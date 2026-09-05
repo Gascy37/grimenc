@@ -2671,69 +2671,24 @@ function cancelCurrentOperation() {
 
 function downloadImage() {
     try {
-        if (!img || !img.src || img.src === '') {
-            showError('没有可下载的图片');
-            return;
-        }
-
-        const url = img.src;
-
-        // 判断是否是 blob: 链接（问题根源）
-        if (url.startsWith('blob:')) {
-            // 使用新方法（fetch + 重新生成 blob URL）作为兜底
-            downloadWithFetch(url);
-        } else {
-            // 原方法：直接使用 a 标签下载（对 data: / http: 等有效）
-            const link = document.createElement('a');
-            link.download = getDownloadFileName();
-            link.href = url;
-            document.body.appendChild(link);
-            link.click();
-            document.body.removeChild(link);
-        }
+        if (!img || !img.src || img.src === '') return;
+        
+        const link = document.createElement('a');
+        link.download = getDownloadFileName();
+        link.href = img.src;
+        link.click();
     } catch (error) {
         showError('下载图片时出错: ' + error.message);
     }
 }
 
-// 新方法：通过 fetch 获取图片数据并生成全新的 blob URL 下载
-async function downloadWithFetch(url) {
+function viewImage() {
     try {
-        showLoader(); // 显示加载动画（可选）
-        const response = await fetch(url);
-        if (!response.ok) {
-            throw new Error(`获取图片数据失败 (${response.status})`);
-        }
-        const blob = await response.blob();
-        if (blob.size === 0) {
-            throw new Error('获取的图片数据为空');
-        }
-
-        const downloadUrl = URL.createObjectURL(blob);
-        const link = document.createElement('a');
-        link.download = getDownloadFileName();
-        link.href = downloadUrl;
-        document.body.appendChild(link);
-        link.click();
-        document.body.removeChild(link);
-
-        // 释放临时 URL（延迟执行，确保下载已触发）
-        setTimeout(() => URL.revokeObjectURL(downloadUrl), 1000);
-        hideLoader();
+        if (!img || !img.src || img.src === '') return;
+        
+        window.open(img.src, '_blank');
     } catch (error) {
-        hideLoader();
-        showError('备用下载方法失败: ' + error.message);
-        // 极端情况：尝试一次原始方法（虽然可能依然无效，但作为最后尝试）
-        try {
-            const link = document.createElement('a');
-            link.download = getDownloadFileName();
-            link.href = url;
-            document.body.appendChild(link);
-            link.click();
-            document.body.removeChild(link);
-        } catch (e) {
-            showError('所有下载方式均失败，请检查网络或图片数据');
-        }
+        showError('查看图片时出错: ' + error.message);
     }
 }
 
