@@ -9,6 +9,17 @@
             margin: 0;
             padding: 0;
             box-sizing: border-box;
+            -webkit-tap-highlight-color: transparent;
+            -webkit-touch-callout: none;
+        }
+        
+        html, body {
+            -webkit-tap-highlight-color: transparent;
+            -webkit-touch-callout: none;
+        }
+        
+        button, input, select, textarea, a, label, summary, div {
+            -webkit-tap-highlight-color: transparent;
         }
         
         body {
@@ -111,6 +122,7 @@
             margin-bottom: 10px;
             overflow: hidden;
             box-shadow: 0 6px 12px rgba(0, 0, 0, 0.15);
+            -webkit-tap-highlight-color: transparent;
         }
         
         .file-button:hover {
@@ -142,6 +154,7 @@
             height: 100%;
             opacity: 0;
             cursor: pointer;
+            -webkit-tap-highlight-color: transparent;
         }
         
         .action-buttons {
@@ -183,6 +196,9 @@
             position: relative;
             overflow: hidden;
             box-shadow: 0 6px 12px rgba(0, 0, 0, 0.15);
+            -webkit-tap-highlight-color: transparent;
+            -webkit-appearance: none;
+            appearance: none;
         }
         
         .action-button:hover {
@@ -194,6 +210,10 @@
         .action-button:active {
             transform: translateY(-1px);
             box-shadow: 0 6px 12px rgba(0, 0, 0, 0.2);
+        }
+        
+        .action-button:focus {
+            outline: none;
         }
         
         .action-button.disabled {
@@ -319,6 +339,9 @@
             position: relative;
             overflow: hidden;
             box-shadow: 0 6px 12px rgba(0, 0, 0, 0.15);
+            -webkit-tap-highlight-color: transparent;
+            -webkit-appearance: none;
+            appearance: none;
         }
         
         .circle-button:hover:not(.disabled) {
@@ -330,6 +353,10 @@
         .circle-button:active:not(.disabled) {
             transform: translateY(-1px);
             box-shadow: 0 6px 12px rgba(0, 0, 0, 0.2);
+        }
+        
+        .circle-button:focus {
+            outline: none;
         }
         
         .circle-button.disabled {
@@ -408,6 +435,9 @@
             -webkit-backdrop-filter: blur(10px);
             font-weight: 500;
             transition: all 0.3s ease;
+            -webkit-tap-highlight-color: transparent;
+            -webkit-appearance: none;
+            appearance: none;
         }
         
         .format-select:disabled {
@@ -496,6 +526,7 @@
             align-items: center;
             padding: 10px 0;
             text-shadow: 0 1px 2px rgba(0, 0, 0, 0.5);
+            -webkit-tap-highlight-color: transparent;
         }
         
         .dev-info-summary::after {
@@ -611,6 +642,7 @@
             align-items: center;
             padding: 10px 0;
             text-shadow: 0 1px 2px rgba(0, 0, 0, 0.5);
+            -webkit-tap-highlight-color: transparent;
         }
         
         .settings-summary::after {
@@ -670,6 +702,7 @@
             justify-content: space-between;
             align-items: center;
             padding: 8px 0;
+            -webkit-tap-highlight-color: transparent;
         }
         
         .sub-summary::after {
@@ -717,6 +750,7 @@
             margin-left: 12px;
             cursor: pointer;
             flex: 1;
+            -webkit-tap-highlight-color: transparent;
         }
         
         .setting-checkbox {
@@ -725,6 +759,7 @@
             cursor: pointer;
             accent-color: #8e2de2;
             border-radius: 4px;
+            -webkit-tap-highlight-color: transparent;
         }
         
         .quality-option {
@@ -765,6 +800,7 @@
             backdrop-filter: blur(5px);
             -webkit-backdrop-filter: blur(5px);
             border: 1px solid rgba(255, 255, 255, 0.2);
+            -webkit-tap-highlight-color: transparent;
         }
         
         #quality-range:disabled {
@@ -862,6 +898,9 @@
             box-shadow: 0 6px 12px rgba(0, 0, 0, 0.15);
             background-color: rgba(30, 144, 255, 0.3);
             color: #d9e6ff;
+            -webkit-tap-highlight-color: transparent;
+            -webkit-appearance: none;
+            appearance: none;
         }
         
         .encrypt-strength-button:hover:not(.selected):not(.disabled) {
@@ -876,6 +915,10 @@
             border-color: rgba(30, 144, 255, 0.9);
             box-shadow: 0 0 20px rgba(30, 144, 255, 0.7), inset 0 0 10px rgba(255, 255, 255, 0.2);
             transform: translateY(-2px);
+        }
+        
+        .encrypt-strength-button:focus {
+            outline: none;
         }
         
         /* 解混淆强度按钮样式 - 红色系 */
@@ -904,6 +947,9 @@
             box-shadow: 0 6px 12px rgba(0, 0, 0, 0.15);
             background-color: rgba(220, 20, 60, 0.3);
             color: #ffd9e6;
+            -webkit-tap-highlight-color: transparent;
+            -webkit-appearance: none;
+            appearance: none;
         }
         
         .decrypt-strength-button:hover:not(.selected):not(.disabled) {
@@ -918,6 +964,10 @@
             border-color: rgba(220, 20, 60, 0.9);
             box-shadow: 0 0 20px rgba(220, 20, 60, 0.7), inset 0 0 10px rgba(255, 255, 255, 0.2);
             transform: translateY(-2px);
+        }
+        
+        .decrypt-strength-button:focus {
+            outline: none;
         }
         
         .loader {
@@ -1171,6 +1221,9 @@
             border-radius: 50%;
             transition: all 0.3s ease;
             box-shadow: 0 3px 8px rgba(0, 0, 0, 0.2);
+            -webkit-tap-highlight-color: transparent;
+            -webkit-appearance: none;
+            appearance: none;
         }
         
         .error-close:hover {
@@ -1182,6 +1235,10 @@
         .error-close:active {
             background-color: rgba(255, 255, 255, 0.2);
             transform: scale(0.95);
+        }
+        
+        .error-close:focus {
+            outline: none;
         }
         
         .error-content {
@@ -1222,6 +1279,9 @@
             position: relative;
             overflow: hidden;
             box-shadow: 0 6px 12px rgba(0, 0, 0, 0.15);
+            -webkit-tap-highlight-color: transparent;
+            -webkit-appearance: none;
+            appearance: none;
         }
         
         .copy-button:hover {
@@ -1234,6 +1294,10 @@
             background-color: rgba(30, 144, 255, 0.7);
             transform: translateY(-1px);
             box-shadow: 0 6px 12px rgba(30, 144, 255, 0.2);
+        }
+        
+        .copy-button:focus {
+            outline: none;
         }
         
         .clear-errors-button {
@@ -1249,6 +1313,9 @@
             position: relative;
             overflow: hidden;
             box-shadow: 0 6px 12px rgba(0, 0, 0, 0.15);
+            -webkit-tap-highlight-color: transparent;
+            -webkit-appearance: none;
+            appearance: none;
         }
         
         .clear-errors-button:hover {
@@ -1261,6 +1328,10 @@
             background-color: rgba(255, 140, 0, 0.7);
             transform: translateY(-1px);
             box-shadow: 0 6px 12px rgba(255, 140, 0, 0.2);
+        }
+        
+        .clear-errors-button:focus {
+            outline: none;
         }
         
         .error-buttons-container {
@@ -1586,15 +1657,15 @@
         <div class="format-options">
             <label for="format-select">输出格式:</label>
             <select id="format-select" class="format-select">
-                <option value="png" selected>PNG (无损)</option>
-                <option value="jpg">JPG (有损)</option>
+                <option value="png">PNG (无损)</option>
+                <option value="jpg" selected>JPG (有损)</option>
             </select>
             
             <div id="quality-option" class="quality-option">
                 <div class="quality-label">图片质量:</div>
                 <div class="quality-slider-container">
-                    <input type="range" id="quality-range" min="10" max="100" value="95">
-                    <span id="quality-value">95</span>
+                    <input type="range" id="quality-range" min="10" max="100" value="100">
+                    <span id="quality-value">100</span>
                 </div>
             </div>
         </div>
@@ -1649,10 +1720,6 @@
                 <details class="sub-settings">
                     <summary class="sub-summary">开发者设置</summary>
                     <div class="sub-content">
-                        <div class="setting-item">
-                            <input type="checkbox" id="show-errors" class="setting-checkbox">
-                            <label for="show-errors">弹出报错信息</label>
-                        </div>
                         <div class="setting-item">
                             <button id="open-error-window" class="action-button" style="display: block; margin: 0 auto; padding: 10px; font-size: 14px; margin-top: 10px; background-color: rgba(106, 17, 203, 0.4); width: fit-content; min-width: 180px;">手动打开错误窗口</button>
                         </div>
@@ -1770,7 +1837,6 @@ const qualityValue = document.getElementById("quality-value");
 
 const enableGreen = document.getElementById("enable-green");
 const reduceGreen = document.getElementById("reduce-green");
-const showErrors = document.getElementById("show-errors");
 const openErrorWindowBtn = document.getElementById("open-error-window");
 
 const errorOverlay = document.getElementById("error-overlay");
@@ -1827,7 +1893,7 @@ function initStrengthButtons() {
     }
 }
 
-// 改进的错误处理系统
+// 改进的错误处理系统（静默处理，仅在错误窗口中记录，不会自动弹出）
 let errorMessages = [];
 
 function showError(message) {
@@ -1850,13 +1916,8 @@ function showError(message) {
         
         errorMessages.push(errorMessage);
         
-        // 更新错误显示
+        // 只更新错误窗口内容，不自动弹出
         updateErrorDisplay();
-        
-        // 如果设置了显示错误窗口，则显示
-        if (showErrors && showErrors.checked && errorOverlay) {
-            errorOverlay.style.display = "flex";
-        }
         
         console.error('应用错误:', errorMessage);
         
@@ -1927,7 +1988,7 @@ try {
     console.error('初始化错误窗口事件失败:', error);
 }
 
-// 简化的全局错误处理
+// 简化的全局错误处理（静默记录）
 window.addEventListener('error', function(event) {
     showError(`全局错误: ${event.message} (${event.filename}:${event.lineno}:${event.colno})`);
 });
@@ -2440,7 +2501,7 @@ async function encryptCommon(imgElement, hideButtons = true) {
             
             ctx.putImageData(imgdata2, 0, 0);
             
-            const format = formatSelect ? formatSelect.value : 'png';
+            const format = formatSelect ? formatSelect.value : 'jpg';
             
             return new Promise((resolve, reject) => {
                 const onBlobCreated = (blob) => {
@@ -2486,7 +2547,7 @@ async function encryptCommon(imgElement, hideButtons = true) {
                 if (format === 'png') {
                     cvs.toBlob(onBlobCreated, "image/png");
                 } else {
-                    const quality = qualityRange ? parseInt(qualityRange.value) / 100 : 0.95;
+                    const quality = qualityRange ? parseInt(qualityRange.value) / 100 : 1.0;
                     cvs.toBlob(onBlobCreated, "image/jpeg", quality);
                 }
             });
@@ -2578,7 +2639,7 @@ async function decryptCommon(imgElement, hideButtons = true) {
             imgdata2.data.set(finalData);
             ctx.putImageData(imgdata2, 0, 0);
             
-            const format = formatSelect ? formatSelect.value : 'png';
+            const format = formatSelect ? formatSelect.value : 'jpg';
             
             return new Promise((resolve, reject) => {
                 const onBlobCreated = (blob) => {
@@ -2624,7 +2685,7 @@ async function decryptCommon(imgElement, hideButtons = true) {
                 if (format === 'png') {
                     cvs.toBlob(onBlobCreated, "image/png");
                 } else {
-                    const quality = qualityRange ? parseInt(qualityRange.value) / 100 : 0.95;
+                    const quality = qualityRange ? parseInt(qualityRange.value) / 100 : 1.0;
                     cvs.toBlob(onBlobCreated, "image/jpeg", quality);
                 }
             });
@@ -2694,7 +2755,7 @@ function viewImage() {
 
 function getDownloadFileName() {
     try {
-        const format = formatSelect ? formatSelect.value : 'png';
+        const format = formatSelect ? formatSelect.value : 'jpg';
         const prefix = hasEncrypted ? 'encrypted_' : hasDecrypted ? 'decrypted_' : 'image_';
         const timestamp = new Date().getTime();
         const extension = format === 'png' ? 'png' : 'jpg';
@@ -2707,7 +2768,7 @@ function getDownloadFileName() {
         return `${prefix}${timestamp}.${extension}`;
     } catch (error) {
         showError('生成下载文件名时出错: ' + error.message);
-        return 'image_' + new Date().getTime() + '.png';
+        return 'image_' + new Date().getTime() + '.jpg';
     }
 }
 
@@ -3017,10 +3078,6 @@ document.addEventListener('visibilitychange', function() {
         scheduleMemoryCleanup();
     }
 });
-
-if (showErrors) {
-    showErrors.checked = false;
-}
 
 if (formatSelect && qualityOption) {
     if (formatSelect.value === 'jpg') {

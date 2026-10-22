@@ -1,0 +1,3039 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>星光_图片混淆TOOL</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        
+        body {
+            margin: 0;
+            padding: 0;
+            width: 100vw;
+            min-height: 100vh;
+            background: 
+                linear-gradient(135deg, #000000 0%, transparent 50%, #87ceeb 100%),
+                linear-gradient(225deg, #ffc0cb 0%, transparent 50%, #ffffff 100%);
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            flex-direction: column;
+            overflow-x: hidden;
+            font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, "Noto Sans", sans-serif, "Apple Color Emoji", "Segoe UI Emoji", "Segoe UI Symbol", "Noto Color Emoji";
+            background-attachment: fixed;
+            position: relative;
+        }
+        
+        .content {
+            text-align: center;
+            width: 100%;
+            max-width: 500px;
+            padding: 20px;
+        }
+        
+        h1 {
+            color: #ff69b4;
+            margin-bottom: 20px;
+            font-size: 1.8rem;
+            letter-spacing: 1px;
+            text-align: left;
+            font-weight: 600;
+            font-family: inherit;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            text-shadow: 0 0 10px rgba(255, 105, 180, 0.7), 0 0 20px rgba(255, 105, 180, 0.5);
+            animation: glow 2s ease-in-out infinite alternate;
+        }
+
+        @keyframes glow {
+            from {
+                text-shadow: 0 0 10px rgba(255, 105, 180, 0.7), 0 0 20px rgba(255, 105, 180, 0.5);
+            }
+            to {
+                text-shadow: 0 0 15px rgba(255, 105, 180, 0.9), 0 0 25px rgba(255, 105, 180, 0.7), 0 0 35px rgba(255, 105, 180, 0.5);
+            }
+        }
+        
+        .image-container {
+            width: min(400px, 80vw, 80vh);
+            height: min(400px, 80vw, 80vh);
+            margin: 0 auto 25px;
+            position: relative;
+            background-color: transparent;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            border-radius: 12px;
+            overflow: hidden;
+            border: 1px solid rgba(255, 255, 255, 0.2);
+            box-shadow: 0 8px 25px rgba(0, 0, 0, 0.3);
+        }
+        
+        #display-img {
+            max-width: 100%;
+            max-height: 100%;
+            display: none;
+            object-fit: contain;
+        }
+        
+        .file-selector {
+            background-color: rgba(255, 255, 255, 0.12);
+            backdrop-filter: blur(12px);
+            -webkit-backdrop-filter: blur(12px);
+            border-radius: 15px;
+            padding: 25px;
+            margin-bottom: 25px;
+            border: 1px solid rgba(255, 255, 255, 0.18);
+            box-shadow: 0 8px 25px rgba(0, 0, 0, 0.25);
+        }
+        
+        .file-button {
+            background-color: rgba(106, 17, 203, 0.4);
+            backdrop-filter: blur(8px);
+            -webkit-backdrop-filter: blur(8px);
+            color: white;
+            width: 200px;
+            height: 55px;
+            border-radius: 12px;
+            position: relative;
+            display: inline-block;
+            transition: all 0.3s ease;
+            border: 1px solid rgba(255, 255, 255, 0.25);
+            font-weight: 600;
+            font-size: 17px;
+            cursor: pointer;
+            margin-bottom: 10px;
+            overflow: hidden;
+            box-shadow: 0 6px 12px rgba(0, 0, 0, 0.15);
+        }
+        
+        .file-button:hover {
+            background-color: rgba(106, 17, 203, 0.7);
+            transform: translateY(-4px);
+            box-shadow: 0 12px 20px rgba(106, 17, 203, 0.4), 0 0 25px rgba(106, 17, 203, 0.4);
+            border-color: rgba(255, 255, 255, 0.4);
+        }
+        
+        .file-button:active {
+            background-color: rgba(106, 17, 203, 0.5);
+            transform: translateY(-1px);
+            box-shadow: 0 6px 12px rgba(106, 17, 203, 0.3);
+        }
+        
+        .file-button span {
+            line-height: 55px;
+            display: block;
+            color: #ffffff;
+            font-weight: 600;
+            text-shadow: 0 1px 2px rgba(0, 0, 0, 0.3);
+        }
+        
+        .ipt_btn {
+            position: absolute;
+            left: 0;
+            top: 0;
+            width: 100%;
+            height: 100%;
+            opacity: 0;
+            cursor: pointer;
+        }
+        
+        .action-buttons {
+            display: flex;
+            flex-direction: column;
+            gap: 15px;
+            margin-bottom: 25px;
+        }
+        
+        .action-button-row {
+            display: flex;
+            justify-content: center;
+            gap: 10px;
+        }
+        
+        .button-group {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+        
+        .action-button {
+            height: 60px;
+            padding: 0 20px;
+            border: none;
+            border-radius: 12px;
+            font-size: 17px;
+            font-weight: 700;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            min-width: 120px;
+            letter-spacing: 0.5px;
+            backdrop-filter: blur(12px);
+            -webkit-backdrop-filter: blur(12px);
+            border: 2px solid rgba(255, 255, 255, 0.2);
+            position: relative;
+            overflow: hidden;
+            box-shadow: 0 6px 12px rgba(0, 0, 0, 0.15);
+        }
+        
+        .action-button:hover {
+            transform: translateY(-4px);
+            box-shadow: 0 12px 20px rgba(0, 0, 0, 0.25), 0 0 25px rgba(255, 255, 255, 0.15);
+            border-color: rgba(255, 255, 255, 0.4);
+        }
+        
+        .action-button:active {
+            transform: translateY(-1px);
+            box-shadow: 0 6px 12px rgba(0, 0, 0, 0.2);
+        }
+        
+        .action-button.disabled {
+            opacity: 0.6;
+            cursor: not-allowed;
+            transform: none !important;
+        }
+        
+        .action-button.disabled:hover {
+            box-shadow: 0 6px 12px rgba(0, 0, 0, 0.15);
+            border-color: rgba(255, 255, 255, 0.2);
+        }
+        
+        #enc {
+            background-color: rgba(30, 144, 255, 0.4);
+            color: #d9e6ff;
+        }
+        
+        #enc:hover:not(.disabled) {
+            background-color: rgba(30, 144, 255, 0.7);
+            box-shadow: 0 12px 20px rgba(30, 144, 255, 0.4), 0 0 25px rgba(30, 144, 255, 0.4);
+        }
+        
+        #enc:active:not(.disabled) {
+            background-color: rgba(30, 144, 255, 0.5);
+            box-shadow: 0 6px 12px rgba(30, 144, 255, 0.3);
+        }
+        
+        #dec {
+            background-color: rgba(220, 20, 60, 0.4);
+            color: #ffd9e6;
+        }
+        
+        #dec:hover:not(.disabled) {
+            background-color: rgba(220, 20, 60, 0.7);
+            box-shadow: 0 12px 20px rgba(220, 20, 60, 0.4), 0 0 25px rgba(220, 20, 60, 0.4);
+        }
+        
+        #dec:active:not(.disabled) {
+            background-color: rgba(220, 20, 60, 0.5);
+            box-shadow: 0 6px 12px rgba(220, 20, 60, 0.3);
+        }
+        
+        #re {
+            background-color: rgba(255, 140, 0, 0.4);
+            color: #ffe6d9;
+            display: none;
+        }
+        
+        #re:hover:not(.disabled) {
+            background-color: rgba(255, 140, 0, 0.7);
+            box-shadow: 0 12px 20px rgba(255, 140, 0, 0.4), 0 0 25px rgba(255, 140, 0, 0.4);
+        }
+        
+        #re:active:not(.disabled) {
+            background-color: rgba(255, 140, 0, 0.5);
+            box-shadow: 0 6px 12px rgba(255, 140, 0, 0.3);
+        }
+        
+        #clear {
+            background-color: rgba(50, 205, 50, 0.4);
+            color: #d9ffe6;
+            display: none;
+        }
+        
+        #clear:hover:not(.disabled) {
+            background-color: rgba(50, 205, 50, 0.7);
+            box-shadow: 0 12px 20px rgba(50, 205, 50, 0.4), 0 0 25px rgba(50, 205, 50, 0.4);
+        }
+        
+        #clear:active:not(.disabled) {
+            background-color: rgba(50, 205, 50, 0.5);
+            box-shadow: 0 6px 12px rgba(50, 205, 50, 0.3);
+        }
+        
+        #download {
+            background-color: rgba(0, 191, 255, 0.4);
+            color: #e6f7ff;
+            display: none;
+        }
+        
+        #download:hover:not(.disabled) {
+            background-color: rgba(0, 191, 255, 0.7);
+            box-shadow: 0 12px 20px rgba(0, 191, 255, 0.4), 0 0 25px rgba(0, 191, 255, 0.4);
+        }
+        
+        #download:active:not(.disabled) {
+            background-color: rgba(0, 191, 255, 0.5);
+            box-shadow: 0 6px 12px rgba(0, 191, 255, 0.3);
+        }
+        
+        #view {
+            background-color: rgba(138, 43, 226, 0.4);
+            color: #f0e6ff;
+            display: none;
+        }
+        
+        #view:hover:not(.disabled) {
+            background-color: rgba(138, 43, 226, 0.7);
+            box-shadow: 0 12px 20px rgba(138, 43, 226, 0.4), 0 0 25px rgba(138, 43, 226, 0.4);
+        }
+        
+        #view:active:not(.disabled) {
+            background-color: rgba(138, 43, 226, 0.5);
+            box-shadow: 0 6px 12px rgba(138, 43, 226, 0.3);
+        }
+        
+        .circle-button {
+            width: 60px;
+            height: 60px;
+            border-radius: 50%;
+            border: none;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 24px;
+            font-weight: bold;
+            transition: all 0.3s ease;
+            backdrop-filter: blur(12px);
+            -webkit-backdrop-filter: blur(12px);
+            border: 2px solid rgba(255, 255, 255, 0.2);
+            position: relative;
+            overflow: hidden;
+            box-shadow: 0 6px 12px rgba(0, 0, 0, 0.15);
+        }
+        
+        .circle-button:hover:not(.disabled) {
+            transform: translateY(-4px);
+            box-shadow: 0 12px 20px rgba(0, 0, 0, 0.25), 0 0 25px rgba(255, 255, 255, 0.15);
+            border-color: rgba(255, 255, 255, 0.4);
+        }
+        
+        .circle-button:active:not(.disabled) {
+            transform: translateY(-1px);
+            box-shadow: 0 6px 12px rgba(0, 0, 0, 0.2);
+        }
+        
+        .circle-button.disabled {
+            opacity: 0.6;
+            cursor: not-allowed;
+            transform: none !important;
+        }
+        
+        .circle-button.disabled:hover {
+            box-shadow: 0 6px 12px rgba(0, 0, 0, 0.15);
+            border-color: rgba(255, 255, 255, 0.2);
+        }
+        
+        #enc-multiple {
+            background-color: rgba(30, 144, 255, 0.4);
+            color: #d9e6ff;
+        }
+        
+        #enc-multiple:hover:not(.disabled) {
+            background-color: rgba(30, 144, 255, 0.7);
+            box-shadow: 0 12px 20px rgba(30, 144, 255, 0.4), 0 0 25px rgba(30, 144, 255, 0.4);
+        }
+        
+        #enc-multiple:active:not(.disabled) {
+            background-color: rgba(30, 144, 255, 0.5);
+            box-shadow: 0 6px 12px rgba(30, 144, 255, 0.3);
+        }
+        
+        #dec-multiple {
+            background-color: rgba(220, 20, 60, 0.4);
+            color: #ffd9e6;
+        }
+        
+        #dec-multiple:hover:not(.disabled) {
+            background-color: rgba(220, 20, 60, 0.7);
+            box-shadow: 0 12px 20px rgba(220, 20, 60, 0.4), 0 0 25px rgba(220, 20, 60, 0.4);
+        }
+        
+        #dec-multiple:active:not(.disabled) {
+            background-color: rgba(220, 20, 60, 0.5);
+            box-shadow: 0 6px 12px rgba(220, 20, 60, 0.3);
+        }
+        
+        .format-options {
+            background-color: rgba(30, 30, 50, 0.8);
+            backdrop-filter: blur(15px);
+            -webkit-backdrop-filter: blur(15px);
+            border-radius: 15px;
+            padding: 25px;
+            margin-bottom: 25px;
+            border: 2px solid rgba(142, 45, 226, 0.5);
+            box-shadow: 0 8px 25px rgba(0, 0, 0, 0.3);
+            animation: slideDown 0.4s ease-out;
+        }
+        
+        .format-options label {
+            color: #e6ccff;
+            font-weight: 600;
+            font-size: 17px;
+            margin-right: 10px;
+            display: inline-block;
+            margin-bottom: 15px;
+            text-shadow: 0 1px 2px rgba(0, 0, 0, 0.5);
+        }
+        
+        .format-select {
+            width: 100%;
+            padding: 15px 20px;
+            border-radius: 12px;
+            border: 2px solid rgba(106, 17, 203, 0.7);
+            background-color: rgba(20, 10, 40, 0.9);
+            font-size: 16px;
+            color: #ffffff;
+            margin-bottom: 20px;
+            backdrop-filter: blur(10px);
+            -webkit-backdrop-filter: blur(10px);
+            font-weight: 500;
+            transition: all 0.3s ease;
+        }
+        
+        .format-select:disabled {
+            opacity: 0.6;
+            cursor: not-allowed;
+        }
+        
+        .format-select:focus {
+            outline: none;
+            border-color: rgba(142, 45, 226, 0.9);
+            background-color: rgba(30, 15, 60, 0.95);
+            box-shadow: 0 0 0 3px rgba(142, 45, 226, 0.3);
+        }
+        
+        .format-select option {
+            background-color: rgba(20, 10, 40, 0.95);
+            color: white;
+            padding: 10px;
+        }
+        
+        .settings-options {
+            background-color: rgba(30, 30, 50, 0.8);
+            backdrop-filter: blur(15px);
+            -webkit-backdrop-filter: blur(15px);
+            border-radius: 15px;
+            margin-bottom: 25px;
+            border: 2px solid rgba(235, 54, 120, 0.5);
+            box-shadow: 0 8px 25px rgba(0, 0, 0, 0.3);
+            overflow: hidden;
+            max-height: 60px;
+            transition: max-height 0.5s cubic-bezier(0.4, 0, 0.2, 1), padding 0.5s cubic-bezier(0.4, 0, 0.2, 1);
+        }
+        
+        .settings-options[open] {
+            max-height: 800px;
+            padding: 25px;
+            animation: expandOpen 0.5s cubic-bezier(0.4, 0, 0.2, 1);
+        }
+        
+        .settings-options:not([open]) {
+            padding: 0 25px;
+        }
+        
+        @keyframes expandOpen {
+            0% {
+                max-height: 60px;
+                opacity: 0.5;
+            }
+            100% {
+                max-height: 800px;
+                opacity: 1;
+            }
+        }
+        
+        /* 修改后的开发信息板块样式 - 与页面风格一致 */
+        .dev-info-options {
+            background-color: rgba(30, 30, 50, 0.8);
+            backdrop-filter: blur(15px);
+            -webkit-backdrop-filter: blur(15px);
+            border-radius: 15px;
+            margin-bottom: 25px;
+            border: 2px solid rgba(50, 205, 50, 0.5);
+            box-shadow: 0 8px 25px rgba(0, 0, 0, 0.3);
+            overflow: hidden;
+            max-height: 60px;
+            transition: max-height 0.5s cubic-bezier(0.4, 0, 0.2, 1), padding 0.5s cubic-bezier(0.4, 0, 0.2, 1);
+        }
+        
+        .dev-info-options[open] {
+            max-height: 600px;
+            padding: 25px;
+            animation: expandOpen 0.5s cubic-bezier(0.4, 0, 0.2, 1);
+        }
+        
+        .dev-info-options:not([open]) {
+            padding: 0 25px;
+        }
+        
+        .dev-info-summary {
+            color: #a0ffa0;
+            font-weight: 600;
+            font-size: 18px;
+            cursor: pointer;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 10px 0;
+            text-shadow: 0 1px 2px rgba(0, 0, 0, 0.5);
+        }
+        
+        .dev-info-summary::after {
+            content: "▼";
+            font-size: 14px;
+            transition: transform 0.5s cubic-bezier(0.4, 0, 0.2, 1);
+            color: #32cd32;
+        }
+        
+        .dev-info-options[open] .dev-info-summary::after {
+            transform: rotate(180deg);
+        }
+        
+        .dev-info-content {
+            padding-top: 20px;
+            border-top: 1px solid rgba(255, 255, 255, 0.15);
+            animation: fadeIn 0.5s ease-out 0.2s both;
+        }
+        
+        @keyframes fadeIn {
+            from {
+                opacity: 0;
+                transform: translateY(-10px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+        
+        @keyframes slideDown {
+            from {
+                opacity: 0;
+                transform: translateY(-20px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+        
+        .dev-info-item {
+            margin-bottom: 15px;
+            padding: 12px 15px;
+            border-radius: 10px;
+            background-color: rgba(255, 255, 255, 0.05);
+            transition: background-color 0.2s ease;
+            display: flex;
+            align-items: center;
+            animation: slideIn 0.4s ease-out;
+        }
+        
+        .dev-info-item:nth-child(1) { animation-delay: 0.1s; }
+        .dev-info-item:nth-child(2) { animation-delay: 0.2s; }
+        .dev-info-item:nth-child(3) { animation-delay: 0.3s; }
+        
+        @keyframes slideIn {
+            from {
+                opacity: 0;
+                transform: translateX(-20px);
+            }
+            to {
+                opacity: 1;
+                transform: translateX(0);
+            }
+        }
+        
+        .dev-info-item:last-child {
+            margin-bottom: 0;
+        }
+        
+        .dev-info-item:hover {
+            background-color: rgba(255, 255, 255, 0.1);
+        }
+        
+        .dev-info-label {
+            color: #c0ffc0;
+            font-weight: 600;
+            font-size: 15px;
+            min-width: 120px;
+            text-align: left;
+        }
+        
+        .dev-info-value {
+            color: #ffffff;
+            font-weight: 500;
+            font-size: 15px;
+            flex: 1;
+            text-align: left;
+            margin-left: 10px;
+        }
+        
+        .dev-info-tool {
+            color: #ffcc80;
+            font-weight: 600;
+            font-size: 16px;
+            text-align: center;
+            padding: 15px;
+            background-color: rgba(50, 205, 50, 0.2);
+            border-radius: 10px;
+            margin-top: 10px;
+            border: 1px solid rgba(50, 205, 50, 0.3);
+            animation: fadeIn 0.5s ease-out 0.4s both;
+        }
+        
+        .settings-summary {
+            color: #ffd9e6;
+            font-weight: 600;
+            font-size: 18px;
+            cursor: pointer;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 10px 0;
+            text-shadow: 0 1px 2px rgba(0, 0, 0, 0.5);
+        }
+        
+        .settings-summary::after {
+            content: "▼";
+            font-size: 14px;
+            transition: transform 0.5s cubic-bezier(0.4, 0, 0.2, 1);
+            color: #ff69b4;
+        }
+        
+        .settings-options[open] .settings-summary::after {
+            transform: rotate(180deg);
+        }
+        
+        .settings-content {
+            padding-top: 20px;
+            border-top: 1px solid rgba(255, 255, 255, 0.15);
+            animation: fadeIn 0.5s ease-out 0.2s both;
+        }
+        
+        .sub-settings {
+            margin-bottom: 20px;
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            border-radius: 10px;
+            padding: 10px;
+            background-color: rgba(40, 30, 60, 0.5);
+            overflow: hidden;
+            max-height: 48px;
+            transition: max-height 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+        }
+        
+        .sub-settings[open] {
+            max-height: 400px;
+            animation: expandSubOpen 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+        }
+        
+        @keyframes expandSubOpen {
+            0% {
+                max-height: 48px;
+                opacity: 0.5;
+            }
+            100% {
+                max-height: 400px;
+                opacity: 1;
+            }
+        }
+        
+        .sub-settings:last-child {
+            margin-bottom: 0;
+        }
+        
+        .sub-summary {
+            color: #e6ccff;
+            font-weight: 600;
+            font-size: 16px;
+            cursor: pointer;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 8px 0;
+        }
+        
+        .sub-summary::after {
+            content: "▼";
+            font-size: 12px;
+            transition: transform 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+            color: #8e2de2;
+        }
+        
+        .sub-settings[open] .sub-summary::after {
+            transform: rotate(180deg);
+        }
+        
+        .sub-content {
+            padding: 15px 0 0 15px;
+            animation: fadeIn 0.4s ease-out 0.1s both;
+        }
+        
+        .setting-item {
+            margin-bottom: 15px;
+            display: flex;
+            align-items: center;
+            padding: 8px 12px;
+            border-radius: 8px;
+            background-color: rgba(255, 255, 255, 0.05);
+            transition: background-color 0.2s ease;
+            animation: slideIn 0.3s ease-out;
+        }
+        
+        .setting-item:nth-child(1) { animation-delay: 0.1s; }
+        .setting-item:nth-child(2) { animation-delay: 0.2s; }
+        
+        .setting-item:hover {
+            background-color: rgba(255, 255, 255, 0.1);
+        }
+        
+        .setting-item:last-child {
+            margin-bottom: 0;
+        }
+        
+        .setting-item label {
+            color: #ffffff;
+            font-weight: 500;
+            font-size: 15px;
+            margin-left: 12px;
+            cursor: pointer;
+            flex: 1;
+        }
+        
+        .setting-checkbox {
+            width: 20px;
+            height: 20px;
+            cursor: pointer;
+            accent-color: #8e2de2;
+            border-radius: 4px;
+        }
+        
+        .quality-option {
+            display: none;
+            margin-top: 20px;
+            padding: 20px;
+            background-color: rgba(30, 15, 60, 0.7);
+            border-radius: 12px;
+            border: 1px solid rgba(106, 17, 203, 0.5);
+            animation: fadeIn 0.4s ease-out;
+        }
+        
+        .quality-label {
+            display: block;
+            color: #e6ccff;
+            margin-bottom: 15px;
+            font-weight: 600;
+            font-size: 16px;
+        }
+        
+        .quality-slider-container {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 15px;
+        }
+        
+        /* 修改滑块样式 - 单色半透明背景 */
+        #quality-range {
+            flex: 1;
+            max-width: 200px;
+            height: 10px;
+            -webkit-appearance: none;
+            appearance: none;
+            background: rgba(142, 45, 226, 0.5);
+            border-radius: 10px;
+            outline: none;
+            backdrop-filter: blur(5px);
+            -webkit-backdrop-filter: blur(5px);
+            border: 1px solid rgba(255, 255, 255, 0.2);
+        }
+        
+        #quality-range:disabled {
+            opacity: 0.6;
+            cursor: not-allowed;
+        }
+        
+        #quality-range::-webkit-slider-thumb {
+            -webkit-appearance: none;
+            appearance: none;
+            width: 24px;
+            height: 24px;
+            border-radius: 50%;
+            background: rgba(255, 255, 255, 0.95);
+            cursor: pointer;
+            border: 3px solid rgba(142, 45, 226, 0.9);
+            box-shadow: 0 0 10px rgba(142, 45, 226, 0.7);
+        }
+        
+        #quality-range:disabled::-webkit-slider-thumb {
+            cursor: not-allowed;
+            opacity: 0.7;
+        }
+        
+        #quality-range::-moz-range-thumb {
+            width: 24px;
+            height: 24px;
+            border-radius: 50%;
+            background: rgba(255, 255, 255, 0.95);
+            cursor: pointer;
+            border: 3px solid rgba(142, 45, 226, 0.9);
+            box-shadow: 0 0 10px rgba(142, 45, 226, 0.7);
+        }
+        
+        #quality-range:disabled::-moz-range-thumb {
+            cursor: not-allowed;
+            opacity: 0.7;
+        }
+        
+        #quality-value {
+            display: inline-block;
+            width: 50px;
+            text-align: center;
+            font-weight: bold;
+            font-size: 18px;
+            color: white;
+            background: rgba(142, 45, 226, 0.5);
+            padding: 8px 15px;
+            border-radius: 10px;
+            backdrop-filter: blur(5px);
+            -webkit-backdrop-filter: blur(5px);
+            box-shadow: 0 6px 12px rgba(0, 0, 0, 0.25);
+            border: 1px solid rgba(255, 255, 255, 0.2);
+        }
+        
+        /* 强度按钮选择器样式 */
+        .strength-button-group {
+            display: flex;
+            flex-direction: column;
+            gap: 10px;
+            margin-top: 10px;
+        }
+        
+        .strength-label {
+            color: #ffffff;
+            font-weight: 600;
+            font-size: 15px;
+            text-align: left;
+            margin-bottom: 5px;
+        }
+        
+        /* 混淆强度按钮样式 - 蓝色系 */
+        .encrypt-strength-buttons {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 8px;
+            justify-content: space-between;
+        }
+        
+        .encrypt-strength-button {
+            flex: 1;
+            min-width: 60px;
+            height: 45px;
+            border: none;
+            border-radius: 8px;
+            font-size: 16px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            backdrop-filter: blur(10px);
+            -webkit-backdrop-filter: blur(10px);
+            border: 2px solid rgba(255, 255, 255, 0.2);
+            position: relative;
+            overflow: hidden;
+            box-shadow: 0 6px 12px rgba(0, 0, 0, 0.15);
+            background-color: rgba(30, 144, 255, 0.3);
+            color: #d9e6ff;
+        }
+        
+        .encrypt-strength-button:hover:not(.selected):not(.disabled) {
+            background-color: rgba(30, 144, 255, 0.5);
+            transform: translateY(-3px);
+            box-shadow: 0 10px 18px rgba(30, 144, 255, 0.4);
+            border-color: rgba(255, 255, 255, 0.4);
+        }
+        
+        .encrypt-strength-button.selected {
+            background-color: rgba(30, 144, 255, 0.8);
+            border-color: rgba(30, 144, 255, 0.9);
+            box-shadow: 0 0 20px rgba(30, 144, 255, 0.7), inset 0 0 10px rgba(255, 255, 255, 0.2);
+            transform: translateY(-2px);
+        }
+        
+        /* 解混淆强度按钮样式 - 红色系 */
+        .decrypt-strength-buttons {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 8px;
+            justify-content: space-between;
+        }
+        
+        .decrypt-strength-button {
+            flex: 1;
+            min-width: 60px;
+            height: 45px;
+            border: none;
+            border-radius: 8px;
+            font-size: 16px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            backdrop-filter: blur(10px);
+            -webkit-backdrop-filter: blur(10px);
+            border: 2px solid rgba(255, 255, 255, 0.2);
+            position: relative;
+            overflow: hidden;
+            box-shadow: 0 6px 12px rgba(0, 0, 0, 0.15);
+            background-color: rgba(220, 20, 60, 0.3);
+            color: #ffd9e6;
+        }
+        
+        .decrypt-strength-button:hover:not(.selected):not(.disabled) {
+            background-color: rgba(220, 20, 60, 0.5);
+            transform: translateY(-3px);
+            box-shadow: 0 10px 18px rgba(220, 20, 60, 0.4);
+            border-color: rgba(255, 255, 255, 0.4);
+        }
+        
+        .decrypt-strength-button.selected {
+            background-color: rgba(220, 20, 60, 0.8);
+            border-color: rgba(220, 20, 60, 0.9);
+            box-shadow: 0 0 20px rgba(220, 20, 60, 0.7), inset 0 0 10px rgba(255, 255, 255, 0.2);
+            transform: translateY(-2px);
+        }
+        
+        .loader {
+            position: fixed;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            display: none;
+            z-index: 1000;
+            width: 400px;
+            height: 400px;
+        }
+        
+        .loader::before {
+            content: '';
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            width: 0;
+            height: 0;
+            border-radius: 50%;
+            background: radial-gradient(circle, rgba(51, 153, 255, 0.9) 0%, rgba(51, 153, 255, 0.4) 30%, rgba(51, 153, 255, 0) 70%);
+            transform: translate(-50%, -50%);
+            animation: blue-pulse 2.5s ease-in-out infinite;
+            z-index: -1;
+            box-shadow: 0 0 200px 100px rgba(51, 153, 255, 0.3);
+        }
+        
+        .loader div {
+            border-width: 8px;
+            border-style: solid;
+            border-left-color: transparent;
+            border-right-color: transparent;
+            border-top-color: transparent;
+            border-bottom-color: transparent;
+            border-radius: 50%;
+            position: absolute;
+            animation: spin 2s ease infinite;
+        }
+        
+        .loader div:nth-child(1) {
+            width: 300px;
+            height: 300px;
+            left: 50px;
+            top: 50px;
+            border-left-color: #8A2BE2;
+            border-right-color: #8A2BE2;
+            animation-delay: 0s;
+        }
+        
+        .loader div:nth-child(2) {
+            width: 260px;
+            height: 260px;
+            left: 70px;
+            top: 70px;
+            border-left-color: #00CED1;
+            border-right-color: #00CED1;
+            animation-delay: 0.1s;
+        }
+        
+        .loader div:nth-child(3) {
+            width: 220px;
+            height: 220px;
+            left: 90px;
+            top: 90px;
+            border-left-color: #FF1493;
+            border-right-color: #FF1493;
+            animation-delay: 0.2s;
+        }
+        
+        .loader div:nth-child(4) {
+            width: 180px;
+            height: 180px;
+            left: 110px;
+            top: 110px;
+            border-left-color: #FF8C00;
+            border-right-color: #FF8C00;
+            animation-delay: 0.3s;
+        }
+        
+        @keyframes spin {
+            50% {
+                transform: rotate(180deg);
+            }
+            100% {
+                transform: rotate(0);
+            }
+        }
+        
+        @keyframes blue-pulse {
+            0% {
+                width: 0;
+                height: 0;
+                opacity: 0;
+                box-shadow: 0 0 0 0 rgba(51, 153, 255, 0);
+            }
+            15% {
+                width: 300vw;
+                height: 300vw;
+                opacity: 0.8;
+                box-shadow: 0 0 200px 100px rgba(51, 153, 255, 0.5);
+            }
+            30% {
+                width: 0;
+                height: 0;
+                opacity: 0;
+                box-shadow: 0 0 0 0 rgba(51, 153, 255, 0);
+            }
+            45% {
+                width: 300vw;
+                height: 300vw;
+                opacity: 0.6;
+                box-shadow: 0 0 150px 80px rgba(51, 153, 255, 0.4);
+            }
+            60% {
+                width: 0;
+                height: 0;
+                opacity: 0;
+                box-shadow: 0 0 0 0 rgba(51, 153, 255, 0);
+            }
+            75% {
+                width: 300vw;
+                height: 300vw;
+                opacity: 0.4;
+                box-shadow: 0 0 100px 60px rgba(51, 153, 255, 0.3);
+            }
+            90% {
+                width: 0;
+                height: 0;
+                opacity: 0;
+                box-shadow: 0 0 0 0 rgba(51, 153, 255, 0);
+            }
+            100% {
+                width: 0;
+                height: 0;
+                opacity: 0;
+                box-shadow: 0 0 0 0 rgba(51, 153, 255, 0);
+            }
+        }
+        
+        .file-button .wave,
+        .action-button .wave,
+        .circle-button .wave,
+        .copy-button .wave,
+        .clear-errors-button .wave,
+        .encrypt-strength-button .wave,
+        .decrypt-strength-button .wave {
+            position: absolute;
+            width: 20px;
+            height: 20px;
+            border-radius: 50%;
+            transform: translate(-50%, -50%);
+            pointer-events: none;
+            animation: animate 0.8s ease-out;
+            z-index: 1;
+            box-shadow: 0 0 10px currentColor;
+        }
+        
+        @keyframes animate {
+            0% {
+                width: 0;
+                height: 0;
+                opacity: 0.9;
+            }
+            70% {
+                opacity: 0.5;
+            }
+            100% {
+                width: 400px;
+                height: 400px;
+                opacity: 0;
+            }
+        }
+        
+        .error-overlay {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background-color: rgba(0, 0, 0, 0.8);
+            display: none;
+            justify-content: center;
+            align-items: center;
+            z-index: 2000;
+            animation: fadeInOverlay 0.3s ease-out;
+        }
+        
+        @keyframes fadeInOverlay {
+            from {
+                opacity: 0;
+            }
+            to {
+                opacity: 1;
+            }
+        }
+        
+        .error-window {
+            background-color: rgba(40, 40, 60, 0.95);
+            backdrop-filter: blur(20px);
+            -webkit-backdrop-filter: blur(20px);
+            border-radius: 15px;
+            width: 90%;
+            max-width: 800px;
+            max-height: 80vh;
+            display: flex;
+            flex-direction: column;
+            border: 2px solid rgba(220, 20, 60, 0.7);
+            box-shadow: 0 15px 40px rgba(0, 0, 0, 0.6);
+            overflow: hidden;
+            animation: slideInError 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+        }
+        
+        @keyframes slideInError {
+            from {
+                opacity: 0;
+                transform: translateY(-30px) scale(0.95);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0) scale(1);
+            }
+        }
+        
+        .error-header {
+            background-color: rgba(220, 20, 60, 0.8);
+            padding: 15px 20px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            border-bottom: 1px solid rgba(255, 255, 255, 0.2);
+        }
+        
+        .error-title {
+            color: white;
+            font-weight: 600;
+            font-size: 18px;
+        }
+        
+        .error-close {
+            background: none;
+            border: none;
+            color: white;
+            font-size: 24px;
+            cursor: pointer;
+            width: 30px;
+            height: 30px;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            border-radius: 50%;
+            transition: all 0.3s ease;
+            box-shadow: 0 3px 8px rgba(0, 0, 0, 0.2);
+        }
+        
+        .error-close:hover {
+            background-color: rgba(255, 255, 255, 0.3);
+            transform: scale(1.1);
+            box-shadow: 0 5px 12px rgba(0, 0, 0, 0.3);
+        }
+        
+        .error-close:active {
+            background-color: rgba(255, 255, 255, 0.2);
+            transform: scale(0.95);
+        }
+        
+        .error-content {
+            flex: 1;
+            padding: 20px;
+            overflow-y: auto;
+            color: #ff6b6b;
+            font-family: monospace;
+            font-size: 14px;
+            white-space: pre-wrap;
+            word-break: break-all;
+        }
+        
+        .error-divider {
+            height: 1px;
+            background-color: rgba(255, 255, 255, 0.2);
+            margin: 10px 0;
+        }
+        
+        .error-controls {
+            padding: 15px 20px;
+            border-top: 1px solid rgba(255, 255, 255, 0.2);
+            display: flex;
+            justify-content: space-between;
+            background-color: rgba(30, 30, 50, 0.8);
+        }
+        
+        .copy-button {
+            background-color: rgba(30, 144, 255, 0.6);
+            color: white;
+            border: none;
+            border-radius: 8px;
+            padding: 10px 20px;
+            font-size: 14px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            position: relative;
+            overflow: hidden;
+            box-shadow: 0 6px 12px rgba(0, 0, 0, 0.15);
+        }
+        
+        .copy-button:hover {
+            background-color: rgba(30, 144, 255, 0.8);
+            transform: translateY(-3px);
+            box-shadow: 0 10px 18px rgba(30, 144, 255, 0.4);
+        }
+        
+        .copy-button:active {
+            background-color: rgba(30, 144, 255, 0.7);
+            transform: translateY(-1px);
+            box-shadow: 0 6px 12px rgba(30, 144, 255, 0.2);
+        }
+        
+        .clear-errors-button {
+            background-color: rgba(255, 140, 0, 0.6);
+            color: white;
+            border: none;
+            border-radius: 8px;
+            padding: 10px 20px;
+            font-size: 14px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            position: relative;
+            overflow: hidden;
+            box-shadow: 0 6px 12px rgba(0, 0, 0, 0.15);
+        }
+        
+        .clear-errors-button:hover {
+            background-color: rgba(255, 140, 0, 0.8);
+            transform: translateY(-3px);
+            box-shadow: 0 10px 18px rgba(255, 140, 0, 0.4);
+        }
+        
+        .clear-errors-button:active {
+            background-color: rgba(255, 140, 0, 0.7);
+            transform: translateY(-1px);
+            box-shadow: 0 6px 12px rgba(255, 140, 0, 0.2);
+        }
+        
+        .error-buttons-container {
+            display: flex;
+            gap: 10px;
+        }
+        
+        @media (max-width: 600px) {
+            .content {
+                padding: 15px;
+                max-width: 100%;
+            }
+            
+            h1 {
+                font-size: 1.5rem;
+                margin-bottom: 20px;
+                gap: 8px;
+            }
+            
+            .image-container {
+                width: min(300px, 80vw, 80vh);
+                height: min(300px, 80vw, 80vh);
+                margin-bottom: 20px;
+                box-shadow: 0 6px 18px rgba(0, 0, 0, 0.25);
+            }
+            
+            .file-selector, .format-options, .settings-options, .dev-info-options {
+                padding: 20px;
+                margin-bottom: 20px;
+                box-shadow: 0 6px 18px rgba(0, 0, 0, 0.25);
+            }
+            
+            .settings-options:not([open]) {
+                padding: 0 20px;
+            }
+            
+            .dev-info-options:not([open]) {
+                padding: 0 20px;
+            }
+            
+            .file-button {
+                width: 180px;
+                height: 50px;
+                box-shadow: 0 4px 10px rgba(0, 0, 0, 0.15);
+            }
+            
+            .file-button:hover {
+                box-shadow: 0 10px 18px rgba(106, 17, 203, 0.4), 0 0 20px rgba(106, 17, 203, 0.3);
+            }
+            
+            .file-button span {
+                line-height: 50px;
+                font-size: 16px;
+            }
+            
+            .action-button {
+                height: 55px;
+                min-width: 100px;
+                padding: 0 15px;
+                font-size: 16px;
+                box-shadow: 0 4px 10px rgba(0, 0, 0, 0.15);
+            }
+            
+            .action-button:hover {
+                box-shadow: 0 10px 18px rgba(0, 0, 0, 0.25), 0 0 20px rgba(255, 255, 255, 0.15);
+            }
+            
+            .circle-button {
+                width: 55px;
+                height: 55px;
+                font-size: 20px;
+                box-shadow: 0 4px 10px rgba(0, 0, 0, 0.15);
+            }
+            
+            .circle-button:hover {
+                box-shadow: 0 10px 18px rgba(0, 0, 0, 0.25), 0 0 20px rgba(255, 255, 255, 0.15);
+            }
+            
+            .action-button-row {
+                gap: 8px;
+            }
+            
+            .button-group {
+                gap: 6px;
+            }
+            
+            .loader {
+                width: 300px;
+                height: 300px;
+            }
+            
+            .loader div:nth-child(1) {
+                width: 230px;
+                height: 230px;
+                left: 35px;
+                top: 35px;
+            }
+            
+            .loader div:nth-child(2) {
+                width: 200px;
+                height: 200px;
+                left: 50px;
+                top: 50px;
+            }
+            
+            .loader div:nth-child(3) {
+                width: 170px;
+                height: 170px;
+                left: 65px;
+                top: 65px;
+            }
+            
+            .loader div:nth-child(4) {
+                width: 140px;
+                height: 140px;
+                left: 80px;
+                top: 80px;
+            }
+            
+            .error-window {
+                width: 95%;
+                max-height: 70vh;
+                box-shadow: 0 10px 30px rgba(0, 0, 0, 0.5);
+            }
+            
+            .error-controls {
+                flex-direction: column;
+                gap: 10px;
+            }
+            
+            .error-buttons-container {
+                width: 100%;
+                justify-content: space-between;
+            }
+            
+            .clear-errors-button,
+            .copy-button {
+                flex: 1;
+                padding: 12px 10px;
+                box-shadow: 0 4px 10px rgba(0, 0, 0, 0.15);
+            }
+            
+            .dev-info-label {
+                min-width: 100px;
+                font-size: 14px;
+            }
+            
+            .dev-info-value {
+                font-size: 14px;
+            }
+            
+            .encrypt-strength-button,
+            .decrypt-strength-button {
+                min-width: 50px;
+                height: 40px;
+                font-size: 15px;
+                box-shadow: 0 4px 10px rgba(0, 0, 0, 0.15);
+            }
+            
+            .encrypt-strength-button:hover {
+                box-shadow: 0 8px 15px rgba(30, 144, 255, 0.4);
+            }
+            
+            .decrypt-strength-button:hover {
+                box-shadow: 0 8px 15px rgba(220, 20, 60, 0.4);
+            }
+        }
+        
+        @media (max-width: 400px) {
+            .action-button-row {
+                flex-direction: column;
+                align-items: center;
+                gap: 12px;
+            }
+            
+            .button-group {
+                width: 100%;
+                max-width: 250px;
+                justify-content: center;
+            }
+            
+            .action-button {
+                width: 100%;
+                max-width: 180px;
+            }
+            
+            .circle-button {
+                width: 50px;
+                height: 50px;
+            }
+            
+            .image-container {
+                width: min(250px, 80vw, 80vh);
+                height: min(250px, 80vw, 80vh);
+            }
+            
+            h1 {
+                font-size: 1.4rem;
+            }
+            
+            .loader {
+                width: 250px;
+                height: 250px;
+            }
+            
+            .loader div:nth-child(1) {
+                width: 180px;
+                height: 180px;
+                left: 35px;
+                top: 35px;
+            }
+            
+            .loader div:nth-child(2) {
+                width: 160px;
+                height: 160px;
+                left: 45px;
+                top: 45px;
+            }
+            
+            .loader div:nth-child(3) {
+                width: 140px;
+                height: 140px;
+                left: 55px;
+                top: 55px;
+            }
+            
+            .loader div:nth-child(4) {
+                width: 120px;
+                height: 120px;
+                left: 65px;
+                top: 65px;
+            }
+            
+            .dev-info-item {
+                flex-direction: column;
+                align-items: flex-start;
+            }
+            
+            .dev-info-label {
+                min-width: auto;
+                margin-bottom: 5px;
+            }
+            
+            .dev-info-value {
+                margin-left: 0;
+            }
+            
+            .encrypt-strength-button,
+            .decrypt-strength-button {
+                min-width: 45px;
+                height: 35px;
+                font-size: 14px;
+            }
+            
+            .encrypt-strength-buttons,
+            .decrypt-strength-buttons {
+                gap: 5px;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="error-overlay" id="error-overlay">
+        <div class="error-window">
+            <div class="error-header">
+                <div class="error-title">错误信息</div>
+                <button class="error-close" id="error-close">&times;</button>
+            </div>
+            <div class="error-content" id="error-content">
+            </div>
+            <div class="error-controls">
+                <div class="error-buttons-container">
+                    <button class="clear-errors-button" id="clear-errors">清除所有记录</button>
+                    <button class="copy-button" id="copy-errors">复制所有错误</button>
+                </div>
+            </div>
+        </div>
+    </div>
+    
+    <div class="loader" id="loader">
+        <div></div>
+        <div></div>
+        <div></div>
+        <div></div>
+    </div>
+    
+    <div class="content" id="content">
+        <h1>星光_图片混淆TOOL</h1>
+        
+        <div class="image-container">
+            <img id="display-img" />
+        </div>
+        
+        <div class="file-selector">
+            <div class="file-button">
+                <span>选择图片</span>
+                <input type="file" accept="image/*" id="ipt" class="ipt_btn" />
+            </div>
+        </div>
+        
+        <div class="action-buttons">
+            <div class="action-button-row">
+                <div class="button-group">
+                    <button id="enc" class="action-button">混淆图片</button>
+                    <button id="enc-multiple" class="circle-button">+</button>
+                </div>
+                <div class="button-group">
+                    <button id="dec" class="action-button">解混淆</button>
+                    <button id="dec-multiple" class="circle-button">-</button>
+                </div>
+            </div>
+            <div class="action-button-row">
+                <button id="re" class="action-button" style="min-width: 200px;">还原原图</button>
+            </div>
+        </div>
+        
+        <div style="display: flex; flex-direction: column; align-items: center; width: 100%; margin-bottom: 15px; gap: 10px;">
+            <button id="download" class="action-button" style="min-width: 200px;">下载图片</button>
+            <button id="view" class="action-button" style="min-width: 200px;">查看图片</button>
+            <button id="clear" class="action-button" style="min-width: 200px;">清除图片</button>
+        </div>
+        
+        <div class="format-options">
+            <label for="format-select">输出格式:</label>
+            <select id="format-select" class="format-select">
+                <option value="png" selected>PNG (无损)</option>
+                <option value="jpg">JPG (有损)</option>
+            </select>
+            
+            <div id="quality-option" class="quality-option">
+                <div class="quality-label">图片质量:</div>
+                <div class="quality-slider-container">
+                    <input type="range" id="quality-range" min="10" max="100" value="95">
+                    <span id="quality-value">95</span>
+                </div>
+            </div>
+        </div>
+        
+        <details class="settings-options" id="settings-options">
+            <summary class="settings-summary">设置</summary>
+            <div class="settings-content">
+                <details class="sub-settings">
+                    <summary class="sub-summary">混淆设置</summary>
+                    <div class="sub-content">
+                        <div class="setting-item">
+                            <input type="checkbox" id="enable-green" class="setting-checkbox">
+                            <label for="enable-green">绿图 (增强绿色80%)</label>
+                        </div>
+                        <div class="setting-item">
+                            <div class="strength-button-group">
+                                <div class="strength-label">混淆强度:</div>
+                                <div class="encrypt-strength-buttons">
+                                    <button class="encrypt-strength-button" data-value="0.0">0.0</button>
+                                    <button class="encrypt-strength-button" data-value="0.5">0.5</button>
+                                    <button class="encrypt-strength-button selected" data-value="1.0">1.0</button>
+                                    <button class="encrypt-strength-button" data-value="1.5">1.5</button>
+                                    <button class="encrypt-strength-button" data-value="2.0">2.0</button>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </details>
+                
+                <details class="sub-settings">
+                    <summary class="sub-summary">解混淆设置</summary>
+                    <div class="sub-content">
+                        <div class="setting-item">
+                            <input type="checkbox" id="reduce-green" class="setting-checkbox">
+                            <label for="reduce-green">减弱绿色效果</label>
+                        </div>
+                        <div class="setting-item">
+                            <div class="strength-button-group">
+                                <div class="strength-label">解混淆强度:</div>
+                                <div class="decrypt-strength-buttons">
+                                    <button class="decrypt-strength-button" data-value="0.0">0.0</button>
+                                    <button class="decrypt-strength-button" data-value="0.5">0.5</button>
+                                    <button class="decrypt-strength-button selected" data-value="1.0">1.0</button>
+                                    <button class="decrypt-strength-button" data-value="1.5">1.5</button>
+                                    <button class="decrypt-strength-button" data-value="2.0">2.0</button>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </details>
+                
+                <details class="sub-settings">
+                    <summary class="sub-summary">开发者设置</summary>
+                    <div class="sub-content">
+                        <div class="setting-item">
+                            <input type="checkbox" id="show-errors" class="setting-checkbox">
+                            <label for="show-errors">弹出报错信息</label>
+                        </div>
+                        <div class="setting-item">
+                            <button id="open-error-window" class="action-button" style="display: block; margin: 0 auto; padding: 10px; font-size: 14px; margin-top: 10px; background-color: rgba(106, 17, 203, 0.4); width: fit-content; min-width: 180px;">手动打开错误窗口</button>
+                        </div>
+                    </div>
+                </details>
+            </div>
+        </details>
+        
+        <!-- 开发信息板块 -->
+        <details class="dev-info-options">
+            <summary class="dev-info-summary">开发信息</summary>
+            <div class="dev-info-content">
+                <div class="dev-info-item">
+                    <div class="dev-info-label">开发者:</div>
+                    <div class="dev-info-value">Gascy</div>
+                </div>
+                <div class="dev-info-item">
+                    <div class="dev-info-label">协助开发者:</div>
+                    <div class="dev-info-value">ctnBobong32</div>
+                </div>
+                <div class="dev-info-item">
+                    <div class="dev-info-label">开发者QQ:</div>
+                    <div class="dev-info-value">2825951507</div>
+                </div>
+                <div class="dev-info-tool">图片混淆和解混淆工具˃ʍ˂</div>
+            </div>
+        </details>
+    </div>
+    
+<script>
+function gilbert2dIterative(width, height) {
+    const coordinates = [];
+    
+    const stack = [];
+    
+    if (width >= height) {
+        stack.push({x: 0, y: 0, ax: width, ay: 0, bx: 0, by: height});
+    } else {
+        stack.push({x: 0, y: 0, ax: 0, ay: height, bx: width, by: 0});
+    }
+    
+    while (stack.length > 0) {
+        const {x, y, ax, ay, bx, by} = stack.pop();
+        
+        const w = Math.abs(ax + ay);
+        const h = Math.abs(bx + by);
+        
+        const dax = Math.sign(ax), day = Math.sign(ay);
+        const dbx = Math.sign(bx), dby = Math.sign(by);
+        
+        if (h === 1) {
+            let curX = x, curY = y;
+            for (let i = 0; i < w; i++) {
+                coordinates.push([curX, curY]);
+                curX += dax;
+                curY += day;
+            }
+            continue;
+        }
+        
+        if (w === 1) {
+            let curX = x, curY = y;
+            for (let i = 0; i < h; i++) {
+                coordinates.push([curX, curY]);
+                curX += dbx;
+                curY += dby;
+            }
+            continue;
+        }
+        
+        let ax2 = Math.floor(ax / 2), ay2 = Math.floor(ay / 2);
+        let bx2 = Math.floor(bx / 2), by2 = Math.floor(by / 2);
+        
+        const w2 = Math.abs(ax2 + ay2);
+        const h2 = Math.abs(bx2 + by2);
+        
+        if (2 * w > 3 * h) {
+            if ((w2 % 2) && (w > 2)) {
+                ax2 += dax;
+                ay2 += day;
+            }
+            
+            stack.push({x: x + ax2, y: y + ay2, ax: ax - ax2, ay: ay - ay2, bx, by});
+            stack.push({x, y, ax: ax2, ay: ay2, bx, by});
+        } else {
+            if ((h2 % 2) && (h > 2)) {
+                bx2 += dbx;
+                by2 += dby;
+            }
+            
+            stack.push({x: x + (ax - dax) + (bx2 - dbx), y: y + (ay - day) + (by2 - dby),
+                ax: -bx2, ay: -by2, bx: -(ax - ax2), by: -(ay - ay2)});
+            stack.push({x: x + bx2, y: y + by2, ax, ay, bx: bx - bx2, by: by - by2});
+            stack.push({x, y, ax: bx2, ay: by2, bx: ax2, by: ay2});
+        }
+    }
+    
+    return coordinates;
+}
+
+const img = document.getElementById("display-img");
+const loader = document.getElementById("loader");
+const encBtn = document.getElementById("enc");
+const decBtn = document.getElementById("dec");
+const encMultipleBtn = document.getElementById("enc-multiple");
+const decMultipleBtn = document.getElementById("dec-multiple");
+const restoreBtn = document.getElementById("re");
+const clearBtn = document.getElementById("clear");
+const downloadBtn = document.getElementById("download");
+const viewBtn = document.getElementById("view");
+const formatSelect = document.getElementById("format-select");
+const qualityOption = document.getElementById("quality-option");
+const qualityRange = document.getElementById("quality-range");
+const qualityValue = document.getElementById("quality-value");
+
+const enableGreen = document.getElementById("enable-green");
+const reduceGreen = document.getElementById("reduce-green");
+const showErrors = document.getElementById("show-errors");
+const openErrorWindowBtn = document.getElementById("open-error-window");
+
+const errorOverlay = document.getElementById("error-overlay");
+const errorContent = document.getElementById("error-content");
+const errorClose = document.getElementById("error-close");
+const copyErrorsBtn = document.getElementById("copy-errors");
+const clearErrorsBtn = document.getElementById("clear-errors");
+
+// 混淆强度和解混淆强度变量（1.0为默认强度）
+let encryptStrength = 1.0;
+let decryptStrength = 1.0;
+
+// 初始化强度按钮
+function initStrengthButtons() {
+    try {
+        // 混淆强度按钮
+        const encryptButtons = document.querySelectorAll('.encrypt-strength-button');
+        encryptButtons.forEach(button => {
+            button.addEventListener('click', function(e) {
+                // 添加波浪效果
+                addWaveEffect(e, 'rgba(30, 144, 255, 0.9)');
+                
+                // 获取强度值
+                const value = parseFloat(this.getAttribute('data-value'));
+                encryptStrength = value;
+                
+                // 移除所有按钮的选中状态
+                encryptButtons.forEach(btn => btn.classList.remove('selected'));
+                // 添加当前按钮的选中状态
+                this.classList.add('selected');
+            });
+        });
+        
+        // 解混淆强度按钮
+        const decryptButtons = document.querySelectorAll('.decrypt-strength-button');
+        decryptButtons.forEach(button => {
+            button.addEventListener('click', function(e) {
+                // 添加波浪效果
+                addWaveEffect(e, 'rgba(220, 20, 60, 0.9)');
+                
+                // 获取强度值
+                const value = parseFloat(this.getAttribute('data-value'));
+                decryptStrength = value;
+                
+                // 移除所有按钮的选中状态
+                decryptButtons.forEach(btn => btn.classList.remove('selected'));
+                // 添加当前按钮的选中状态
+                this.classList.add('selected');
+            });
+        });
+        
+    } catch (error) {
+        console.error('初始化强度按钮时出错:', error);
+    }
+}
+
+// 改进的错误处理系统
+let errorMessages = [];
+
+function showError(message) {
+    try {
+        if (typeof message !== 'string') {
+            try {
+                message = JSON.stringify(message);
+            } catch (e) {
+                message = String(message);
+            }
+        }
+        
+        const timestamp = new Date().toLocaleTimeString();
+        const errorMessage = `[${timestamp}] ${message}`;
+        
+        // 限制错误消息数量，防止内存泄漏
+        if (errorMessages.length > 100) {
+            errorMessages.shift();
+        }
+        
+        errorMessages.push(errorMessage);
+        
+        // 更新错误显示
+        updateErrorDisplay();
+        
+        // 如果设置了显示错误窗口，则显示
+        if (showErrors && showErrors.checked && errorOverlay) {
+            errorOverlay.style.display = "flex";
+        }
+        
+        console.error('应用错误:', errorMessage);
+        
+    } catch (error) {
+        console.error('显示错误时出错:', error);
+    }
+}
+
+function updateErrorDisplay() {
+    try {
+        if (!errorContent) return;
+        
+        errorContent.textContent = errorMessages.join('\n\n');
+        errorContent.scrollTop = errorContent.scrollHeight;
+    } catch (error) {
+        console.error('更新错误显示失败:', error);
+    }
+}
+
+function clearAllErrors() {
+    errorMessages = [];
+    updateErrorDisplay();
+}
+
+function copyAllErrors() {
+    try {
+        const allErrors = errorMessages.join('\n');
+        navigator.clipboard.writeText(allErrors).then(() => {
+        }).catch(err => {
+            console.error('复制失败:', err);
+            showError('复制失败: ' + err.message);
+        });
+    } catch (error) {
+        showError('复制错误时出错: ' + error.message);
+    }
+}
+
+function closeErrorWindow() {
+    try {
+        if (errorOverlay) {
+            errorOverlay.style.display = "none";
+        }
+    } catch (error) {
+        console.error('关闭错误窗口失败:', error);
+    }
+}
+
+function openErrorWindow() {
+    try {
+        if (errorOverlay) {
+            updateErrorDisplay();
+            errorOverlay.style.display = "flex";
+        }
+    } catch (error) {
+        console.error('打开错误窗口时出错:', error);
+    }
+}
+
+// 初始化错误窗口事件
+try {
+    if (errorClose) errorClose.addEventListener('click', closeErrorWindow);
+    if (copyErrorsBtn) copyErrorsBtn.addEventListener('click', copyAllErrors);
+    if (clearErrorsBtn) clearErrorsBtn.addEventListener('click', clearAllErrors);
+    if (openErrorWindowBtn) {
+        openErrorWindowBtn.addEventListener('click', openErrorWindow);
+    }
+} catch (error) {
+    console.error('初始化错误窗口事件失败:', error);
+}
+
+// 简化的全局错误处理
+window.addEventListener('error', function(event) {
+    showError(`全局错误: ${event.message} (${event.filename}:${event.lineno}:${event.colno})`);
+});
+
+window.addEventListener('unhandledrejection', function(event) {
+    event.preventDefault();
+    const errorMsg = event.reason ? event.reason.toString() : '未处理的Promise拒绝';
+    showError('未处理的Promise拒绝: ' + errorMsg);
+});
+
+// =================== 改进的内存管理 ===================
+
+// 改进的blob URL管理
+let activeBlobURLs = new Set(); // 改用Set避免重复
+let currentBlobURL = null; // 当前显示图片的blob URL
+
+function addBlobURL(url) {
+    if (typeof url === 'string' && url.startsWith('blob:')) {
+        // 如果已经有相同的URL，先移除旧的
+        if (activeBlobURLs.has(url)) {
+            try {
+                URL.revokeObjectURL(url);
+                activeBlobURLs.delete(url);
+            } catch (e) {
+            }
+        }
+        
+        activeBlobURLs.add(url);
+        currentBlobURL = url;
+    }
+}
+
+function releaseBlobURL(url) {
+    try {
+        if (typeof url === 'string' && url.startsWith('blob:')) {
+            URL.revokeObjectURL(url);
+            activeBlobURLs.delete(url);
+            
+            if (currentBlobURL === url) {
+                currentBlobURL = null;
+            }
+            
+            return true;
+        }
+    } catch (e) {
+    }
+    return false;
+}
+
+function releaseAllBlobURLs() {
+    try {
+        let releasedCount = 0;
+        const urlsToRelease = Array.from(activeBlobURLs);
+        
+        for (const url of urlsToRelease) {
+            if (releaseBlobURL(url)) {
+                releasedCount++;
+            }
+        }
+        
+        activeBlobURLs.clear();
+        currentBlobURL = null;
+        
+        return releasedCount;
+    } catch (error) {
+        console.error('释放blob URL时出错:', error);
+        return 0;
+    }
+}
+
+// 改进的大对象管理
+let largeObjects = {
+    canvas: null,
+    imgData: null,
+    curve: null
+};
+
+// 改进的releaseLargeObjects函数
+function releaseLargeObjects() {
+    try {
+        // 1. 首先释放canvas资源
+        if (largeObjects.canvas) {
+            try {
+                const ctx = largeObjects.canvas.getContext('2d');
+                if (ctx) {
+                    // 清除画布内容
+                    ctx.clearRect(0, 0, largeObjects.canvas.width, largeObjects.canvas.height);
+                    // 释放画布上下文
+                    try {
+                        // 强制canvas重置尺寸来释放GPU内存
+                        largeObjects.canvas.width = 0;
+                        largeObjects.canvas.height = 0;
+                    } catch (e) {
+                        // 忽略可能的错误
+                    }
+                }
+                
+                // 移除canvas的所有事件监听器（如果有）
+                const newCanvas = largeObjects.canvas.cloneNode(false);
+                if (largeObjects.canvas.parentNode) {
+                    largeObjects.canvas.parentNode.replaceChild(newCanvas, largeObjects.canvas);
+                }
+                
+                // 显式断开引用
+                largeObjects.canvas = null;
+                
+            } catch (e) {
+                largeObjects.canvas = null;
+            }
+        }
+        
+        // 2. 释放ImageData（通过置空引用来帮助垃圾回收）
+        if (largeObjects.imgData) {
+            // 对于大型图像数据，可以尝试手动释放内存
+            if (largeObjects.imgData.data && largeObjects.imgData.data.length > 1000000) {
+                // 对于超过1百万像素的图像数据，强制清除
+                try {
+                    // 创建一个小的临时数组来替换大数据
+                    const tempArray = new Uint8ClampedArray(4);
+                    largeObjects.imgData.data.set(tempArray);
+                } catch (e) {
+                    // 忽略错误
+                }
+            }
+            largeObjects.imgData = null;
+        }
+        
+        // 3. 释放曲线数据
+        if (largeObjects.curve) {
+            // 对于大型曲线数组，可以强制清空
+            if (largeObjects.curve.length > 100000) {
+                largeObjects.curve.length = 0; // 清空数组
+            }
+            largeObjects.curve = null;
+        }
+        
+        // 4. 强制垃圾回收提示（如果浏览器支持）
+        if (window.gc) {
+            try {
+                window.gc();
+            } catch (e) {
+                // 忽略错误
+            }
+        }
+        
+        // 5. 释放JavaScript引擎内存
+        if (globalThis.gc && typeof globalThis.gc === 'function') {
+            try {
+                globalThis.gc();
+            } catch (e) {
+                // 忽略错误
+            }
+        }
+        
+    } catch (error) {
+        console.error('释放大对象时出错:', error);
+        // 确保所有引用都被清除
+        largeObjects.canvas = null;
+        largeObjects.imgData = null;
+        largeObjects.curve = null;
+    }
+}
+
+// 新增：定期清理函数
+function scheduleMemoryCleanup() {
+    // 如果对象太大或blob URLs太多，进行清理
+    const shouldCleanup = 
+        (largeObjects.imgData && largeObjects.imgData.data && largeObjects.imgData.data.length > 5000000) || // 大于5百万像素
+        (largeObjects.curve && largeObjects.curve.length > 500000) || // 大于50万点
+        activeBlobURLs.size > 5; // 超过5个blob URLs
+    
+    if (shouldCleanup) {
+        releaseLargeObjects();
+        
+        // 保留当前blob URL，释放其他的
+        if (currentBlobURL) {
+            const urlsToRelease = Array.from(activeBlobURLs).filter(url => url !== currentBlobURL);
+            urlsToRelease.forEach(url => releaseBlobURL(url));
+        } else {
+            releaseAllBlobURLs();
+        }
+    }
+}
+
+let isProcessing = false;
+let abortController = null;
+
+// 简化的图像处理分块函数
+function processImageInChunks(totalPixels, processPixel, chunkSize = 10000, checkCancel = () => false) {
+    return new Promise((resolve, reject) => {
+        let index = 0;
+        
+        function processChunk() {
+            try {
+                if (checkCancel()) {
+                    reject(new Error('操作已被取消'));
+                    return;
+                }
+                
+                const end = Math.min(index + chunkSize, totalPixels);
+                for (let i = index; i < end; i++) {
+                    processPixel(i);
+                }
+                
+                index = end;
+                
+                if (index < totalPixels) {
+                    setTimeout(processChunk, 0);
+                } else {
+                    resolve();
+                }
+            } catch (error) {
+                reject(error);
+            }
+        }
+        
+        processChunk();
+    });
+}
+
+function setImageSrc(src) {
+    try {
+        if (img) {
+            img.onerror = null;
+            img.onload = null;
+        }
+        
+        if (!src) {
+            if (img) {
+                img.style.display = "none";
+                img.src = "";
+            }
+            // 释放当前blob URL
+            if (currentBlobURL) {
+                releaseBlobURL(currentBlobURL);
+            }
+            return;
+        }
+        
+        // 如果不是blob URL（比如data URL），释放所有blob URLs
+        if (!src.startsWith('blob:')) {
+            releaseAllBlobURLs();
+        }
+        
+        // 如果是blob URL，先释放旧的再添加新的
+        if (typeof src === 'string' && src.startsWith('blob:')) {
+            // 释放之前的blob URLs（保留当前）
+            const urlsToRelease = Array.from(activeBlobURLs).filter(url => url !== src);
+            urlsToRelease.forEach(url => releaseBlobURL(url));
+            
+            addBlobURL(src);
+        }
+        
+        if (img) {
+            img.onerror = function() {
+                showError('图片加载失败');
+                hideLoader();
+                // 加载失败时释放blob URL
+                if (src.startsWith('blob:')) {
+                    releaseBlobURL(src);
+                }
+            };
+            
+            img.onload = function() {
+                if (img) {
+                    img.style.display = "block";
+                }
+                // 图片完全加载后再隐藏加载动画
+                setTimeout(hideLoader, 100);
+            };
+            
+            img.src = src;
+        }
+        
+    } catch (error) {
+        showError('设置图片源时出错: ' + error.message);
+        hideLoader();
+        // 出错时释放blob URL
+        if (src && src.startsWith('blob:')) {
+            releaseBlobURL(src);
+        }
+    }
+}
+
+function showLoader() {
+    try {
+        if (loader) {
+            loader.style.display = "block";
+        }
+    } catch (error) {
+        console.error('显示加载动画失败:', error);
+    }
+}
+
+function hideLoader() {
+    try {
+        if (loader) {
+            loader.style.display = "none";
+        }
+    } catch (error) {
+        console.error('隐藏加载动画失败:', error);
+    }
+}
+
+let hasEncrypted = false;
+let hasDecrypted = false;
+let hasImage = false;
+let currentFileName = "";
+
+function resetButtonStates() {
+    try {
+        hasEncrypted = false;
+        hasDecrypted = false;
+        
+        if (encBtn) encBtn.style.display = "flex";
+        if (decBtn) decBtn.style.display = "flex";
+        if (encMultipleBtn) encMultipleBtn.style.display = "flex";
+        if (decMultipleBtn) decMultipleBtn.style.display = "flex";
+        if (restoreBtn) restoreBtn.style.display = "none";
+        
+        updateDownloadButtonVisibility();
+        updateViewButtonVisibility();
+        enableButtons();
+    } catch (error) {
+        showError('重置按钮状态时出错: ' + error.message);
+    }
+}
+
+function showRestoreButton() {
+    try {
+        if (restoreBtn) {
+            restoreBtn.style.display = "flex";
+        }
+        updateDownloadButtonVisibility();
+        updateViewButtonVisibility();
+    } catch (error) {
+        showError('显示还原按钮时出错: ' + error.message);
+    }
+}
+
+function updateDownloadButtonVisibility() {
+    try {
+        if (downloadBtn) {
+            if (hasImage && (hasEncrypted || hasDecrypted)) {
+                downloadBtn.style.display = "flex";
+            } else {
+                downloadBtn.style.display = "none";
+            }
+        }
+    } catch (error) {
+        showError('更新下载按钮可见性时出错: ' + error.message);
+    }
+}
+
+function updateViewButtonVisibility() {
+    try {
+        if (viewBtn) {
+            if (hasImage && (hasEncrypted || hasDecrypted)) {
+                viewBtn.style.display = "flex";
+            } else {
+                viewBtn.style.display = "none";
+            }
+        }
+    } catch (error) {
+        showError('更新查看图片按钮可见性时出错: ' + error.message);
+    }
+}
+
+function rgbToHsl(r, g, b) {
+    r /= 255, g /= 255, b /= 255;
+    const max = Math.max(r, g, b), min = Math.min(r, g, b);
+    let h, s, l = (max + min) / 2;
+
+    if (max === min) {
+        h = s = 0;
+    } else {
+        const d = max - min;
+        s = l > 0.5 ? d / (2 - max - min) : d / (max + min);
+        switch (max) {
+            case r: h = (g - b) / d + (g < b ? 6 : 0); break;
+            case g: h = (b - r) / d + 2; break;
+            case b: h = (r - g) / d + 4; break;
+        }
+        h /= 6;
+    }
+
+    return [h * 360, s * 100, l * 100];
+}
+
+function adjustGreenColor(data, enhance = true) {
+    const result = new Uint8ClampedArray(data.length);
+    
+    for (let i = 0; i < data.length; i += 4) {
+        const r = data[i];
+        const g = data[i + 1];
+        const b = data[i + 2];
+        const a = data[i + 3];
+        
+        const [h, s, l] = rgbToHsl(r, g, b);
+        
+        let newR = r, newG = g, newB = b;
+        
+        const isGreenish = (h >= 75 && h <= 165 && s > 8 && l > 10 && l < 90);
+        
+        if (enhance && isGreenish) {
+            const greenFactor = 1.0 + (Math.min(s, 70) / 100) * 0.6;
+            const redBlueFactor = Math.max(0.7, 1.0 - (Math.min(s, 70) / 100) * 0.3);
+            
+            newG = Math.min(255, Math.round(g * greenFactor));
+            newR = Math.max(0, Math.round(r * redBlueFactor));
+            newB = Math.max(0, Math.round(b * redBlueFactor));
+            
+        } else if (!enhance && isGreenish) {
+            const greenFactor = Math.max(0.5, 1.0 - (Math.min(s, 80) / 100) * 0.5);
+            const redBlueFactor = Math.min(1.3, 1.0 + (Math.min(s, 80) / 100) * 0.3);
+            
+            newG = Math.max(0, Math.round(g * greenFactor));
+            newR = Math.min(255, Math.round(r * redBlueFactor));
+            newB = Math.min(255, Math.round(b * redBlueFactor));
+        }
+        
+        result[i] = Math.max(0, Math.min(255, newR));
+        result[i + 1] = Math.max(0, Math.min(255, newG));
+        result[i + 2] = Math.max(0, Math.min(255, newB));
+        result[i + 3] = a;
+    }
+    
+    return result;
+}
+
+function disableButtons() {
+    const buttons = [encBtn, decBtn, encMultipleBtn, decMultipleBtn, restoreBtn, clearBtn, downloadBtn, viewBtn];
+    buttons.forEach(btn => {
+        if (btn) {
+            btn.classList.add('disabled');
+        }
+    });
+}
+
+function enableButtons() {
+    const buttons = [encBtn, decBtn, encMultipleBtn, decMultipleBtn, restoreBtn, clearBtn, downloadBtn, viewBtn];
+    buttons.forEach(btn => {
+        if (btn) {
+            btn.classList.remove('disabled');
+        }
+    });
+}
+
+async function encryptCommon(imgElement, hideButtons = true) {
+    try {
+        if (isProcessing) {
+            showError('当前有操作正在进行，请稍后重试');
+            return;
+        }
+        
+        isProcessing = true;
+        disableButtons();
+        showLoader();
+        
+        abortController = new AbortController();
+        const signal = abortController.signal;
+        
+        try {
+            // 在处理前释放大对象
+            releaseLargeObjects();
+            
+            const cvs = document.createElement("canvas");
+            largeObjects.canvas = cvs;
+            const width = cvs.width = imgElement.width;
+            const height = cvs.height = imgElement.height;
+            const ctx = cvs.getContext("2d", { willReadFrequently: true });
+            ctx.drawImage(imgElement, 0, 0);
+            
+            let imgdata = ctx.getImageData(0, 0, width, height);
+            largeObjects.imgData = imgdata;
+            
+            if (enableGreen && enableGreen.checked) {
+                const enhancedData = adjustGreenColor(imgdata.data, true);
+                imgdata.data.set(enhancedData);
+            }
+            
+            const imgdata2 = new ImageData(width, height);
+            const curve = gilbert2dIterative(width, height);
+            largeObjects.curve = curve;
+            
+            const totalPixels = width * height;
+            // 使用混淆强度系数计算偏移量
+            const offset = Math.round(encryptStrength * (Math.sqrt(5) - 1) / 2 * totalPixels);
+            
+            await processImageInChunks(
+                totalPixels,
+                (i) => {
+                    const old_pos = curve[i];
+                    const new_pos = curve[(i + offset) % totalPixels];
+                    const old_p = 4 * (old_pos[0] + old_pos[1] * width);
+                    const new_p = 4 * (new_pos[0] + new_pos[1] * width);
+                    
+                    imgdata2.data[new_p] = imgdata.data[old_p];
+                    imgdata2.data[new_p + 1] = imgdata.data[old_p + 1];
+                    imgdata2.data[new_p + 2] = imgdata.data[old_p + 2];
+                    imgdata2.data[new_p + 3] = imgdata.data[old_p + 3];
+                },
+                10000,
+                () => signal.aborted
+            );
+            
+            if (signal.aborted) {
+                throw new Error('操作已被取消');
+            }
+            
+            ctx.putImageData(imgdata2, 0, 0);
+            
+            const format = formatSelect ? formatSelect.value : 'png';
+            
+            return new Promise((resolve, reject) => {
+                const onBlobCreated = (blob) => {
+                    try {
+                        if (signal.aborted) {
+                            reject(new Error('操作已被取消'));
+                            return;
+                        }
+                        
+                        if (!blob) {
+                            reject(new Error('创建blob失败'));
+                            return;
+                        }
+                        
+                        const blobURL = URL.createObjectURL(blob);
+                        
+                        // 设置图片源，等待图片加载完成
+                        setImageSrc(blobURL);
+                        
+                        // 注意：加载动画将在图片加载完成后由setImageSrc函数隐藏
+                        
+                        hasEncrypted = true;
+                        showRestoreButton();
+                        updateDownloadButtonVisibility();
+                        updateViewButtonVisibility();
+                        
+                        if (hideButtons) {
+                            if (encBtn) encBtn.style.display = "none";
+                            if (encMultipleBtn) encMultipleBtn.style.display = "none";
+                        }
+                        
+                        // 处理完成后立即释放大对象
+                        setTimeout(() => {
+                            releaseLargeObjects();
+                        }, 500);
+                        
+                        resolve(blobURL);
+                    } catch (error) {
+                        reject(error);
+                    }
+                };
+                
+                if (format === 'png') {
+                    cvs.toBlob(onBlobCreated, "image/png");
+                } else {
+                    const quality = qualityRange ? parseInt(qualityRange.value) / 100 : 0.95;
+                    cvs.toBlob(onBlobCreated, "image/jpeg", quality);
+                }
+            });
+            
+        } catch (error) {
+            // 处理过程中出错，隐藏加载动画
+            hideLoader();
+            // 确保释放大对象
+            releaseLargeObjects();
+            throw error;
+        }
+        
+    } catch (error) {
+        if (error.message !== '操作已被取消') {
+            showError('加密处理时出错: ' + error.message);
+        }
+        throw error;
+    } finally {
+        // 注意：这里不再隐藏加载动画，因为加载动画将在图片加载完成后由setImageSrc函数隐藏
+        isProcessing = false;
+        abortController = null;
+        enableButtons();
+    }
+}
+
+async function decryptCommon(imgElement, hideButtons = true) {
+    try {
+        if (isProcessing) {
+            showError('当前有操作正在进行，请稍后重试');
+            return;
+        }
+        
+        isProcessing = true;
+        disableButtons();
+        showLoader();
+        
+        abortController = new AbortController();
+        const signal = abortController.signal;
+        
+        try {
+            // 在处理前释放大对象
+            releaseLargeObjects();
+            
+            const cvs = document.createElement("canvas");
+            largeObjects.canvas = cvs;
+            const width = cvs.width = imgElement.width;
+            const height = cvs.height = imgElement.height;
+            const ctx = cvs.getContext("2d", { willReadFrequently: true });
+            ctx.drawImage(imgElement, 0, 0);
+            
+            let imgdata = ctx.getImageData(0, 0, width, height);
+            largeObjects.imgData = imgdata;
+            const imgdata2 = new ImageData(width, height);
+            
+            const curve = gilbert2dIterative(width, height);
+            largeObjects.curve = curve;
+            
+            const totalPixels = width * height;
+            // 使用解混淆强度系数计算偏移量
+            const offset = Math.round(decryptStrength * (Math.sqrt(5) - 1) / 2 * totalPixels);
+            
+            await processImageInChunks(
+                totalPixels,
+                (i) => {
+                    const old_pos = curve[i];
+                    const new_pos = curve[(i + offset) % totalPixels];
+                    const old_p = 4 * (old_pos[0] + old_pos[1] * width);
+                    const new_p = 4 * (new_pos[0] + new_pos[1] * width);
+                    
+                    imgdata2.data[old_p] = imgdata.data[new_p];
+                    imgdata2.data[old_p + 1] = imgdata.data[new_p + 1];
+                    imgdata2.data[old_p + 2] = imgdata.data[new_p + 2];
+                    imgdata2.data[old_p + 3] = imgdata.data[new_p + 3];
+                },
+                10000,
+                () => signal.aborted
+            );
+            
+            if (signal.aborted) {
+                throw new Error('操作已被取消');
+            }
+            
+            let finalData = new Uint8ClampedArray(imgdata2.data);
+            
+            if (reduceGreen && reduceGreen.checked) {
+                finalData = adjustGreenColor(finalData, false);
+            }
+            
+            imgdata2.data.set(finalData);
+            ctx.putImageData(imgdata2, 0, 0);
+            
+            const format = formatSelect ? formatSelect.value : 'png';
+            
+            return new Promise((resolve, reject) => {
+                const onBlobCreated = (blob) => {
+                    try {
+                        if (signal.aborted) {
+                            reject(new Error('操作已被取消'));
+                            return;
+                        }
+                        
+                        if (!blob) {
+                            reject(new Error('创建blob失败'));
+                            return;
+                        }
+                        
+                        const blobURL = URL.createObjectURL(blob);
+                        
+                        // 设置图片源，等待图片加载完成
+                        setImageSrc(blobURL);
+                        
+                        // 注意：加载动画将在图片加载完成后由setImageSrc函数隐藏
+                        
+                        hasDecrypted = true;
+                        showRestoreButton();
+                        updateDownloadButtonVisibility();
+                        updateViewButtonVisibility();
+                        
+                        if (hideButtons) {
+                            if (decBtn) decBtn.style.display = "none";
+                            if (decMultipleBtn) decMultipleBtn.style.display = "none";
+                        }
+                        
+                        // 处理完成后立即释放大对象
+                        setTimeout(() => {
+                            releaseLargeObjects();
+                        }, 500);
+                        
+                        resolve(blobURL);
+                    } catch (error) {
+                        reject(error);
+                    }
+                };
+                
+                if (format === 'png') {
+                    cvs.toBlob(onBlobCreated, "image/png");
+                } else {
+                    const quality = qualityRange ? parseInt(qualityRange.value) / 100 : 0.95;
+                    cvs.toBlob(onBlobCreated, "image/jpeg", quality);
+                }
+            });
+            
+        } catch (error) {
+            // 处理过程中出错，隐藏加载动画
+            hideLoader();
+            // 确保释放大对象
+            releaseLargeObjects();
+            throw error;
+        }
+        
+    } catch (error) {
+        if (error.message !== '操作已被取消') {
+            showError('解密处理时出错: ' + error.message);
+        }
+        throw error;
+    } finally {
+        // 注意：这里不再隐藏加载动画，因为加载动画将在图片加载完成后由setImageSrc函数隐藏
+        isProcessing = false;
+        abortController = null;
+        enableButtons();
+    }
+}
+
+function encrypt(imgElement, hideButtons = true) {
+    encryptCommon(imgElement, hideButtons).catch(() => {});
+}
+
+function decrypt(imgElement, hideButtons = true) {
+    decryptCommon(imgElement, hideButtons).catch(() => {});
+}
+
+function cancelCurrentOperation() {
+    if (abortController) {
+        abortController.abort();
+        hideLoader();
+        isProcessing = false;
+        enableButtons();
+        // 取消时释放大对象
+        releaseLargeObjects();
+    }
+}
+
+function downloadImage() {
+    try {
+        if (!img || !img.src || img.src === '') return;
+        
+        const link = document.createElement('a');
+        link.download = getDownloadFileName();
+        link.href = img.src;
+        link.click();
+    } catch (error) {
+        showError('下载图片时出错: ' + error.message);
+    }
+}
+
+function viewImage() {
+    try {
+        if (!img || !img.src || img.src === '') return;
+        
+        window.open(img.src, '_blank');
+    } catch (error) {
+        showError('查看图片时出错: ' + error.message);
+    }
+}
+
+function getDownloadFileName() {
+    try {
+        const format = formatSelect ? formatSelect.value : 'png';
+        const prefix = hasEncrypted ? 'encrypted_' : hasDecrypted ? 'decrypted_' : 'image_';
+        const timestamp = new Date().getTime();
+        const extension = format === 'png' ? 'png' : 'jpg';
+        
+        if (currentFileName) {
+            const nameWithoutExt = currentFileName.replace(/\.[^/.]+$/, "");
+            return `${prefix}${nameWithoutExt}_${timestamp}.${extension}`;
+        }
+        
+        return `${prefix}${timestamp}.${extension}`;
+    } catch (error) {
+        showError('生成下载文件名时出错: ' + error.message);
+        return 'image_' + new Date().getTime() + '.png';
+    }
+}
+
+function clearImage() {
+    try {
+        if (isProcessing) {
+            cancelCurrentOperation();
+        }
+        
+        if (img) {
+            img.style.display = "none";
+            img.src = "";
+        }
+        
+        // 彻底释放所有资源
+        releaseAllBlobURLs();
+        releaseLargeObjects();
+        
+        const ipt = document.getElementById("ipt");
+        if (ipt) {
+            ipt.value = "";
+        }
+        
+        hasImage = false;
+        hasEncrypted = false;
+        hasDecrypted = false;
+        currentFileName = "";
+        
+        resetButtonStates();
+        if (clearBtn) clearBtn.style.display = "none";
+        if (downloadBtn) downloadBtn.style.display = "none";
+        if (viewBtn) viewBtn.style.display = "none";
+        
+        // 强制垃圾回收提示
+        if (window.gc) {
+            try {
+                window.gc();
+            } catch (e) {}
+        }
+    } catch (error) {
+        showError('清除图片时出错: ' + error.message);
+    }
+}
+
+function addWaveEffect(event, waveColor) {
+    try {
+        const button = event.currentTarget;
+        if (!button || button.classList.contains('disabled')) return;
+        
+        const wave = document.createElement('div');
+        wave.className = 'wave';
+        
+        const rect = button.getBoundingClientRect();
+        const x = event.clientX - rect.left;
+        const y = event.clientY - rect.top;
+        
+        wave.style.left = x + 'px';
+        wave.style.top = y + 'px';
+        
+        const enhancedColor = waveColor.replace('0.7', '0.9').replace('0.6', '0.9');
+        wave.style.backgroundColor = enhancedColor;
+        
+        button.appendChild(wave);
+        
+        setTimeout(() => {
+            if (wave && wave.parentNode === button) {
+                wave.remove();
+            }
+        }, 800);
+    } catch (error) {
+        console.error('添加波浪效果时出错:', error);
+    }
+}
+
+const buttons = [
+    { element: document.querySelector('.file-button'), color: 'rgba(106, 17, 203, 0.9)' },
+    { element: encBtn, color: 'rgba(30, 144, 255, 0.9)' },
+    { element: decBtn, color: 'rgba(220, 20, 60, 0.9)' },
+    { element: encMultipleBtn, color: 'rgba(30, 144, 255, 0.9)' },
+    { element: decMultipleBtn, color: 'rgba(220, 20, 60, 0.9)' },
+    { element: restoreBtn, color: 'rgba(255, 140, 0, 0.9)' },
+    { element: clearBtn, color: 'rgba(50, 205, 50, 0.9)' },
+    { element: downloadBtn, color: 'rgba(0, 191, 255, 0.9)' },
+    { element: viewBtn, color: 'rgba(138, 43, 226, 0.9)' },
+    { element: clearErrorsBtn, color: 'rgba(255, 140, 0, 0.9)' },
+    { element: copyErrorsBtn, color: 'rgba(30, 144, 255, 0.9)' },
+    { element: openErrorWindowBtn, color: 'rgba(106, 17, 203, 0.9)' }
+];
+
+buttons.forEach(button => {
+    if (button.element) {
+        button.element.addEventListener('click', (e) => {
+            addWaveEffect(e, button.color);
+        });
+    }
+});
+
+// 为强度按钮添加波浪效果
+document.querySelectorAll('.encrypt-strength-button').forEach(button => {
+    button.addEventListener('click', (e) => {
+        addWaveEffect(e, 'rgba(30, 144, 255, 0.9)');
+    });
+});
+
+document.querySelectorAll('.decrypt-strength-button').forEach(button => {
+    button.addEventListener('click', (e) => {
+        addWaveEffect(e, 'rgba(220, 20, 60, 0.9)');
+    });
+});
+
+const ipt = document.getElementById("ipt");
+if (ipt) {
+    ipt.onchange = () => {
+        try {
+            if (!ipt.files || ipt.files.length === 0) return;
+            
+            if (isProcessing) {
+                showError('当前有操作正在进行，无法选择新图片');
+                return;
+            }
+            
+            resetButtonStates();
+            
+            if (img) {
+                img.style.display = "none";
+            }
+            
+            const file = ipt.files[0];
+            if (!file.type.startsWith('image/')) {
+                showError('请选择图片文件');
+                ipt.value = "";
+                return;
+            }
+            
+            // 先释放之前的资源
+            releaseAllBlobURLs();
+            releaseLargeObjects();
+            
+            const fileURL = URL.createObjectURL(file);
+            setImageSrc(fileURL);
+            
+            hasImage = true;
+            currentFileName = file.name;
+            
+            if (clearBtn) clearBtn.style.display = "flex";
+            if (downloadBtn) downloadBtn.style.display = "none";
+            if (viewBtn) viewBtn.style.display = "none";
+            
+        } catch (error) {
+            showError('选择图片时出错: ' + error.message);
+        }
+    };
+}
+
+if (encBtn) {
+    encBtn.onclick = () => {
+        try {
+            if (isProcessing) return;
+            if (img && img.src && img.src !== '') {
+                if (img) img.style.display = "none";
+                encrypt(img, true);
+            }
+        } catch (error) {
+            showError('点击混淆按钮时出错: ' + error.message);
+        }
+    };
+}
+
+if (decBtn) {
+    decBtn.onclick = () => {
+        try {
+            if (isProcessing) return;
+            if (img && img.src && img.src !== '') {
+                if (img) img.style.display = "none";
+                decrypt(img, true);
+            }
+        } catch (error) {
+            showError('点击解混淆按钮时出错: ' + error.message);
+        }
+    };
+}
+
+if (encMultipleBtn) {
+    encMultipleBtn.onclick = () => {
+        try {
+            if (isProcessing) return;
+            if (img && img.src && img.src !== '') {
+                if (img) img.style.display = "none";
+                encrypt(img, false);
+            }
+        } catch (error) {
+            showError('点击多次混淆按钮时出错: ' + error.message);
+        }
+    };
+}
+
+if (decMultipleBtn) {
+    decMultipleBtn.onclick = () => {
+        try {
+            if (isProcessing) return;
+            if (img && img.src && img.src !== '') {
+                if (img) img.style.display = "none";
+                decrypt(img, false);
+            }
+        } catch (error) {
+            showError('点击多次解混淆按钮时出错: ' + error.message);
+        }
+    };
+}
+
+if (restoreBtn) {
+    restoreBtn.onclick = () => {
+        try {
+            if (isProcessing) {
+                showError('当前有操作正在进行，无法还原图片');
+                return;
+            }
+            
+            const ipt = document.getElementById("ipt");
+            if (ipt && ipt.files && ipt.files.length > 0) {
+                resetButtonStates();
+                if (img) img.style.display = "none";
+                
+                // 释放之前的blob URLs
+                releaseAllBlobURLs();
+                
+                const fileURL = URL.createObjectURL(ipt.files[0]);
+                setImageSrc(fileURL);
+                hasImage = true;
+                
+                if (downloadBtn) downloadBtn.style.display = "none";
+                if (viewBtn) viewBtn.style.display = "none";
+            }
+        } catch (error) {
+            showError('还原原图时出错: ' + error.message);
+        }
+    };
+}
+
+if (downloadBtn) {
+    downloadBtn.onclick = () => {
+        downloadImage();
+    };
+}
+
+if (viewBtn) {
+    viewBtn.onclick = () => {
+        viewImage();
+    };
+}
+
+if (clearBtn) {
+    clearBtn.onclick = () => {
+        clearImage();
+    };
+}
+
+if (formatSelect) {
+    formatSelect.addEventListener('change', function() {
+        try {
+            if (this.value === 'jpg' && qualityOption) {
+                qualityOption.style.display = 'block';
+            } else if (qualityOption) {
+                qualityOption.style.display = 'none';
+            }
+        } catch (error) {
+            showError('更改输出格式时出错: ' + error.message);
+        }
+    });
+}
+
+if (qualityRange) {
+    qualityRange.addEventListener('input', function() {
+        try {
+            if (qualityValue) {
+                qualityValue.textContent = this.value;
+            }
+        } catch (error) {
+            showError('更新质量滑块值时出错: ' + error.message);
+        }
+    });
+    
+    if (qualityValue) {
+        qualityValue.textContent = qualityRange.value;
+    }
+}
+
+window.addEventListener('beforeunload', function(event) {
+    try {
+        cancelCurrentOperation();
+        releaseAllBlobURLs();
+        releaseLargeObjects();
+        
+        if (isProcessing) {
+            event.preventDefault();
+            event.returnValue = '图片处理正在进行中，确定要离开吗？';
+        }
+    } catch (error) {
+        console.error('页面卸载时清理资源出错:', error);
+    }
+});
+
+// 添加页面隐藏时的内存清理
+document.addEventListener('visibilitychange', function() {
+    if (document.hidden) {
+        // 页面隐藏时执行内存清理
+        scheduleMemoryCleanup();
+    }
+});
+
+if (showErrors) {
+    showErrors.checked = false;
+}
+
+if (formatSelect && qualityOption) {
+    if (formatSelect.value === 'jpg') {
+        qualityOption.style.display = 'block';
+    } else {
+        qualityOption.style.display = 'none';
+    }
+}
+
+// 初始化强度按钮
+initStrengthButtons();
+
+resetButtonStates();
+</script>
+</body>
+</html>
