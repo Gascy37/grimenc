@@ -12,22 +12,22 @@
             -webkit-tap-highlight-color: transparent;
             -webkit-touch-callout: none;
         }
-        
+
         html, body {
             -webkit-tap-highlight-color: transparent;
             -webkit-touch-callout: none;
         }
-        
+
         button, input, select, textarea, a, label, summary, div {
             -webkit-tap-highlight-color: transparent;
         }
-        
+
         body {
             margin: 0;
             padding: 0;
             width: 100vw;
             min-height: 100vh;
-            background: 
+            background:
                 linear-gradient(135deg, #000000 0%, transparent 50%, #87ceeb 100%),
                 linear-gradient(225deg, #ffc0cb 0%, transparent 50%, #ffffff 100%);
             display: flex;
@@ -39,14 +39,19 @@
             background-attachment: fixed;
             position: relative;
         }
-        
+
+        html.modal-open,
+        body.modal-open {
+            overflow: hidden;
+        }
+
         .content {
             text-align: center;
             width: 100%;
             max-width: 500px;
             padding: 20px;
         }
-        
+
         h1 {
             color: #ff69b4;
             margin-bottom: 20px;
@@ -70,7 +75,7 @@
                 text-shadow: 0 0 15px rgba(255, 105, 180, 0.9), 0 0 25px rgba(255, 105, 180, 0.7), 0 0 35px rgba(255, 105, 180, 0.5);
             }
         }
-        
+
         .image-container {
             width: min(400px, 80vw, 80vh);
             height: min(400px, 80vw, 80vh);
@@ -85,14 +90,14 @@
             border: 1px solid rgba(255, 255, 255, 0.2);
             box-shadow: 0 8px 25px rgba(0, 0, 0, 0.3);
         }
-        
+
         #display-img {
             max-width: 100%;
             max-height: 100%;
             display: none;
             object-fit: contain;
         }
-        
+
         .file-selector {
             background-color: rgba(255, 255, 255, 0.12);
             backdrop-filter: blur(12px);
@@ -103,7 +108,7 @@
             border: 1px solid rgba(255, 255, 255, 0.18);
             box-shadow: 0 8px 25px rgba(0, 0, 0, 0.25);
         }
-        
+
         .file-button {
             background-color: rgba(106, 17, 203, 0.4);
             backdrop-filter: blur(8px);
@@ -124,28 +129,50 @@
             box-shadow: 0 6px 12px rgba(0, 0, 0, 0.15);
             -webkit-tap-highlight-color: transparent;
         }
-        
+
         .file-button:hover {
             background-color: rgba(106, 17, 203, 0.7);
             transform: translateY(-4px);
             box-shadow: 0 12px 20px rgba(106, 17, 203, 0.4), 0 0 25px rgba(106, 17, 203, 0.4);
             border-color: rgba(255, 255, 255, 0.4);
         }
-        
+
         .file-button:active {
             background-color: rgba(106, 17, 203, 0.5);
             transform: translateY(-1px);
             box-shadow: 0 6px 12px rgba(106, 17, 203, 0.3);
         }
-        
+
+        .file-button.disabled,
+        .file-button.disabled:hover,
+        .file-button.disabled:active {
+            opacity: 0.5;
+            cursor: not-allowed;
+            pointer-events: none;
+            transform: none !important;
+            filter: grayscale(0.5);
+            box-shadow: 0 6px 12px rgba(0, 0, 0, 0.15);
+            border-color: rgba(255, 255, 255, 0.2);
+        }
+
         .file-button span {
-            line-height: 55px;
-            display: block;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 8px;
+            width: 100%;
+            height: 100%;
             color: #ffffff;
             font-weight: 600;
             text-shadow: 0 1px 2px rgba(0, 0, 0, 0.3);
+            white-space: nowrap;
         }
-        
+
+        .file-button span svg {
+            flex-shrink: 0;
+            display: block;
+        }
+
         .ipt_btn {
             position: absolute;
             left: 0;
@@ -156,26 +183,30 @@
             cursor: pointer;
             -webkit-tap-highlight-color: transparent;
         }
-        
+
+        .ipt_btn:disabled {
+            cursor: not-allowed;
+        }
+
         .action-buttons {
             display: flex;
             flex-direction: column;
             gap: 15px;
             margin-bottom: 25px;
         }
-        
+
         .action-button-row {
             display: flex;
             justify-content: center;
             gap: 10px;
         }
-        
+
         .button-group {
             display: flex;
             align-items: center;
             gap: 8px;
         }
-        
+
         .action-button {
             height: 60px;
             padding: 0 20px;
@@ -188,6 +219,7 @@
             display: flex;
             align-items: center;
             justify-content: center;
+            gap: 8px;
             min-width: 120px;
             letter-spacing: 0.5px;
             backdrop-filter: blur(12px);
@@ -199,128 +231,136 @@
             -webkit-tap-highlight-color: transparent;
             -webkit-appearance: none;
             appearance: none;
+            white-space: nowrap;
         }
-        
-        .action-button:hover {
+
+        .action-button svg {
+            flex-shrink: 0;
+            display: block;
+        }
+
+        .action-button:hover:not(.disabled):not(:disabled) {
             transform: translateY(-4px);
             box-shadow: 0 12px 20px rgba(0, 0, 0, 0.25), 0 0 25px rgba(255, 255, 255, 0.15);
             border-color: rgba(255, 255, 255, 0.4);
         }
-        
-        .action-button:active {
+
+        .action-button:active:not(.disabled):not(:disabled) {
             transform: translateY(-1px);
             box-shadow: 0 6px 12px rgba(0, 0, 0, 0.2);
         }
-        
+
         .action-button:focus {
             outline: none;
         }
-        
-        .action-button.disabled {
+
+        .action-button.disabled,
+        .action-button:disabled {
             opacity: 0.6;
             cursor: not-allowed;
             transform: none !important;
         }
-        
-        .action-button.disabled:hover {
+
+        .action-button.disabled:hover,
+        .action-button:disabled:hover {
             box-shadow: 0 6px 12px rgba(0, 0, 0, 0.15);
             border-color: rgba(255, 255, 255, 0.2);
         }
-        
+
         #enc {
             background-color: rgba(30, 144, 255, 0.4);
             color: #d9e6ff;
         }
-        
-        #enc:hover:not(.disabled) {
+
+        #enc:hover:not(.disabled):not(:disabled) {
             background-color: rgba(30, 144, 255, 0.7);
             box-shadow: 0 12px 20px rgba(30, 144, 255, 0.4), 0 0 25px rgba(30, 144, 255, 0.4);
         }
-        
-        #enc:active:not(.disabled) {
+
+        #enc:active:not(.disabled):not(:disabled) {
             background-color: rgba(30, 144, 255, 0.5);
             box-shadow: 0 6px 12px rgba(30, 144, 255, 0.3);
         }
-        
+
         #dec {
             background-color: rgba(220, 20, 60, 0.4);
             color: #ffd9e6;
         }
-        
-        #dec:hover:not(.disabled) {
+
+        #dec:hover:not(.disabled):not(:disabled) {
             background-color: rgba(220, 20, 60, 0.7);
             box-shadow: 0 12px 20px rgba(220, 20, 60, 0.4), 0 0 25px rgba(220, 20, 60, 0.4);
         }
-        
-        #dec:active:not(.disabled) {
+
+        #dec:active:not(.disabled):not(:disabled) {
             background-color: rgba(220, 20, 60, 0.5);
             box-shadow: 0 6px 12px rgba(220, 20, 60, 0.3);
         }
-        
+
         #re {
             background-color: rgba(255, 140, 0, 0.4);
             color: #ffe6d9;
             display: none;
         }
-        
-        #re:hover:not(.disabled) {
+
+        #re:hover:not(.disabled):not(:disabled) {
             background-color: rgba(255, 140, 0, 0.7);
             box-shadow: 0 12px 20px rgba(255, 140, 0, 0.4), 0 0 25px rgba(255, 140, 0, 0.4);
         }
-        
-        #re:active:not(.disabled) {
+
+        #re:active:not(.disabled):not(:disabled) {
             background-color: rgba(255, 140, 0, 0.5);
             box-shadow: 0 6px 12px rgba(255, 140, 0, 0.3);
         }
-        
+
         #clear {
             background-color: rgba(50, 205, 50, 0.4);
             color: #d9ffe6;
             display: none;
         }
-        
-        #clear:hover:not(.disabled) {
+
+        #clear:hover:not(.disabled):not(:disabled) {
             background-color: rgba(50, 205, 50, 0.7);
             box-shadow: 0 12px 20px rgba(50, 205, 50, 0.4), 0 0 25px rgba(50, 205, 50, 0.4);
         }
-        
-        #clear:active:not(.disabled) {
+
+        #clear:active:not(.disabled):not(:disabled) {
             background-color: rgba(50, 205, 50, 0.5);
             box-shadow: 0 6px 12px rgba(50, 205, 50, 0.3);
         }
-        
+
         #download {
             background-color: rgba(0, 191, 255, 0.4);
             color: #e6f7ff;
             display: none;
         }
-        
-        #download:hover:not(.disabled) {
+
+        #download:hover:not(.disabled):not(:disabled) {
             background-color: rgba(0, 191, 255, 0.7);
             box-shadow: 0 12px 20px rgba(0, 191, 255, 0.4), 0 0 25px rgba(0, 191, 255, 0.4);
         }
-        
-        #download:active:not(.disabled) {
+
+        #download:active:not(.disabled):not(:disabled) {
             background-color: rgba(0, 191, 255, 0.5);
             box-shadow: 0 6px 12px rgba(0, 191, 255, 0.3);
         }
-        
+
         #view {
             background-color: rgba(138, 43, 226, 0.4);
             color: #f0e6ff;
             display: none;
         }
-        
-        #view:hover:not(.disabled) {
+
+        #view:hover:not(.disabled):not(:disabled) {
             background-color: rgba(138, 43, 226, 0.7);
             box-shadow: 0 12px 20px rgba(138, 43, 226, 0.4), 0 0 25px rgba(138, 43, 226, 0.4);
         }
-        
-        #view:active:not(.disabled) {
+
+        #view:active:not(.disabled):not(:disabled) {
             background-color: rgba(138, 43, 226, 0.5);
             box-shadow: 0 6px 12px rgba(138, 43, 226, 0.3);
         }
-        
+
         .circle-button {
             width: 60px;
             height: 60px;
@@ -343,63 +383,65 @@
             -webkit-appearance: none;
             appearance: none;
         }
-        
-        .circle-button:hover:not(.disabled) {
+
+        .circle-button:hover:not(.disabled):not(:disabled) {
             transform: translateY(-4px);
             box-shadow: 0 12px 20px rgba(0, 0, 0, 0.25), 0 0 25px rgba(255, 255, 255, 0.15);
             border-color: rgba(255, 255, 255, 0.4);
         }
-        
-        .circle-button:active:not(.disabled) {
+
+        .circle-button:active:not(.disabled):not(:disabled) {
             transform: translateY(-1px);
             box-shadow: 0 6px 12px rgba(0, 0, 0, 0.2);
         }
-        
+
         .circle-button:focus {
             outline: none;
         }
-        
-        .circle-button.disabled {
+
+        .circle-button.disabled,
+        .circle-button:disabled {
             opacity: 0.6;
             cursor: not-allowed;
             transform: none !important;
         }
-        
-        .circle-button.disabled:hover {
+
+        .circle-button.disabled:hover,
+        .circle-button:disabled:hover {
             box-shadow: 0 6px 12px rgba(0, 0, 0, 0.15);
             border-color: rgba(255, 255, 255, 0.2);
         }
-        
+
         #enc-multiple {
             background-color: rgba(30, 144, 255, 0.4);
             color: #d9e6ff;
         }
-        
-        #enc-multiple:hover:not(.disabled) {
+
+        #enc-multiple:hover:not(.disabled):not(:disabled) {
             background-color: rgba(30, 144, 255, 0.7);
             box-shadow: 0 12px 20px rgba(30, 144, 255, 0.4), 0 0 25px rgba(30, 144, 255, 0.4);
         }
-        
-        #enc-multiple:active:not(.disabled) {
+
+        #enc-multiple:active:not(.disabled):not(:disabled) {
             background-color: rgba(30, 144, 255, 0.5);
             box-shadow: 0 6px 12px rgba(30, 144, 255, 0.3);
         }
-        
+
         #dec-multiple {
             background-color: rgba(220, 20, 60, 0.4);
             color: #ffd9e6;
         }
-        
-        #dec-multiple:hover:not(.disabled) {
+
+        #dec-multiple:hover:not(.disabled):not(:disabled) {
             background-color: rgba(220, 20, 60, 0.7);
             box-shadow: 0 12px 20px rgba(220, 20, 60, 0.4), 0 0 25px rgba(220, 20, 60, 0.4);
         }
-        
-        #dec-multiple:active:not(.disabled) {
+
+        #dec-multiple:active:not(.disabled):not(:disabled) {
             background-color: rgba(220, 20, 60, 0.5);
             box-shadow: 0 6px 12px rgba(220, 20, 60, 0.3);
         }
-        
+
         .format-options {
             background-color: rgba(30, 30, 50, 0.8);
             backdrop-filter: blur(15px);
@@ -411,7 +453,7 @@
             box-shadow: 0 8px 25px rgba(0, 0, 0, 0.3);
             animation: slideDown 0.4s ease-out;
         }
-        
+
         .format-options label {
             color: #e6ccff;
             font-weight: 600;
@@ -421,7 +463,7 @@
             margin-bottom: 15px;
             text-shadow: 0 1px 2px rgba(0, 0, 0, 0.5);
         }
-        
+
         .format-select {
             width: 100%;
             padding: 15px 20px;
@@ -439,28 +481,27 @@
             -webkit-appearance: none;
             appearance: none;
         }
-        
+
         .format-select:disabled {
             opacity: 0.6;
             cursor: not-allowed;
         }
-        
+
         .format-select:focus {
             outline: none;
             border-color: rgba(142, 45, 226, 0.9);
             background-color: rgba(30, 15, 60, 0.95);
             box-shadow: 0 0 0 3px rgba(142, 45, 226, 0.3);
         }
-        
+
         .format-select option {
             background-color: rgba(20, 10, 40, 0.95);
             color: white;
             padding: 10px;
         }
-        
-        /* 输出格式下方的推荐提示：阴影更清 */
+
         .format-tip {
-            color: #ffd9e6;
+            color: #e6ccff;
             font-size: 14px;
             font-weight: 500;
             line-height: 1.5;
@@ -469,12 +510,12 @@
             margin-bottom: 5px;
             padding: 10px 12px;
             border-radius: 10px;
-            background-color: rgba(255, 105, 180, 0.12);
-            border: 1px solid rgba(255, 105, 180, 0.3);
-            text-shadow: 0 1px 1px rgba(0, 0, 0, 0.15);
+            background-color: rgba(142, 45, 226, 0.18);
+            border: 1px solid rgba(142, 45, 226, 0.45);
+            text-shadow: 0 1px 1px rgba(0, 0, 0, 0.2);
             animation: fadeIn 0.5s ease-out 0.15s both;
         }
-        
+
         .settings-options {
             background-color: rgba(30, 30, 50, 0.8);
             backdrop-filter: blur(15px);
@@ -487,29 +528,28 @@
             max-height: 60px;
             transition: max-height 0.5s cubic-bezier(0.4, 0, 0.2, 1), padding 0.5s cubic-bezier(0.4, 0, 0.2, 1);
         }
-        
+
         .settings-options[open] {
-            max-height: 800px;
+            max-height: 2000px;
             padding: 25px;
             animation: expandOpen 0.5s cubic-bezier(0.4, 0, 0.2, 1);
         }
-        
+
         .settings-options:not([open]) {
             padding: 0 25px;
         }
-        
+
         @keyframes expandOpen {
             0% {
                 max-height: 60px;
                 opacity: 0.5;
             }
             100% {
-                max-height: 800px;
+                max-height: 2000px;
                 opacity: 1;
             }
         }
-        
-        /* 开发信息板块样式 */
+
         .dev-info-options {
             background-color: rgba(30, 30, 50, 0.8);
             backdrop-filter: blur(15px);
@@ -522,17 +562,17 @@
             max-height: 60px;
             transition: max-height 0.5s cubic-bezier(0.4, 0, 0.2, 1), padding 0.5s cubic-bezier(0.4, 0, 0.2, 1);
         }
-        
+
         .dev-info-options[open] {
-            max-height: 600px;
+            max-height: 1200px;
             padding: 25px;
             animation: expandOpen 0.5s cubic-bezier(0.4, 0, 0.2, 1);
         }
-        
+
         .dev-info-options:not([open]) {
             padding: 0 25px;
         }
-        
+
         .dev-info-summary {
             color: #a0ffa0;
             font-weight: 600;
@@ -545,24 +585,24 @@
             text-shadow: 0 1px 2px rgba(0, 0, 0, 0.5);
             -webkit-tap-highlight-color: transparent;
         }
-        
+
         .dev-info-summary::after {
             content: "▼";
             font-size: 14px;
             transition: transform 0.5s cubic-bezier(0.4, 0, 0.2, 1);
             color: #32cd32;
         }
-        
+
         .dev-info-options[open] .dev-info-summary::after {
             transform: rotate(180deg);
         }
-        
+
         .dev-info-content {
             padding-top: 20px;
             border-top: 1px solid rgba(255, 255, 255, 0.15);
             animation: fadeIn 0.5s ease-out 0.2s both;
         }
-        
+
         @keyframes fadeIn {
             from {
                 opacity: 0;
@@ -573,7 +613,7 @@
                 transform: translateY(0);
             }
         }
-        
+
         @keyframes slideDown {
             from {
                 opacity: 0;
@@ -584,7 +624,7 @@
                 transform: translateY(0);
             }
         }
-        
+
         .dev-info-item {
             margin-bottom: 15px;
             padding: 12px 15px;
@@ -595,11 +635,11 @@
             align-items: center;
             animation: slideIn 0.4s ease-out;
         }
-        
+
         .dev-info-item:nth-child(1) { animation-delay: 0.1s; }
         .dev-info-item:nth-child(2) { animation-delay: 0.2s; }
         .dev-info-item:nth-child(3) { animation-delay: 0.3s; }
-        
+
         @keyframes slideIn {
             from {
                 opacity: 0;
@@ -610,15 +650,15 @@
                 transform: translateX(0);
             }
         }
-        
+
         .dev-info-item:last-child {
             margin-bottom: 0;
         }
-        
+
         .dev-info-item:hover {
             background-color: rgba(255, 255, 255, 0.1);
         }
-        
+
         .dev-info-label {
             color: #c0ffc0;
             font-weight: 600;
@@ -626,7 +666,7 @@
             min-width: 120px;
             text-align: left;
         }
-        
+
         .dev-info-value {
             color: #ffffff;
             font-weight: 500;
@@ -635,7 +675,7 @@
             text-align: left;
             margin-left: 10px;
         }
-        
+
         .dev-info-tool {
             color: #ffcc80;
             font-weight: 600;
@@ -648,7 +688,7 @@
             border: 1px solid rgba(50, 205, 50, 0.3);
             animation: fadeIn 0.5s ease-out 0.4s both;
         }
-        
+
         .settings-summary {
             color: #ffd9e6;
             font-weight: 600;
@@ -661,24 +701,24 @@
             text-shadow: 0 1px 2px rgba(0, 0, 0, 0.5);
             -webkit-tap-highlight-color: transparent;
         }
-        
+
         .settings-summary::after {
             content: "▼";
             font-size: 14px;
             transition: transform 0.5s cubic-bezier(0.4, 0, 0.2, 1);
             color: #ff69b4;
         }
-        
+
         .settings-options[open] .settings-summary::after {
             transform: rotate(180deg);
         }
-        
+
         .settings-content {
             padding-top: 20px;
             border-top: 1px solid rgba(255, 255, 255, 0.15);
             animation: fadeIn 0.5s ease-out 0.2s both;
         }
-        
+
         .sub-settings {
             margin-bottom: 20px;
             border: 1px solid rgba(255, 255, 255, 0.1);
@@ -689,27 +729,27 @@
             max-height: 48px;
             transition: max-height 0.4s cubic-bezier(0.4, 0, 0.2, 1);
         }
-        
+
         .sub-settings[open] {
-            max-height: 400px;
+            max-height: 900px;
             animation: expandSubOpen 0.4s cubic-bezier(0.4, 0, 0.2, 1);
         }
-        
+
         @keyframes expandSubOpen {
             0% {
                 max-height: 48px;
                 opacity: 0.5;
             }
             100% {
-                max-height: 400px;
+                max-height: 900px;
                 opacity: 1;
             }
         }
-        
+
         .sub-settings:last-child {
             margin-bottom: 0;
         }
-        
+
         .sub-summary {
             color: #e6ccff;
             font-weight: 600;
@@ -721,23 +761,23 @@
             padding: 8px 0;
             -webkit-tap-highlight-color: transparent;
         }
-        
+
         .sub-summary::after {
             content: "▼";
             font-size: 12px;
             transition: transform 0.4s cubic-bezier(0.4, 0, 0.2, 1);
             color: #8e2de2;
         }
-        
+
         .sub-settings[open] .sub-summary::after {
             transform: rotate(180deg);
         }
-        
+
         .sub-content {
             padding: 15px 0 0 15px;
             animation: fadeIn 0.4s ease-out 0.1s both;
         }
-        
+
         .setting-item {
             margin-bottom: 15px;
             display: flex;
@@ -748,18 +788,18 @@
             transition: background-color 0.2s ease;
             animation: slideIn 0.3s ease-out;
         }
-        
+
         .setting-item:nth-child(1) { animation-delay: 0.1s; }
         .setting-item:nth-child(2) { animation-delay: 0.2s; }
-        
+
         .setting-item:hover {
             background-color: rgba(255, 255, 255, 0.1);
         }
-        
+
         .setting-item:last-child {
             margin-bottom: 0;
         }
-        
+
         .setting-item label {
             color: #ffffff;
             font-weight: 500;
@@ -769,7 +809,7 @@
             flex: 1;
             -webkit-tap-highlight-color: transparent;
         }
-        
+
         .setting-checkbox {
             width: 20px;
             height: 20px;
@@ -778,7 +818,7 @@
             border-radius: 4px;
             -webkit-tap-highlight-color: transparent;
         }
-        
+
         .quality-option {
             display: none;
             margin-top: 20px;
@@ -788,7 +828,7 @@
             border: 1px solid rgba(106, 17, 203, 0.5);
             animation: fadeIn 0.4s ease-out;
         }
-        
+
         .quality-label {
             display: block;
             color: #e6ccff;
@@ -796,14 +836,14 @@
             font-weight: 600;
             font-size: 16px;
         }
-        
+
         .quality-slider-container {
             display: flex;
             align-items: center;
             justify-content: center;
             gap: 15px;
         }
-        
+
         #quality-range {
             flex: 1;
             max-width: 200px;
@@ -818,12 +858,12 @@
             border: 1px solid rgba(255, 255, 255, 0.2);
             -webkit-tap-highlight-color: transparent;
         }
-        
+
         #quality-range:disabled {
-            opacity: 0.6;
+            opacity: 0.5;
             cursor: not-allowed;
         }
-        
+
         #quality-range::-webkit-slider-thumb {
             -webkit-appearance: none;
             appearance: none;
@@ -835,12 +875,12 @@
             border: 3px solid rgba(142, 45, 226, 0.9);
             box-shadow: 0 0 10px rgba(142, 45, 226, 0.7);
         }
-        
+
         #quality-range:disabled::-webkit-slider-thumb {
             cursor: not-allowed;
             opacity: 0.7;
         }
-        
+
         #quality-range::-moz-range-thumb {
             width: 24px;
             height: 24px;
@@ -850,29 +890,34 @@
             border: 3px solid rgba(142, 45, 226, 0.9);
             box-shadow: 0 0 10px rgba(142, 45, 226, 0.7);
         }
-        
+
         #quality-range:disabled::-moz-range-thumb {
             cursor: not-allowed;
             opacity: 0.7;
         }
-        
+
         #quality-value {
-            display: inline-block;
-            width: 50px;
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            width: 80px;
+            height: 38px;
             text-align: center;
             font-weight: bold;
             font-size: 18px;
+            line-height: 1;
             color: white;
             background: rgba(142, 45, 226, 0.5);
-            padding: 8px 15px;
+            padding: 0;
             border-radius: 10px;
             backdrop-filter: blur(5px);
             -webkit-backdrop-filter: blur(5px);
             box-shadow: 0 6px 12px rgba(0, 0, 0, 0.25);
             border: 1px solid rgba(255, 255, 255, 0.2);
+            flex-shrink: 0;
+            white-space: nowrap;
         }
-        
-        /* 强度按钮选择器样式 */
+
         .strength-button-group {
             display: flex;
             flex-direction: column;
@@ -880,7 +925,7 @@
             margin-top: 10px;
             width: 100%;
         }
-        
+
         .strength-label {
             color: #ffffff;
             font-weight: 600;
@@ -888,15 +933,14 @@
             text-align: left;
             margin-bottom: 5px;
         }
-        
-        /* 混淆强度按钮样式 - 蓝色系 */
+
         .encrypt-strength-buttons {
             display: flex;
             flex-wrap: wrap;
             gap: 8px;
             justify-content: space-between;
         }
-        
+
         .encrypt-strength-button {
             flex: 1;
             min-width: 60px;
@@ -919,33 +963,32 @@
             -webkit-appearance: none;
             appearance: none;
         }
-        
-        .encrypt-strength-button:hover:not(.selected):not(.disabled) {
+
+        .encrypt-strength-button:hover:not(.selected):not(.disabled):not(:disabled) {
             background-color: rgba(30, 144, 255, 0.5);
             transform: translateY(-3px);
             box-shadow: 0 10px 18px rgba(30, 144, 255, 0.4);
             border-color: rgba(255, 255, 255, 0.4);
         }
-        
+
         .encrypt-strength-button.selected {
             background-color: rgba(30, 144, 255, 0.8);
             border-color: rgba(30, 144, 255, 0.9);
             box-shadow: 0 0 20px rgba(30, 144, 255, 0.7), inset 0 0 10px rgba(255, 255, 255, 0.2);
             transform: translateY(-2px);
         }
-        
+
         .encrypt-strength-button:focus {
             outline: none;
         }
-        
-        /* 解混淆强度按钮样式 - 红色系 */
+
         .decrypt-strength-buttons {
             display: flex;
             flex-wrap: wrap;
             gap: 8px;
             justify-content: space-between;
         }
-        
+
         .decrypt-strength-button {
             flex: 1;
             min-width: 60px;
@@ -968,103 +1011,112 @@
             -webkit-appearance: none;
             appearance: none;
         }
-        
-        .decrypt-strength-button:hover:not(.selected):not(.disabled) {
+
+        .decrypt-strength-button:hover:not(.selected):not(.disabled):not(:disabled) {
             background-color: rgba(220, 20, 60, 0.5);
             transform: translateY(-3px);
             box-shadow: 0 10px 18px rgba(220, 20, 60, 0.4);
             border-color: rgba(255, 255, 255, 0.4);
         }
-        
+
         .decrypt-strength-button.selected {
             background-color: rgba(220, 20, 60, 0.8);
             border-color: rgba(220, 20, 60, 0.9);
             box-shadow: 0 0 20px rgba(220, 20, 60, 0.7), inset 0 0 10px rgba(255, 255, 255, 0.2);
             transform: translateY(-2px);
         }
-        
+
         .decrypt-strength-button:focus {
             outline: none;
         }
-        
+
+        .encrypt-strength-button:disabled,
+        .decrypt-strength-button:disabled {
+            opacity: 0.5;
+            cursor: not-allowed;
+            transform: none !important;
+            box-shadow: 0 6px 12px rgba(0, 0, 0, 0.15) !important;
+        }
+
+        /* ===== 加载遮罩：黑底为主，混入灰蓝 ===== */
         .loader {
             position: fixed;
-            top: 50%;
-            left: 50%;
-            transform: translate(-50%, -50%);
+            inset: 0;
             display: none;
+            justify-content: center;
+            align-items: center;
             z-index: 1000;
-            width: 400px;
-            height: 400px;
+            background: rgba(10, 14, 22, 0.62);
+            backdrop-filter: blur(1px);
+            -webkit-backdrop-filter: blur(1px);
+            animation: fadeInOverlay 0.25s ease-out;
         }
-        
-        .loader::before {
-            content: '';
-            position: absolute;
-            top: 50%;
-            left: 50%;
-            width: 0;
-            height: 0;
-            border-radius: 50%;
-            background: radial-gradient(circle, rgba(51, 153, 255, 0.9) 0%, rgba(51, 153, 255, 0.4) 30%, rgba(51, 153, 255, 0) 70%);
-            transform: translate(-50%, -50%);
-            animation: blue-pulse 2.5s ease-in-out infinite;
-            z-index: -1;
-            box-shadow: 0 0 200px 100px rgba(51, 153, 255, 0.3);
-        }
-        
-        .loader div {
-            border-width: 8px;
-            border-style: solid;
-            border-left-color: transparent;
-            border-right-color: transparent;
-            border-top-color: transparent;
-            border-bottom-color: transparent;
-            border-radius: 50%;
-            position: absolute;
-            animation: spin 2s ease infinite;
-        }
-        
-        .loader div:nth-child(1) {
+
+        .loader-spinner {
+            position: relative;
             width: 300px;
             height: 300px;
-            left: 50px;
-            top: 50px;
+            pointer-events: none;
+            transition: filter 0.35s ease;
+        }
+
+        .loader-spinner div {
+            position: absolute;
+            border-width: 8px;
+            border-style: solid;
+            border-color: transparent;
+            border-radius: 50%;
+            animation: spin 2s ease infinite;
+        }
+
+        .loader.cancelling .loader-spinner {
+            filter: hue-rotate(180deg);
+        }
+
+        .loader.cancelling .loader-spinner div {
+            animation-direction: reverse;
+        }
+
+        .loader-spinner div:nth-child(1) {
+            width: 300px;
+            height: 300px;
+            left: 0;
+            top: 0;
             border-left-color: #8A2BE2;
             border-right-color: #8A2BE2;
             animation-delay: 0s;
         }
-        
-        .loader div:nth-child(2) {
+
+        .loader-spinner div:nth-child(2) {
             width: 260px;
             height: 260px;
-            left: 70px;
-            top: 70px;
+            left: 20px;
+            top: 20px;
             border-left-color: #00CED1;
             border-right-color: #00CED1;
             animation-delay: 0.1s;
         }
-        
-        .loader div:nth-child(3) {
+
+        .loader-spinner div:nth-child(3) {
             width: 220px;
             height: 220px;
-            left: 90px;
-            top: 90px;
+            left: 40px;
+            top: 40px;
             border-left-color: #FF1493;
             border-right-color: #FF1493;
             animation-delay: 0.2s;
         }
-        
-        .loader div:nth-child(4) {
+
+        .loader-spinner div:nth-child(4) {
             width: 180px;
             height: 180px;
-            left: 110px;
-            top: 110px;
+            left: 60px;
+            top: 60px;
             border-left-color: #FF8C00;
             border-right-color: #FF8C00;
             animation-delay: 0.3s;
         }
-        
+
         @keyframes spin {
             50% {
                 transform: rotate(180deg);
@@ -1073,65 +1125,69 @@
                 transform: rotate(0);
             }
         }
-        
-        @keyframes blue-pulse {
-            0% {
-                width: 0;
-                height: 0;
-                opacity: 0;
-                box-shadow: 0 0 0 0 rgba(51, 153, 255, 0);
-            }
-            15% {
-                width: 300vw;
-                height: 300vw;
-                opacity: 0.8;
-                box-shadow: 0 0 200px 100px rgba(51, 153, 255, 0.5);
-            }
-            30% {
-                width: 0;
-                height: 0;
-                opacity: 0;
-                box-shadow: 0 0 0 0 rgba(51, 153, 255, 0);
-            }
-            45% {
-                width: 300vw;
-                height: 300vw;
-                opacity: 0.6;
-                box-shadow: 0 0 150px 80px rgba(51, 153, 255, 0.4);
-            }
-            60% {
-                width: 0;
-                height: 0;
-                opacity: 0;
-                box-shadow: 0 0 0 0 rgba(51, 153, 255, 0);
-            }
-            75% {
-                width: 300vw;
-                height: 300vw;
-                opacity: 0.4;
-                box-shadow: 0 0 100px 60px rgba(51, 153, 255, 0.3);
-            }
-            90% {
-                width: 0;
-                height: 0;
-                opacity: 0;
-                box-shadow: 0 0 0 0 rgba(51, 153, 255, 0);
-            }
-            100% {
-                width: 0;
-                height: 0;
-                opacity: 0;
-                box-shadow: 0 0 0 0 rgba(51, 153, 255, 0);
-            }
+
+        /* 取消按钮：颜色更深、支持涟漪裁剪、禁用保持深色 */
+        .loader-cancel {
+            position: absolute;
+            bottom: max(15%, 90px);
+            left: 50%;
+            transform: translateX(-50%);
+            padding: 16px 46px;
+            border-radius: 30px;
+            background: rgba(70, 70, 70, 0.68);
+            color: #ffffff;
+            border: 1px solid rgba(255, 255, 255, 0.28);
+            font-size: 18px;
+            font-weight: 600;
+            cursor: pointer;
+            backdrop-filter: blur(8px);
+            -webkit-backdrop-filter: blur(8px);
+            box-shadow: 0 6px 16px rgba(0, 0, 0, 0.35);
+            transition: background 0.2s ease, box-shadow 0.2s ease, transform 0.2s ease, border-color 0.2s ease;
+            z-index: 1001;
+            -webkit-tap-highlight-color: transparent;
+            -webkit-appearance: none;
+            appearance: none;
+            letter-spacing: 0.5px;
+            overflow: hidden;
+            min-width: 200px;
+            text-align: center;
         }
-        
+
+        .loader-cancel:hover {
+            background: rgba(90, 90, 90, 0.82);
+            transform: translateX(-50%) translateY(-2px);
+            box-shadow: 0 10px 22px rgba(0, 0, 0, 0.4);
+            border-color: rgba(255, 255, 255, 0.45);
+        }
+
+        .loader-cancel:active {
+            transform: translateX(-50%) translateY(0);
+        }
+
+        .loader-cancel:focus {
+            outline: none;
+        }
+
+        /* 取消中：保持深色原色，只轻微降低对比，不变灰变黑 */
+        .loader-cancel.disabled,
+        .loader-cancel:disabled {
+            background: rgba(70, 70, 70, 0.5);
+            color: rgba(255, 255, 255, 0.72);
+            cursor: not-allowed;
+            transform: translateX(-50%) !important;
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.28) !important;
+            border-color: rgba(255, 255, 255, 0.22);
+        }
+
         .file-button .wave,
         .action-button .wave,
         .circle-button .wave,
         .copy-button .wave,
         .clear-errors-button .wave,
         .encrypt-strength-button .wave,
-        .decrypt-strength-button .wave {
+        .decrypt-strength-button .wave,
+        .loader-cancel .wave {
             position: absolute;
             width: 20px;
             height: 20px;
@@ -1140,9 +1196,8 @@
             pointer-events: none;
             animation: animate 0.8s ease-out;
             z-index: 1;
-            box-shadow: 0 0 10px currentColor;
         }
-        
+
         @keyframes animate {
             0% {
                 width: 0;
@@ -1158,7 +1213,7 @@
                 opacity: 0;
             }
         }
-        
+
         .error-overlay {
             position: fixed;
             top: 0;
@@ -1172,7 +1227,7 @@
             z-index: 2000;
             animation: fadeInOverlay 0.3s ease-out;
         }
-        
+
         @keyframes fadeInOverlay {
             from {
                 opacity: 0;
@@ -1181,9 +1236,9 @@
                 opacity: 1;
             }
         }
-        
+
         .error-window {
-            background-color: rgba(40, 40, 60, 0.95);
+            background-color: rgba(48, 12, 18, 0.96);
             backdrop-filter: blur(20px);
             -webkit-backdrop-filter: blur(20px);
             border-radius: 15px;
@@ -1192,12 +1247,12 @@
             max-height: 80vh;
             display: flex;
             flex-direction: column;
-            border: 2px solid rgba(220, 20, 60, 0.7);
-            box-shadow: 0 15px 40px rgba(0, 0, 0, 0.6);
+            border: 2px solid rgba(160, 30, 45, 0.85);
+            box-shadow: 0 15px 40px rgba(0, 0, 0, 0.6), 0 0 30px rgba(140, 20, 35, 0.35);
             overflow: hidden;
             animation: slideInError 0.4s cubic-bezier(0.4, 0, 0.2, 1);
         }
-        
+
         @keyframes slideInError {
             from {
                 opacity: 0;
@@ -1208,81 +1263,85 @@
                 transform: translateY(0) scale(1);
             }
         }
-        
+
         .error-header {
-            background-color: rgba(220, 20, 60, 0.8);
+            background-color: rgba(105, 15, 28, 0.95);
             padding: 15px 20px;
             display: flex;
             justify-content: space-between;
             align-items: center;
-            border-bottom: 1px solid rgba(255, 255, 255, 0.2);
+            border-bottom: 1px solid rgba(200, 60, 80, 0.35);
         }
-        
+
         .error-title {
-            color: white;
+            color: #ffe0e5;
             font-weight: 600;
             font-size: 18px;
+            text-shadow: 0 1px 2px rgba(0, 0, 0, 0.4);
         }
-        
+
         .error-close {
-            background: none;
+            background-color: rgba(255, 130, 130, 0.3);
             border: none;
-            color: white;
+            color: #ffe0e0;
             font-size: 24px;
             cursor: pointer;
-            width: 30px;
-            height: 30px;
+            width: 34px;
+            height: 34px;
             display: flex;
             justify-content: center;
             align-items: center;
             border-radius: 50%;
             transition: all 0.3s ease;
-            box-shadow: 0 3px 8px rgba(0, 0, 0, 0.2);
+            box-shadow: 0 3px 8px rgba(0, 0, 0, 0.25);
             -webkit-tap-highlight-color: transparent;
             -webkit-appearance: none;
             appearance: none;
         }
-        
+
         .error-close:hover {
-            background-color: rgba(255, 255, 255, 0.3);
+            background-color: rgba(255, 130, 130, 0.55);
+            color: #ffffff;
             transform: scale(1.1);
-            box-shadow: 0 5px 12px rgba(0, 0, 0, 0.3);
+            box-shadow: 0 5px 14px rgba(255, 130, 130, 0.45);
         }
-        
+
         .error-close:active {
-            background-color: rgba(255, 255, 255, 0.2);
+            background-color: rgba(255, 130, 130, 0.42);
             transform: scale(0.95);
+            box-shadow: 0 3px 8px rgba(255, 130, 130, 0.3);
         }
-        
+
         .error-close:focus {
             outline: none;
         }
-        
+
         .error-content {
             flex: 1;
             padding: 20px;
             overflow-y: auto;
-            color: #ff6b6b;
+            -webkit-overflow-scrolling: touch;
+            color: #ffbdbd;
             font-family: monospace;
             font-size: 14px;
             white-space: pre-wrap;
             word-break: break-all;
         }
-        
+
         .error-divider {
             height: 1px;
             background-color: rgba(255, 255, 255, 0.2);
             margin: 10px 0;
         }
-        
+
         .error-controls {
             padding: 15px 20px;
-            border-top: 1px solid rgba(255, 255, 255, 0.2);
+            border-top: 1px solid rgba(200, 60, 80, 0.35);
             display: flex;
             justify-content: space-between;
-            background-color: rgba(30, 30, 50, 0.8);
+            background-color: rgba(62, 14, 24, 0.92);
         }
-        
+
         .copy-button {
             background-color: rgba(30, 144, 255, 0.6);
             color: white;
@@ -1300,23 +1359,23 @@
             -webkit-appearance: none;
             appearance: none;
         }
-        
+
         .copy-button:hover {
             background-color: rgba(30, 144, 255, 0.8);
             transform: translateY(-3px);
             box-shadow: 0 10px 18px rgba(30, 144, 255, 0.4);
         }
-        
+
         .copy-button:active {
             background-color: rgba(30, 144, 255, 0.7);
             transform: translateY(-1px);
             box-shadow: 0 6px 12px rgba(30, 144, 255, 0.2);
         }
-        
+
         .copy-button:focus {
             outline: none;
         }
-        
+
         .clear-errors-button {
             background-color: rgba(255, 140, 0, 0.6);
             color: white;
@@ -1334,177 +1393,201 @@
             -webkit-appearance: none;
             appearance: none;
         }
-        
+
         .clear-errors-button:hover {
             background-color: rgba(255, 140, 0, 0.8);
             transform: translateY(-3px);
             box-shadow: 0 10px 18px rgba(255, 140, 0, 0.4);
         }
-        
+
         .clear-errors-button:active {
             background-color: rgba(255, 140, 0, 0.7);
             transform: translateY(-1px);
             box-shadow: 0 6px 12px rgba(255, 140, 0, 0.2);
         }
-        
+
         .clear-errors-button:focus {
             outline: none;
         }
-        
+
         .error-buttons-container {
             display: flex;
             gap: 10px;
         }
-        
+
         @media (max-width: 600px) {
             .content {
                 padding: 15px;
                 max-width: 100%;
             }
-            
+
             h1 {
                 font-size: 1.5rem;
                 margin-bottom: 20px;
                 gap: 8px;
             }
-            
+
             .image-container {
                 width: min(300px, 80vw, 80vh);
                 height: min(300px, 80vw, 80vh);
                 margin-bottom: 20px;
                 box-shadow: 0 6px 18px rgba(0, 0, 0, 0.25);
             }
-            
+
             .file-selector, .format-options, .settings-options, .dev-info-options {
                 padding: 20px;
                 margin-bottom: 20px;
                 box-shadow: 0 6px 18px rgba(0, 0, 0, 0.25);
             }
-            
+
             .settings-options:not([open]) {
                 padding: 0 20px;
             }
-            
+
             .dev-info-options:not([open]) {
                 padding: 0 20px;
             }
-            
+
             .file-button {
                 width: 180px;
                 height: 50px;
                 box-shadow: 0 4px 10px rgba(0, 0, 0, 0.15);
             }
-            
+
             .file-button:hover {
                 box-shadow: 0 10px 18px rgba(106, 17, 203, 0.4), 0 0 20px rgba(106, 17, 203, 0.3);
             }
-            
+
             .file-button span {
-                line-height: 50px;
                 font-size: 16px;
+                gap: 6px;
             }
-            
+
+            .file-button span svg {
+                width: 18px;
+                height: 18px;
+            }
+
             .action-button {
                 height: 55px;
                 min-width: 100px;
                 padding: 0 15px;
                 font-size: 16px;
+                gap: 6px;
                 box-shadow: 0 4px 10px rgba(0, 0, 0, 0.15);
             }
-            
+
+            .action-button svg {
+                width: 18px;
+                height: 18px;
+            }
+
             .action-button:hover {
                 box-shadow: 0 10px 18px rgba(0, 0, 0, 0.25), 0 0 20px rgba(255, 255, 255, 0.15);
             }
-            
+
             .circle-button {
                 width: 55px;
                 height: 55px;
                 font-size: 20px;
                 box-shadow: 0 4px 10px rgba(0, 0, 0, 0.15);
             }
-            
+
             .circle-button:hover {
                 box-shadow: 0 10px 18px rgba(0, 0, 0, 0.25), 0 0 20px rgba(255, 255, 255, 0.15);
             }
-            
+
             .action-button-row {
                 gap: 8px;
             }
-            
+
             .button-group {
                 gap: 6px;
             }
-            
+
             .format-tip {
                 font-size: 13px;
                 padding: 8px 10px;
             }
-            
-            .loader {
-                width: 300px;
-                height: 300px;
+
+            #quality-value {
+                width: 70px;
+                height: 36px;
+                font-size: 17px;
             }
-            
-            .loader div:nth-child(1) {
+
+            .loader-spinner {
                 width: 230px;
                 height: 230px;
-                left: 35px;
-                top: 35px;
             }
-            
-            .loader div:nth-child(2) {
+
+            .loader-spinner div:nth-child(1) {
+                width: 230px;
+                height: 230px;
+                left: 0;
+                top: 0;
+            }
+
+            .loader-spinner div:nth-child(2) {
                 width: 200px;
                 height: 200px;
-                left: 50px;
-                top: 50px;
+                left: 15px;
+                top: 15px;
             }
-            
-            .loader div:nth-child(3) {
+
+            .loader-spinner div:nth-child(3) {
                 width: 170px;
                 height: 170px;
-                left: 65px;
-                top: 65px;
+                left: 30px;
+                top: 30px;
             }
-            
-            .loader div:nth-child(4) {
+
+            .loader-spinner div:nth-child(4) {
                 width: 140px;
                 height: 140px;
-                left: 80px;
-                top: 80px;
+                left: 45px;
+                top: 45px;
             }
-            
+
+            .loader-cancel {
+                bottom: max(18%, 90px);
+                padding: 15px 38px;
+                font-size: 17px;
+                min-width: 180px;
+            }
+
             .error-window {
                 width: 95%;
                 max-height: 70vh;
                 box-shadow: 0 10px 30px rgba(0, 0, 0, 0.5);
             }
-            
+
             .error-controls {
                 flex-direction: column;
                 gap: 10px;
             }
-            
+
             .error-buttons-container {
                 width: 100%;
                 justify-content: space-between;
             }
-            
+
             .clear-errors-button,
             .copy-button {
                 flex: 1;
                 padding: 12px 10px;
                 box-shadow: 0 4px 10px rgba(0, 0, 0, 0.15);
             }
-            
+
             .dev-info-label {
                 min-width: 100px;
                 font-size: 14px;
             }
-            
+
             .dev-info-value {
                 font-size: 14px;
             }
-            
+
             .encrypt-strength-button,
             .decrypt-strength-button {
                 min-width: 50px;
@@ -1512,107 +1595,120 @@
                 font-size: 15px;
                 box-shadow: 0 4px 10px rgba(0, 0, 0, 0.15);
             }
-            
+
             .encrypt-strength-button:hover {
                 box-shadow: 0 8px 15px rgba(30, 144, 255, 0.4);
             }
-            
+
             .decrypt-strength-button:hover {
                 box-shadow: 0 8px 15px rgba(220, 20, 60, 0.4);
             }
         }
-        
+
         @media (max-width: 400px) {
             .action-button-row {
                 flex-direction: column;
                 align-items: center;
                 gap: 12px;
             }
-            
+
             .button-group {
                 width: 100%;
                 max-width: 250px;
                 justify-content: center;
             }
-            
+
             .action-button {
                 width: 100%;
                 max-width: 180px;
             }
-            
+
             .circle-button {
                 width: 50px;
                 height: 50px;
             }
-            
+
             .image-container {
                 width: min(250px, 80vw, 80vh);
                 height: min(250px, 80vw, 80vh);
             }
-            
+
             h1 {
                 font-size: 1.4rem;
             }
-            
+
             .format-tip {
                 font-size: 12px;
                 padding: 7px 8px;
             }
-            
-            .loader {
-                width: 250px;
-                height: 250px;
+
+            #quality-value {
+                width: 65px;
+                height: 34px;
+                font-size: 16px;
             }
-            
-            .loader div:nth-child(1) {
-                width: 180px;
-                height: 180px;
-                left: 35px;
-                top: 35px;
+
+            .loader-spinner {
+                width: 200px;
+                height: 200px;
             }
-            
-            .loader div:nth-child(2) {
-                width: 160px;
-                height: 160px;
+
+            .loader-spinner div:nth-child(1) {
+                width: 200px;
+                height: 200px;
+                left: 0;
+                top: 0;
+            }
+
+            .loader-spinner div:nth-child(2) {
+                width: 170px;
+                height: 170px;
+                left: 15px;
+                top: 15px;
+            }
+
+            .loader-spinner div:nth-child(3) {
+                width: 140px;
+                height: 140px;
+                left: 30px;
+                top: 30px;
+            }
+
+            .loader-spinner div:nth-child(4) {
+                width: 110px;
+                height: 110px;
                 left: 45px;
                 top: 45px;
             }
-            
-            .loader div:nth-child(3) {
-                width: 140px;
-                height: 140px;
-                left: 55px;
-                top: 55px;
+
+            .loader-cancel {
+                bottom: max(20%, 85px);
+                padding: 14px 32px;
+                font-size: 16px;
+                min-width: 160px;
             }
-            
-            .loader div:nth-child(4) {
-                width: 120px;
-                height: 120px;
-                left: 65px;
-                top: 65px;
-            }
-            
+
             .dev-info-item {
                 flex-direction: column;
                 align-items: flex-start;
             }
-            
+
             .dev-info-label {
                 min-width: auto;
                 margin-bottom: 5px;
             }
-            
+
             .dev-info-value {
                 margin-left: 0;
             }
-            
+
             .encrypt-strength-button,
             .decrypt-strength-button {
                 min-width: 45px;
                 height: 35px;
                 font-size: 14px;
             }
-            
+
             .encrypt-strength-buttons,
             .decrypt-strength-buttons {
                 gap: 5px;
@@ -1625,71 +1721,120 @@
         <div class="error-window">
             <div class="error-header">
                 <div class="error-title">错误信息</div>
-                <button class="error-close" id="error-close">&times;</button>
+                <button class="error-close" id="error-close" type="button">&times;</button>
             </div>
             <div class="error-content" id="error-content">
             </div>
             <div class="error-controls">
                 <div class="error-buttons-container">
-                    <button class="clear-errors-button" id="clear-errors">清除所有记录</button>
-                    <button class="copy-button" id="copy-errors">复制所有错误</button>
+                    <button class="clear-errors-button" id="clear-errors" type="button">清除所有记录</button>
+                    <button class="copy-button" id="copy-errors" type="button">复制所有错误</button>
                 </div>
             </div>
         </div>
     </div>
-    
+
     <div class="loader" id="loader">
-        <div></div>
-        <div></div>
-        <div></div>
-        <div></div>
+        <div class="loader-spinner">
+            <div></div>
+            <div></div>
+            <div></div>
+            <div></div>
+        </div>
+        <button class="loader-cancel" id="loader-cancel" type="button">取消处理</button>
     </div>
-    
+
     <div class="content" id="content">
         <h1>星光_图片混淆TOOL</h1>
-        
+
         <div class="image-container">
-            <img id="display-img" />
+            <img id="display-img" alt="" />
         </div>
-        
+
         <div class="file-selector">
-            <div class="file-button">
-                <span>选择图片</span>
+            <div class="file-button" id="file-button">
+                <span>
+                    <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+                        <rect x="3" y="3" width="18" height="18" rx="2" ry="2"/>
+                        <circle cx="8.5" cy="8.5" r="1.5"/>
+                        <polyline points="21 15 16 10 5 21"/>
+                    </svg>
+                    选择图片
+                </span>
                 <input type="file" accept="image/*" id="ipt" class="ipt_btn" />
             </div>
         </div>
-        
+
         <div class="action-buttons">
             <div class="action-button-row">
                 <div class="button-group">
-                    <button id="enc" class="action-button">混淆图片</button>
-                    <button id="enc-multiple" class="circle-button">+</button>
+                    <button id="enc" class="action-button" type="button">
+                        <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+                            <rect x="3" y="11" width="18" height="11" rx="2" ry="2"/>
+                            <path d="M7 11V7a5 5 0 0 1 10 0v4"/>
+                        </svg>
+                        混淆图片
+                    </button>
+                    <button id="enc-multiple" class="circle-button" type="button">+</button>
                 </div>
                 <div class="button-group">
-                    <button id="dec" class="action-button">解混淆</button>
-                    <button id="dec-multiple" class="circle-button">-</button>
+                    <button id="dec" class="action-button" type="button">
+                        <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+                            <rect x="3" y="11" width="18" height="11" rx="2" ry="2"/>
+                            <path d="M7 11V7a5 5 0 0 1 9.9-1"/>
+                        </svg>
+                        解混淆
+                    </button>
+                    <button id="dec-multiple" class="circle-button" type="button">-</button>
                 </div>
             </div>
             <div class="action-button-row">
-                <button id="re" class="action-button" style="min-width: 200px;">还原原图</button>
+                <button id="re" class="action-button" type="button" style="min-width: 200px;">
+                    <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+                        <path d="M3 7v6h6"/>
+                        <path d="M21 17a9 9 0 0 0-9-9 9 9 0 0 0-6 2.3L3 13"/>
+                    </svg>
+                    还原原图
+                </button>
             </div>
         </div>
-        
+
         <div style="display: flex; flex-direction: column; align-items: center; width: 100%; margin-bottom: 15px; gap: 10px;">
-            <button id="download" class="action-button" style="min-width: 200px;">下载图片</button>
-            <button id="view" class="action-button" style="min-width: 200px;">查看图片</button>
-            <button id="clear" class="action-button" style="min-width: 200px;">清除图片</button>
+            <button id="download" class="action-button" type="button" style="min-width: 200px;">
+                <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+                    <path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/>
+                    <polyline points="7 10 12 15 17 10"/>
+                    <line x1="12" y1="15" x2="12" y2="3"/>
+                </svg>
+                下载图片
+            </button>
+            <button id="view" class="action-button" type="button" style="min-width: 200px;">
+                <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+                    <path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z"/>
+                    <circle cx="12" cy="12" r="3"/>
+                </svg>
+                查看图片
+            </button>
+            <button id="clear" class="action-button" type="button" style="min-width: 200px;">
+                <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+                    <polyline points="3 6 5 6 21 6"/>
+                    <path d="M19 6l-1 14a2 2 0 0 1-2 2H8a2 2 0 0 1-2-2L5 6"/>
+                    <path d="M10 11v6M14 11v6"/>
+                    <path d="M9 6V4a2 2 0 0 1 2-2h2a2 2 0 0 1 2 2v2"/>
+                </svg>
+                清除图片
+            </button>
         </div>
-        
+
         <div class="format-options">
             <label for="format-select">输出格式:</label>
             <select id="format-select" class="format-select">
                 <option value="png" selected>PNG (无损)</option>
                 <option value="jpg">JPG (有损)</option>
             </select>
-            
+
             <div class="format-tip">更推荐你使用PNG，虽然速度慢了点OvO</div>
-            
+
             <div id="quality-option" class="quality-option">
                 <div class="quality-label">图片质量:</div>
                 <div class="quality-slider-container">
@@ -1698,7 +1843,7 @@
                 </div>
             </div>
         </div>
-        
+
         <details class="settings-options" id="settings-options">
             <summary class="settings-summary">设置</summary>
             <div class="settings-content">
@@ -1709,16 +1854,16 @@
                             <div class="strength-button-group">
                                 <div class="strength-label">混淆强度:</div>
                                 <div class="encrypt-strength-buttons">
-                                    <button class="encrypt-strength-button" data-value="0.5">0.5</button>
-                                    <button class="encrypt-strength-button selected" data-value="1.0">1.0</button>
-                                    <button class="encrypt-strength-button" data-value="1.5">1.5</button>
-                                    <button class="encrypt-strength-button" data-value="2.0">2.0</button>
+                                    <button class="encrypt-strength-button" data-value="0.5" type="button">0.5</button>
+                                    <button class="encrypt-strength-button selected" data-value="1.0" type="button">1.0</button>
+                                    <button class="encrypt-strength-button" data-value="1.5" type="button">1.5</button>
+                                    <button class="encrypt-strength-button" data-value="2.0" type="button">2.0</button>
                                 </div>
                             </div>
                         </div>
                     </div>
                 </details>
-                
+
                 <details class="sub-settings">
                     <summary class="sub-summary">解混淆设置</summary>
                     <div class="sub-content">
@@ -1726,28 +1871,27 @@
                             <div class="strength-button-group">
                                 <div class="strength-label">解混淆强度:</div>
                                 <div class="decrypt-strength-buttons">
-                                    <button class="decrypt-strength-button" data-value="0.5">0.5</button>
-                                    <button class="decrypt-strength-button selected" data-value="1.0">1.0</button>
-                                    <button class="decrypt-strength-button" data-value="1.5">1.5</button>
-                                    <button class="decrypt-strength-button" data-value="2.0">2.0</button>
+                                    <button class="decrypt-strength-button" data-value="0.5" type="button">0.5</button>
+                                    <button class="decrypt-strength-button selected" data-value="1.0" type="button">1.0</button>
+                                    <button class="decrypt-strength-button" data-value="1.5" type="button">1.5</button>
+                                    <button class="decrypt-strength-button" data-value="2.0" type="button">2.0</button>
                                 </div>
                             </div>
                         </div>
                     </div>
                 </details>
-                
+
                 <details class="sub-settings">
                     <summary class="sub-summary">开发者设置</summary>
                     <div class="sub-content">
                         <div class="setting-item">
-                            <button id="open-error-window" class="action-button" style="display: block; margin: 0 auto; padding: 10px; font-size: 14px; margin-top: 10px; background-color: rgba(106, 17, 203, 0.4); width: fit-content; min-width: 180px;">手动打开错误窗口</button>
+                            <button id="open-error-window" class="action-button" type="button" style="display: block; margin: 0 auto; padding: 10px; font-size: 14px; margin-top: 10px; background-color: rgba(106, 17, 203, 0.4); width: fit-content; min-width: 180px;">手动打开错误窗口</button>
                         </div>
                     </div>
                 </details>
             </div>
         </details>
-        
-        <!-- 开发信息板块 -->
+
         <details class="dev-info-options">
             <summary class="dev-info-summary">开发信息</summary>
             <div class="dev-info-content">
@@ -1767,80 +1911,14 @@
             </div>
         </details>
     </div>
-    
-<script>
-function gilbert2dIterative(width, height) {
-    const coordinates = [];
-    
-    const stack = [];
-    
-    if (width >= height) {
-        stack.push({x: 0, y: 0, ax: width, ay: 0, bx: 0, by: height});
-    } else {
-        stack.push({x: 0, y: 0, ax: 0, ay: height, bx: width, by: 0});
-    }
-    
-    while (stack.length > 0) {
-        const {x, y, ax, ay, bx, by} = stack.pop();
-        
-        const w = Math.abs(ax + ay);
-        const h = Math.abs(bx + by);
-        
-        const dax = Math.sign(ax), day = Math.sign(ay);
-        const dbx = Math.sign(bx), dby = Math.sign(by);
-        
-        if (h === 1) {
-            let curX = x, curY = y;
-            for (let i = 0; i < w; i++) {
-                coordinates.push([curX, curY]);
-                curX += dax;
-                curY += day;
-            }
-            continue;
-        }
-        
-        if (w === 1) {
-            let curX = x, curY = y;
-            for (let i = 0; i < h; i++) {
-                coordinates.push([curX, curY]);
-                curX += dbx;
-                curY += dby;
-            }
-            continue;
-        }
-        
-        let ax2 = Math.floor(ax / 2), ay2 = Math.floor(ay / 2);
-        let bx2 = Math.floor(bx / 2), by2 = Math.floor(by / 2);
-        
-        const w2 = Math.abs(ax2 + ay2);
-        const h2 = Math.abs(bx2 + by2);
-        
-        if (2 * w > 3 * h) {
-            if ((w2 % 2) && (w > 2)) {
-                ax2 += dax;
-                ay2 += day;
-            }
-            
-            stack.push({x: x + ax2, y: y + ay2, ax: ax - ax2, ay: ay - ay2, bx, by});
-            stack.push({x, y, ax: ax2, ay: ay2, bx, by});
-        } else {
-            if ((h2 % 2) && (h > 2)) {
-                bx2 += dbx;
-                by2 += dby;
-            }
-            
-            stack.push({x: x + (ax - dax) + (bx2 - dbx), y: y + (ay - day) + (by2 - dby),
-                ax: -bx2, ay: -by2, bx: -(ax - ax2), by: -(ay - ay2)});
-            stack.push({x: x + bx2, y: y + by2, ax, ay, bx: bx - bx2, by: by - by2});
-            stack.push({x, y, ax: bx2, ay: by2, bx: ax2, by: ay2});
-        }
-    }
-    
-    return coordinates;
-}
 
+<script>
+/* =========================================================
+   0. 元素引用
+   ========================================================= */
 const img = document.getElementById("display-img");
 const loader = document.getElementById("loader");
+const loaderCancelBtn = document.getElementById("loader-cancel");
 const encBtn = document.getElementById("enc");
 const decBtn = document.getElementById("dec");
 const encMultipleBtn = document.getElementById("enc-multiple");
@@ -1853,7 +1931,8 @@ const formatSelect = document.getElementById("format-select");
 const qualityOption = document.getElementById("quality-option");
 const qualityRange = document.getElementById("quality-range");
 const qualityValue = document.getElementById("quality-value");
-
+const ipt = document.getElementById("ipt");
+const fileButton = document.getElementById("file-button");
 const openErrorWindowBtn = document.getElementById("open-error-window");
 
 const errorOverlay = document.getElementById("error-overlay");
@@ -1862,56 +1941,11 @@ const errorClose = document.getElementById("error-close");
 const copyErrorsBtn = document.getElementById("copy-errors");
 const clearErrorsBtn = document.getElementById("clear-errors");
 
-// 混淆强度和解混淆强度变量（1.0为默认强度）
-let encryptStrength = 1.0;
-let decryptStrength = 1.0;
-
-// 初始化强度按钮
-function initStrengthButtons() {
-    try {
-        // 混淆强度按钮
-        const encryptButtons = document.querySelectorAll('.encrypt-strength-button');
-        encryptButtons.forEach(button => {
-            button.addEventListener('click', function(e) {
-                // 添加波浪效果
-                addWaveEffect(e, 'rgba(30, 144, 255, 0.9)');
-                
-                // 获取强度值
-                const value = parseFloat(this.getAttribute('data-value'));
-                encryptStrength = value;
-                
-                // 移除所有按钮的选中状态
-                encryptButtons.forEach(btn => btn.classList.remove('selected'));
-                // 添加当前按钮的选中状态
-                this.classList.add('selected');
-            });
-        });
-        
-        // 解混淆强度按钮
-        const decryptButtons = document.querySelectorAll('.decrypt-strength-button');
-        decryptButtons.forEach(button => {
-            button.addEventListener('click', function(e) {
-                // 添加波浪效果
-                addWaveEffect(e, 'rgba(220, 20, 60, 0.9)');
-                
-                // 获取强度值
-                const value = parseFloat(this.getAttribute('data-value'));
-                decryptStrength = value;
-                
-                // 移除所有按钮的选中状态
-                decryptButtons.forEach(btn => btn.classList.remove('selected'));
-                // 添加当前按钮的选中状态
-                this.classList.add('selected');
-            });
-        });
-        
-    } catch (error) {
-        console.error('初始化强度按钮时出错:', error);
-    }
-}
-
-// 改进的错误处理系统（静默处理，仅在错误窗口中记录，不会自动弹出）
+/* =========================================================
+   1. 错误记录系统
+   ========================================================= */
 let errorMessages = [];
+const MAX_ERRORS = 100;
 
 function showError(message) {
     try {
@@ -1922,22 +1956,16 @@ function showError(message) {
                 message = String(message);
             }
         }
-        
         const timestamp = new Date().toLocaleTimeString();
         const errorMessage = `[${timestamp}] ${message}`;
-        
-        // 限制错误消息数量，防止内存泄漏
-        if (errorMessages.length > 100) {
+
+        while (errorMessages.length >= MAX_ERRORS) {
             errorMessages.shift();
         }
-        
         errorMessages.push(errorMessage);
-        
-        // 只更新错误窗口内容，不自动弹出
+
         updateErrorDisplay();
-        
         console.error('应用错误:', errorMessage);
-        
     } catch (error) {
         console.error('显示错误时出错:', error);
     }
@@ -1946,7 +1974,6 @@ function showError(message) {
 function updateErrorDisplay() {
     try {
         if (!errorContent) return;
-        
         errorContent.textContent = errorMessages.join('\n\n');
         errorContent.scrollTop = errorContent.scrollHeight;
     } catch (error) {
@@ -1960,23 +1987,40 @@ function clearAllErrors() {
 }
 
 function copyAllErrors() {
+    const allErrors = errorMessages.join('\n');
+    const fallback = () => {
+        try {
+            const ta = document.createElement('textarea');
+            ta.value = allErrors;
+            ta.style.position = 'fixed';
+            ta.style.top = '-1000px';
+            ta.style.opacity = '0';
+            document.body.appendChild(ta);
+            ta.focus();
+            ta.select();
+            const ok = document.execCommand('copy');
+            document.body.removeChild(ta);
+            if (!ok) showError('复制失败，请手动选择文本复制');
+        } catch (e) {
+            showError('复制失败: ' + e.message);
+        }
+    };
     try {
-        const allErrors = errorMessages.join('\n');
-        navigator.clipboard.writeText(allErrors).then(() => {
-        }).catch(err => {
-            console.error('复制失败:', err);
-            showError('复制失败: ' + err.message);
-        });
+        if (navigator.clipboard && window.isSecureContext) {
+            navigator.clipboard.writeText(allErrors).catch(fallback);
+        } else {
+            fallback();
+        }
     } catch (error) {
-        showError('复制错误时出错: ' + error.message);
+        fallback();
     }
 }
 
 function closeErrorWindow() {
     try {
-        if (errorOverlay) {
-            errorOverlay.style.display = "none";
-        }
+        if (errorOverlay) errorOverlay.style.display = "none";
+        document.documentElement.classList.remove('modal-open');
+        document.body.classList.remove('modal-open');
     } catch (error) {
         console.error('关闭错误窗口失败:', error);
     }
@@ -1987,55 +2031,54 @@ function openErrorWindow() {
         if (errorOverlay) {
             updateErrorDisplay();
             errorOverlay.style.display = "flex";
+            document.documentElement.classList.add('modal-open');
+            document.body.classList.add('modal-open');
         }
     } catch (error) {
         console.error('打开错误窗口时出错:', error);
     }
 }
 
-// 初始化错误窗口事件
 try {
     if (errorClose) errorClose.addEventListener('click', closeErrorWindow);
     if (copyErrorsBtn) copyErrorsBtn.addEventListener('click', copyAllErrors);
     if (clearErrorsBtn) clearErrorsBtn.addEventListener('click', clearAllErrors);
-    if (openErrorWindowBtn) {
-        openErrorWindowBtn.addEventListener('click', openErrorWindow);
-    }
+    if (openErrorWindowBtn) openErrorWindowBtn.addEventListener('click', openErrorWindow);
 } catch (error) {
     console.error('初始化错误窗口事件失败:', error);
 }
 
-// 简化的全局错误处理（静默记录）
-window.addEventListener('error', function(event) {
+window.addEventListener('error', function (event) {
+    const target = event.target;
+    if (target && target !== window && target.tagName) {
+        const url = target.src || target.href || '';
+        if (url) {
+            showError('资源加载失败: ' + url);
+            return;
+        }
+    }
+    if (!event.message) return;
     showError(`全局错误: ${event.message} (${event.filename}:${event.lineno}:${event.colno})`);
-});
+}, true);
 
-window.addEventListener('unhandledrejection', function(event) {
-    event.preventDefault();
-    const errorMsg = event.reason ? event.reason.toString() : '未处理的Promise拒绝';
+window.addEventListener('unhandledrejection', function (event) {
+    const reason = event.reason;
+    const errorMsg = reason
+        ? (reason.message ? reason.message : String(reason))
+        : '未处理的Promise拒绝';
     showError('未处理的Promise拒绝: ' + errorMsg);
 });
 
-// =================== 改进的内存管理 ===================
-
-// 改进的blob URL管理
-let activeBlobURLs = new Set(); // 改用Set避免重复
-let currentBlobURL = null; // 当前显示图片的blob URL
+/* =========================================================
+   2. Blob URL 管理
+   ========================================================= */
+let activeBlobURLs = new Set();
+let currentBlobURL = null;
 
 function addBlobURL(url) {
-    if (typeof url === 'string' && url.startsWith('blob:')) {
-        // 如果已经有相同的URL，先移除旧的
-        if (activeBlobURLs.has(url)) {
-            try {
-                URL.revokeObjectURL(url);
-                activeBlobURLs.delete(url);
-            } catch (e) {
-            }
-        }
-        
-        activeBlobURLs.add(url);
-        currentBlobURL = url;
-    }
+    if (typeof url !== 'string' || !url.startsWith('blob:')) return;
+    activeBlobURLs.add(url);
+    currentBlobURL = url;
 }
 
 function releaseBlobURL(url) {
@@ -2043,258 +2086,267 @@ function releaseBlobURL(url) {
         if (typeof url === 'string' && url.startsWith('blob:')) {
             URL.revokeObjectURL(url);
             activeBlobURLs.delete(url);
-            
-            if (currentBlobURL === url) {
-                currentBlobURL = null;
-            }
-            
+            if (currentBlobURL === url) currentBlobURL = null;
             return true;
         }
-    } catch (e) {
-    }
+    } catch (e) { /* 忽略 */ }
     return false;
 }
 
 function releaseAllBlobURLs() {
     try {
-        let releasedCount = 0;
-        const urlsToRelease = Array.from(activeBlobURLs);
-        
-        for (const url of urlsToRelease) {
-            if (releaseBlobURL(url)) {
-                releasedCount++;
-            }
-        }
-        
+        const urls = Array.from(activeBlobURLs);
+        for (const url of urls) releaseBlobURL(url);
         activeBlobURLs.clear();
         currentBlobURL = null;
-        
-        return releasedCount;
+        return urls.length;
     } catch (error) {
         console.error('释放blob URL时出错:', error);
         return 0;
     }
 }
 
-// 改进的大对象管理
-let largeObjects = {
-    canvas: null,
-    imgData: null,
-    curve: null
-};
-
-// 改进的releaseLargeObjects函数
-function releaseLargeObjects() {
-    try {
-        // 1. 首先释放canvas资源
-        if (largeObjects.canvas) {
-            try {
-                const ctx = largeObjects.canvas.getContext('2d');
-                if (ctx) {
-                    // 清除画布内容
-                    ctx.clearRect(0, 0, largeObjects.canvas.width, largeObjects.canvas.height);
-                    // 释放画布上下文
-                    try {
-                        // 强制canvas重置尺寸来释放GPU内存
-                        largeObjects.canvas.width = 0;
-                        largeObjects.canvas.height = 0;
-                    } catch (e) {
-                        // 忽略可能的错误
-                    }
-                }
-                
-                // 移除canvas的所有事件监听器（如果有）
-                const newCanvas = largeObjects.canvas.cloneNode(false);
-                if (largeObjects.canvas.parentNode) {
-                    largeObjects.canvas.parentNode.replaceChild(newCanvas, largeObjects.canvas);
-                }
-                
-                // 显式断开引用
-                largeObjects.canvas = null;
-                
-            } catch (e) {
-                largeObjects.canvas = null;
-            }
-        }
-        
-        // 2. 释放ImageData（通过置空引用来帮助垃圾回收）
-        if (largeObjects.imgData) {
-            // 对于大型图像数据，可以尝试手动释放内存
-            if (largeObjects.imgData.data && largeObjects.imgData.data.length > 1000000) {
-                // 对于超过1百万像素的图像数据，强制清除
-                try {
-                    // 创建一个小的临时数组来替换大数据
-                    const tempArray = new Uint8ClampedArray(4);
-                    largeObjects.imgData.data.set(tempArray);
-                } catch (e) {
-                    // 忽略错误
-                }
-            }
-            largeObjects.imgData = null;
-        }
-        
-        // 3. 释放曲线数据
-        if (largeObjects.curve) {
-            // 对于大型曲线数组，可以强制清空
-            if (largeObjects.curve.length > 100000) {
-                largeObjects.curve.length = 0; // 清空数组
-            }
-            largeObjects.curve = null;
-        }
-        
-        // 4. 强制垃圾回收提示（如果浏览器支持）
-        if (window.gc) {
-            try {
-                window.gc();
-            } catch (e) {
-                // 忽略错误
-            }
-        }
-        
-        // 5. 释放JavaScript引擎内存
-        if (globalThis.gc && typeof globalThis.gc === 'function') {
-            try {
-                globalThis.gc();
-            } catch (e) {
-                // 忽略错误
-            }
-        }
-        
-    } catch (error) {
-        console.error('释放大对象时出错:', error);
-        // 确保所有引用都被清除
-        largeObjects.canvas = null;
-        largeObjects.imgData = null;
-        largeObjects.curve = null;
-    }
-}
-
-// 新增：定期清理函数
-function scheduleMemoryCleanup() {
-    // 如果对象太大或blob URLs太多，进行清理
-    const shouldCleanup = 
-        (largeObjects.imgData && largeObjects.imgData.data && largeObjects.imgData.data.length > 5000000) || // 大于5百万像素
-        (largeObjects.curve && largeObjects.curve.length > 500000) || // 大于50万点
-        activeBlobURLs.size > 5; // 超过5个blob URLs
-    
-    if (shouldCleanup) {
-        releaseLargeObjects();
-        
-        // 保留当前blob URL，释放其他的
-        if (currentBlobURL) {
-            const urlsToRelease = Array.from(activeBlobURLs).filter(url => url !== currentBlobURL);
-            urlsToRelease.forEach(url => releaseBlobURL(url));
-        } else {
-            releaseAllBlobURLs();
-        }
-    }
-}
-
-let isProcessing = false;
-let abortController = null;
-
-// 简化的图像处理分块函数
-function processImageInChunks(totalPixels, processPixel, chunkSize = 10000, checkCancel = () => false) {
+/* =========================================================
+   3. 通用工具
+   ========================================================= */
+function withTimeout(promise, ms, errMsg) {
     return new Promise((resolve, reject) => {
-        let index = 0;
-        
-        function processChunk() {
-            try {
-                if (checkCancel()) {
-                    reject(new Error('操作已被取消'));
-                    return;
-                }
-                
-                const end = Math.min(index + chunkSize, totalPixels);
-                for (let i = index; i < end; i++) {
-                    processPixel(i);
-                }
-                
-                index = end;
-                
-                if (index < totalPixels) {
-                    setTimeout(processChunk, 0);
-                } else {
-                    resolve();
-                }
-            } catch (error) {
-                reject(error);
+        let settled = false;
+        const timer = setTimeout(() => {
+            if (settled) return;
+            settled = true;
+            reject(new Error(errMsg || '操作超时'));
+        }, ms);
+        promise.then(
+            v => {
+                if (settled) return;
+                settled = true;
+                clearTimeout(timer);
+                resolve(v);
+            },
+            e => {
+                if (settled) return;
+                settled = true;
+                clearTimeout(timer);
+                reject(e);
             }
-        }
-        
-        processChunk();
+        );
     });
 }
 
-function setImageSrc(src) {
-    try {
-        if (img) {
-            img.onerror = null;
-            img.onload = null;
-        }
-        
-        if (!src) {
-            if (img) {
-                img.style.display = "none";
-                img.src = "";
-            }
-            // 释放当前blob URL
-            if (currentBlobURL) {
-                releaseBlobURL(currentBlobURL);
-            }
-            return;
-        }
-        
-        // 如果不是blob URL（比如data URL），释放所有blob URLs
-        if (!src.startsWith('blob:')) {
-            releaseAllBlobURLs();
-        }
-        
-        // 如果是blob URL，先释放旧的再添加新的
-        if (typeof src === 'string' && src.startsWith('blob:')) {
-            // 释放之前的blob URLs（保留当前）
-            const urlsToRelease = Array.from(activeBlobURLs).filter(url => url !== src);
-            urlsToRelease.forEach(url => releaseBlobURL(url));
-            
-            addBlobURL(src);
-        }
-        
-        if (img) {
-            img.onerror = function() {
-                showError('图片加载失败');
-                hideLoader();
-                // 加载失败时释放blob URL
-                if (src.startsWith('blob:')) {
-                    releaseBlobURL(src);
-                }
-            };
-            
-            img.onload = function() {
-                if (img) {
-                    img.style.display = "block";
-                }
-                // 图片完全加载后再隐藏加载动画
-                setTimeout(hideLoader, 100);
-            };
-            
-            img.src = src;
-        }
-        
-    } catch (error) {
-        showError('设置图片源时出错: ' + error.message);
-        hideLoader();
-        // 出错时释放blob URL
-        if (src && src.startsWith('blob:')) {
-            releaseBlobURL(src);
-        }
+function inferMimeFromFileName(name) {
+    if (!name) return '';
+    const idx = name.lastIndexOf('.');
+    if (idx < 0) return '';
+    const ext = name.slice(idx + 1).toLowerCase();
+    switch (ext) {
+        case 'jpg':
+        case 'jpeg': return 'image/jpeg';
+        case 'png': return 'image/png';
+        case 'webp': return 'image/webp';
+        case 'gif': return 'image/gif';
+        case 'bmp': return 'image/bmp';
+        case 'svg': return 'image/svg+xml';
+        case 'ico': return 'image/x-icon';
+        case 'avif': return 'image/avif';
+        default: return '';
     }
+}
+
+/* =========================================================
+   4. 操作与资源管理
+   ========================================================= */
+let operationSeq = 0;
+let activeOperation = null;
+let isProcessing = false;
+
+function createResourceBag() {
+    return { canvas: null, imgData: null, curve: null };
+}
+
+function releaseResourceBag(res) {
+    if (!res) return;
+    try {
+        if (res.canvas) {
+            try {
+                const ctx = res.canvas.getContext('2d');
+                if (ctx) {
+                    ctx.clearRect(0, 0, res.canvas.width || 0, res.canvas.height || 0);
+                }
+            } catch (e) { /* 忽略 */ }
+            try {
+                res.canvas.width = 0;
+                res.canvas.height = 0;
+            } catch (e) { /* 忽略 */ }
+            res.canvas = null;
+        }
+        res.imgData = null;
+        res.curve = null;
+    } catch (e) {
+        res.canvas = null;
+        res.imgData = null;
+        res.curve = null;
+    }
+}
+
+function createOperation() {
+    return {
+        id: ++operationSeq,
+        controller: new AbortController(),
+        resources: createResourceBag(),
+        cancelled: false,
+        finished: false,
+        disposed: false,
+        forced: false,
+        rollingBack: false,
+        producedBlobURL: null
+    };
+}
+
+function disposeOperation(op, options) {
+    if (!op || op.disposed) return;
+    op.disposed = true;
+    op.cancelled = true;
+    try { op.controller.abort(); } catch (e) { /* 忽略 */ }
+    const interruptRollback = !options || options.interruptRollback !== false;
+    if (interruptRollback && pendingLoadResolve) {
+        const f = pendingLoadResolve;
+        pendingLoadResolve = null;
+        f(false);
+    }
+}
+
+/* =========================================================
+   5. setImageSrc
+   ========================================================= */
+let pendingLoadResolve = null;
+
+function setImageSrc(src, op) {
+    return new Promise((resolve) => {
+        if (pendingLoadResolve) {
+            const prev = pendingLoadResolve;
+            pendingLoadResolve = null;
+            prev(false);
+        }
+
+        let done = false;
+        const finish = (ok) => {
+            if (done) return;
+            done = true;
+            if (pendingLoadResolve === finish) pendingLoadResolve = null;
+            if (img) {
+                img.onload = null;
+                img.onerror = null;
+            }
+            resolve(ok);
+        };
+        pendingLoadResolve = finish;
+
+        const isOpValid = () => {
+            if (!op) return true;
+            return op === activeOperation && !op.cancelled && !op.disposed;
+        };
+
+        try {
+            if (!img) {
+                finish(false);
+                return;
+            }
+
+            if (!src) {
+                img.style.display = "none";
+                img.removeAttribute("src");
+                releaseAllBlobURLs();
+                if (op) hideLoader();
+                finish(false);
+                return;
+            }
+
+            const oldURLs = Array.from(activeBlobURLs).filter(url => url !== src);
+
+            img.onerror = function () {
+                if (!isOpValid()) { finish(false); return; }
+                showError('图片加载失败');
+                finish(false);
+            };
+
+            img.onload = function () {
+                if (!isOpValid()) { finish(false); return; }
+                if (img) img.style.display = "block";
+                if (typeof src === 'string' && src.startsWith('blob:')) {
+                    addBlobURL(src);
+                }
+                oldURLs.forEach(releaseBlobURL);
+                if (op) hideLoader();
+                finish(true);
+            };
+
+            img.src = src;
+        } catch (error) {
+            showError('设置图片源时出错: ' + error.message);
+            finish(false);
+        }
+    });
+}
+
+async function safeSetImageSrc(src, timeoutMs, op) {
+    let timedOut = false;
+    let timeoutId = null;
+
+    const p = setImageSrc(src, op);
+    const timeoutP = new Promise((_, reject) => {
+        timeoutId = setTimeout(() => {
+            timedOut = true;
+            reject(new Error('图片加载超时'));
+        }, timeoutMs || 30000);
+    });
+
+    try {
+        return await Promise.race([p, timeoutP]);
+    } catch (e) {
+        if (timedOut && pendingLoadResolve) {
+            const f = pendingLoadResolve;
+            pendingLoadResolve = null;
+            f(false);
+        }
+        throw e;
+    } finally {
+        clearTimeout(timeoutId);
+    }
+}
+
+/* =========================================================
+   6. 加载动画
+   ========================================================= */
+let loaderFallbackTimer = null;
+let cancelFallbackTimer = null;
+let isCancelling = false;
+
+function resetCancelButtonState() {
+    if (loaderCancelBtn) {
+        loaderCancelBtn.disabled = false;
+        loaderCancelBtn.classList.remove('disabled');
+        loaderCancelBtn.textContent = '取消处理';
+    }
+    if (loader) loader.classList.remove('cancelling');
+    isCancelling = false;
 }
 
 function showLoader() {
     try {
-        if (loader) {
-            loader.style.display = "block";
-        }
+        if (loader) loader.style.display = "flex";
+        resetCancelButtonState();
+        clearTimeout(loaderFallbackTimer);
+        loaderFallbackTimer = setTimeout(function () {
+            loaderFallbackTimer = null;
+            if (isCancelling) return;
+            if (activeOperation) {
+                showError('处理超时（30秒），已自动取消');
+                cancelCurrentOperation();
+            } else {
+                hideLoader();
+            }
+        }, 30000);
     } catch (error) {
         console.error('显示加载动画失败:', error);
     }
@@ -2302,33 +2354,218 @@ function showLoader() {
 
 function hideLoader() {
     try {
-        if (loader) {
-            loader.style.display = "none";
-        }
+        clearTimeout(loaderFallbackTimer);
+        loaderFallbackTimer = null;
+        clearTimeout(cancelFallbackTimer);
+        cancelFallbackTimer = null;
+        resetCancelButtonState();
+        if (loader) loader.style.display = "none";
     } catch (error) {
         console.error('隐藏加载动画失败:', error);
     }
 }
 
-let hasEncrypted = false;
-let hasDecrypted = false;
-let hasImage = false;
-let currentFileName = "";
+function cancelCurrentOperation() {
+    const op = activeOperation;
+    if (!op || op.finished || op.cancelled) return;
 
-function resetButtonStates() {
+    op.cancelled = true;
+    try { op.controller.abort(); } catch (e) { /* 忽略 */ }
+
+    if (!isCancelling) {
+        isCancelling = true;
+        if (loader) loader.classList.add('cancelling');
+        if (loaderCancelBtn) {
+            loaderCancelBtn.disabled = true;
+            loaderCancelBtn.classList.add('disabled');
+            loaderCancelBtn.textContent = '取消中...';
+        }
+    }
+
+    if (pendingLoadResolve) {
+        const f = pendingLoadResolve;
+        pendingLoadResolve = null;
+        f(false);
+    }
+
+    clearTimeout(loaderFallbackTimer);
+    loaderFallbackTimer = null;
+
+    // 15 秒兜底：不再提前回滚/置空，只强制解锁 UI。
+    clearTimeout(cancelFallbackTimer);
+    cancelFallbackTimer = setTimeout(function () {
+        cancelFallbackTimer = null;
+        const curOp = activeOperation;
+        if (!curOp) return;
+
+        curOp.forced = true;
+
+        if (pendingLoadResolve) {
+            const f = pendingLoadResolve;
+            pendingLoadResolve = null;
+            f(false);
+        }
+
+        activeOperation = null;
+        isProcessing = false;
+        enableButtons();
+        hideLoader();
+        updateImageUiState();
+    }, 15000);
+}
+
+/* =========================================================
+   7. 分块处理
+   ========================================================= */
+function processImageInChunks(totalPixels, processPixel, chunkSize, checkCancel) {
+    chunkSize = chunkSize || 50000;
+    checkCancel = checkCancel || function () { return false; };
+    return new Promise((resolve, reject) => {
+        let index = 0;
+
+        function scheduleNext(cb) {
+            if (document.hidden) {
+                setTimeout(cb, 0);
+            } else if (typeof requestAnimationFrame === 'function') {
+                requestAnimationFrame(cb);
+            } else {
+                setTimeout(cb, 0);
+            }
+        }
+
+        function processChunk() {
+            try {
+                if (checkCancel()) {
+                    reject(new Error('操作已被取消'));
+                    return;
+                }
+
+                const end = Math.min(index + chunkSize, totalPixels);
+                for (let i = index; i < end; i++) {
+                    processPixel(i);
+                }
+                index = end;
+
+                if (index < totalPixels) {
+                    scheduleNext(processChunk);
+                } else {
+                    resolve();
+                }
+            } catch (error) {
+                reject(error);
+            }
+        }
+
+        processChunk();
+    });
+}
+
+/* =========================================================
+   8. 图片数据状态与 UI 状态
+   ========================================================= */
+let hasImage = false;
+let currentImageKind = null;
+let currentBlob = null;
+let currentBlobType = "";
+let currentFileName = "";
+let originalFile = null;
+
+function clearImageData() {
+    hasImage = false;
+    currentImageKind = null;
+    currentBlob = null;
+    currentBlobType = "";
+    currentFileName = "";
+}
+
+function updateFileButtonState() {
+    if (!fileButton) return;
+    if (ipt && ipt.disabled) fileButton.classList.add('disabled');
+    else fileButton.classList.remove('disabled');
+}
+
+function updateQualityAvailability() {
+    const isJpg = !!formatSelect && formatSelect.value === 'jpg';
+    if (qualityOption) qualityOption.style.display = isJpg ? 'block' : 'none';
+    if (qualityRange) qualityRange.disabled = !isJpg || isProcessing;
+}
+
+function setStrengthButtonsDisabled(disabled) {
     try {
-        hasEncrypted = false;
-        hasDecrypted = false;
-        
+        const btns = document.querySelectorAll('.encrypt-strength-button, .decrypt-strength-button');
+        btns.forEach(btn => {
+            btn.disabled = disabled;
+            if (disabled) btn.classList.add('disabled');
+            else btn.classList.remove('disabled');
+        });
+    } catch (e) {
+        console.error('设置强度按钮禁用状态失败:', e);
+    }
+}
+
+function isProcessedImage() {
+    return hasImage && (currentImageKind === 'encrypted' || currentImageKind === 'decrypted');
+}
+
+function updateDownloadButtonVisibility() {
+    if (downloadBtn) downloadBtn.style.display = isProcessedImage() ? "flex" : "none";
+}
+
+function updateViewButtonVisibility() {
+    if (viewBtn) viewBtn.style.display = isProcessedImage() ? "flex" : "none";
+}
+
+function updateClearButtonVisibility() {
+    if (clearBtn) clearBtn.style.display = hasImage ? "flex" : "none";
+}
+
+function updateImageUiState() {
+    updateDownloadButtonVisibility();
+    updateViewButtonVisibility();
+    updateClearButtonVisibility();
+}
+
+function disableButtons() {
+    const buttons = [encBtn, decBtn, encMultipleBtn, decMultipleBtn, restoreBtn, clearBtn, downloadBtn, viewBtn, openErrorWindowBtn];
+    buttons.forEach(btn => {
+        if (btn) {
+            btn.disabled = true;
+            btn.classList.add('disabled');
+        }
+    });
+    if (ipt) ipt.disabled = true;
+    if (formatSelect) formatSelect.disabled = true;
+    if (qualityRange) qualityRange.disabled = true;
+    setStrengthButtonsDisabled(true);
+    updateFileButtonState();
+}
+
+function enableButtons() {
+    const buttons = [encBtn, decBtn, encMultipleBtn, decMultipleBtn, restoreBtn, clearBtn, downloadBtn, viewBtn, openErrorWindowBtn];
+    buttons.forEach(btn => {
+        if (btn) {
+            btn.disabled = false;
+            btn.classList.remove('disabled');
+        }
+    });
+    if (ipt) ipt.disabled = false;
+    if (formatSelect) formatSelect.disabled = false;
+    updateQualityAvailability();
+    setStrengthButtonsDisabled(false);
+    updateFileButtonState();
+}
+
+function resetButtonStates(keepDisabled) {
+    try {
         if (encBtn) encBtn.style.display = "flex";
         if (decBtn) decBtn.style.display = "flex";
         if (encMultipleBtn) encMultipleBtn.style.display = "flex";
         if (decMultipleBtn) decMultipleBtn.style.display = "flex";
         if (restoreBtn) restoreBtn.style.display = "none";
-        
-        updateDownloadButtonVisibility();
-        updateViewButtonVisibility();
-        enableButtons();
+
+        updateImageUiState();
+
+        if (!keepDisabled) enableButtons();
     } catch (error) {
         showError('重置按钮状态时出错: ' + error.message);
     }
@@ -2336,351 +2573,503 @@ function resetButtonStates() {
 
 function showRestoreButton() {
     try {
-        if (restoreBtn) {
-            restoreBtn.style.display = "flex";
-        }
-        updateDownloadButtonVisibility();
-        updateViewButtonVisibility();
+        if (restoreBtn) restoreBtn.style.display = "flex";
+        updateImageUiState();
     } catch (error) {
         showError('显示还原按钮时出错: ' + error.message);
     }
 }
 
-function updateDownloadButtonVisibility() {
-    try {
-        if (downloadBtn) {
-            if (hasImage && (hasEncrypted || hasDecrypted)) {
-                downloadBtn.style.display = "flex";
-            } else {
-                downloadBtn.style.display = "none";
-            }
-        }
-    } catch (error) {
-        showError('更新下载按钮可见性时出错: ' + error.message);
+/* =========================================================
+   9. 核心：混淆 / 解混淆
+   ========================================================= */
+function gilbert2dIterative(width, height, checkCancel) {
+    const total = width * height;
+    const order = new Int32Array(total);
+    const stack = [];
+    let outIndex = 0;
+    let guard = 0;
+
+    if (width >= height) {
+        stack.push({ x: 0, y: 0, ax: width, ay: 0, bx: 0, by: height });
+    } else {
+        stack.push({ x: 0, y: 0, ax: 0, ay: height, bx: width, by: 0 });
     }
+
+    while (stack.length > 0) {
+        if (checkCancel && ((guard++ & 0x3FF) === 0) && checkCancel()) {
+            throw new Error('操作已被取消');
+        }
+
+        const cur = stack.pop();
+        const x = cur.x, y = cur.y;
+        const ax = cur.ax, ay = cur.ay;
+        const bx = cur.bx, by = cur.by;
+
+        const w = Math.abs(ax + ay);
+        const h = Math.abs(bx + by);
+
+        const dax = Math.sign(ax), day = Math.sign(ay);
+        const dbx = Math.sign(bx), dby = Math.sign(by);
+
+        if (h === 1) {
+            let curX = x, curY = y;
+            for (let i = 0; i < w; i++) {
+                order[outIndex++] = curX + curY * width;
+                curX += dax;
+                curY += day;
+            }
+            continue;
+        }
+
+        if (w === 1) {
+            let curX = x, curY = y;
+            for (let i = 0; i < h; i++) {
+                order[outIndex++] = curX + curY * width;
+                curX += dbx;
+                curY += dby;
+            }
+            continue;
+        }
+
+        let ax2 = Math.floor(ax / 2), ay2 = Math.floor(ay / 2);
+        let bx2 = Math.floor(bx / 2), by2 = Math.floor(by / 2);
+
+        const w2 = Math.abs(ax2 + ay2);
+        const h2 = Math.abs(bx2 + by2);
+
+        if (2 * w > 3 * h) {
+            if ((w2 % 2) && (w > 2)) {
+                ax2 += dax;
+                ay2 += day;
+            }
+
+            stack.push({ x: x + ax2, y: y + ay2, ax: ax - ax2, ay: ay - ay2, bx: bx, by: by });
+            stack.push({ x: x, y: y, ax: ax2, ay: ay2, bx: bx, by: by });
+        } else {
+            if ((h2 % 2) && (h > 2)) {
+                bx2 += dbx;
+                by2 += dby;
+            }
+
+            stack.push({
+                x: x + (ax - dax) + (bx2 - dbx), y: y + (ay - day) + (by2 - dby),
+                ax: -bx2, ay: -by2, bx: -(ax - ax2), by: -(ay - ay2)
+            });
+            stack.push({ x: x + bx2, y: y + by2, ax: ax, ay: ay, bx: bx - bx2, by: by - by2 });
+            stack.push({ x: x, y: y, ax: bx2, ay: by2, bx: ax2, by: ay2 });
+        }
+    }
+
+    return order;
 }
 
-function updateViewButtonVisibility() {
-    try {
-        if (viewBtn) {
-            if (hasImage && (hasEncrypted || hasDecrypted)) {
-                viewBtn.style.display = "flex";
+function canvasToBlob(canvas, format, quality) {
+    return new Promise((resolve, reject) => {
+        let called = false;
+        const done = (blob) => {
+            if (called) return;
+            called = true;
+            if (blob) resolve(blob);
+            else reject(new Error('生成图片数据失败'));
+        };
+        try {
+            if (format === 'png') {
+                canvas.toBlob(done, 'image/png');
             } else {
-                viewBtn.style.display = "none";
+                canvas.toBlob(done, 'image/jpeg', quality);
             }
-        }
-    } catch (error) {
-        showError('更新查看图片按钮可见性时出错: ' + error.message);
-    }
-}
-
-function disableButtons() {
-    const buttons = [encBtn, decBtn, encMultipleBtn, decMultipleBtn, restoreBtn, clearBtn, downloadBtn, viewBtn];
-    buttons.forEach(btn => {
-        if (btn) {
-            btn.classList.add('disabled');
+        } catch (e) {
+            if (!called) {
+                called = true;
+                reject(e);
+            }
         }
     });
 }
 
-function enableButtons() {
-    const buttons = [encBtn, decBtn, encMultipleBtn, decMultipleBtn, restoreBtn, clearBtn, downloadBtn, viewBtn];
-    buttons.forEach(btn => {
-        if (btn) {
-            btn.classList.remove('disabled');
-        }
-    });
+function getImageSize(imgEl) {
+    const w = (imgEl && (imgEl.naturalWidth || imgEl.width)) || 0;
+    const h = (imgEl && (imgEl.naturalHeight || imgEl.height)) || 0;
+    return { w: w, h: h };
 }
 
-async function encryptCommon(imgElement, hideButtons = true) {
+async function rollbackTransform(op, prevState, opBlobURL) {
+    if (opBlobURL && typeof opBlobURL === 'string' && opBlobURL.startsWith('blob:')) {
+        if (activeBlobURLs.has(opBlobURL)) {
+            releaseBlobURL(opBlobURL);
+        } else {
+            try { URL.revokeObjectURL(opBlobURL); } catch (e) { /* 忽略 */ }
+        }
+    }
+
+    if (op.forced || op.disposed || (activeOperation && activeOperation !== op)) {
+        return;
+    }
+
+    let targetURL = null;
+    let targetIsTemp = false;
+
+    const prevBlob = prevState ? prevState.blob : null;
+    if (prevBlob instanceof Blob) {
+        try {
+            targetURL = URL.createObjectURL(prevBlob);
+            targetIsTemp = true;
+        } catch (e) {
+            targetURL = null;
+        }
+    }
+
+    if (!targetURL) {
+        const prevSrc = prevState ? prevState.imgSrc : null;
+        if (prevSrc && typeof prevSrc === 'string' && prevSrc.startsWith('blob:') && activeBlobURLs.has(prevSrc)) {
+            targetURL = prevSrc;
+            targetIsTemp = false;
+        }
+    }
+
+    if (!targetURL && originalFile) {
+        try {
+            targetURL = URL.createObjectURL(originalFile);
+            targetIsTemp = true;
+        } catch (e) {
+            targetURL = null;
+        }
+    }
+
+    if (targetURL) {
+        op.rollingBack = true;
+        try {
+            const ok = await setImageSrc(targetURL, null);
+
+            if (op.forced || op.disposed || (activeOperation && activeOperation !== op)) {
+                if (targetIsTemp && targetURL && !activeBlobURLs.has(targetURL)) {
+                    releaseBlobURL(targetURL);
+                }
+                return;
+            }
+
+            if (ok) {
+                if (prevState && prevBlob instanceof Blob && targetURL !== prevState.imgSrc) {
+                    hasImage = prevState.hasImage;
+                    currentImageKind = prevState.currentImageKind;
+                    currentBlob = prevState.currentBlob;
+                    currentBlobType = prevState.currentBlobType;
+                    currentFileName = prevState.currentFileName;
+                } else if (prevState && targetURL === prevState.imgSrc) {
+                    hasImage = prevState.hasImage;
+                    currentImageKind = prevState.currentImageKind;
+                    currentBlob = prevState.currentBlob;
+                    currentBlobType = prevState.currentBlobType;
+                    currentFileName = prevState.currentFileName;
+                } else if (originalFile) {
+                    hasImage = true;
+                    currentImageKind = 'original';
+                    currentBlob = originalFile;
+                    currentBlobType = originalFile.type || inferMimeFromFileName(originalFile.name) || 'application/octet-stream';
+                    currentFileName = originalFile.name;
+                }
+
+                updateImageUiState();
+                if (restoreBtn) restoreBtn.style.display = prevState ? (prevState.restoreVisible || 'none') : 'none';
+                return;
+            }
+        } catch (e) {
+            // 回滚加载失败/被中断，走下方兜底
+        } finally {
+            op.rollingBack = false;
+            if (targetIsTemp && targetURL && !activeBlobURLs.has(targetURL)) {
+                releaseBlobURL(targetURL);
+            }
+        }
+    }
+
+    if (op.forced || op.disposed || (activeOperation && activeOperation !== op)) {
+        return;
+    }
+
+    if (img) {
+        img.style.display = 'none';
+        img.removeAttribute('src');
+    }
+    hasImage = false;
+    currentImageKind = null;
+    currentBlob = null;
+    currentBlobType = '';
+    currentFileName = '';
+    releaseAllBlobURLs();
+    updateImageUiState();
+    if (restoreBtn) restoreBtn.style.display = originalFile ? 'flex' : 'none';
+}
+
+async function transformImage(imgElement, mode, hideButtons) {
+    if (isProcessing) {
+        showError('当前有操作正在进行，请稍后重试');
+        return false;
+    }
+    if (!imgElement || !imgElement.getAttribute('src')) {
+        showError('请先选择图片');
+        return false;
+    }
+
+    const size = getImageSize(imgElement);
+    const width = size.w;
+    const height = size.h;
+    if (!width || !height) {
+        showError('图片尚未加载完成或尺寸无效，请稍候再试');
+        return false;
+    }
+
+    const isEncrypt = mode === 'encrypt';
+
+    const format = formatSelect ? formatSelect.value : 'png';
+    let quality = 1;
+    if (format !== 'png' && qualityRange) {
+        const q = parseInt(qualityRange.value, 10);
+        quality = isNaN(q) ? 1 : Math.min(1, Math.max(0.1, q / 100));
+    }
+
+    const prevState = {
+        imgSrc: imgElement.getAttribute('src'),
+        blob: currentBlob,
+        hasImage: hasImage,
+        currentImageKind: currentImageKind,
+        currentBlob: currentBlob,
+        currentBlobType: currentBlobType,
+        currentFileName: currentFileName,
+        restoreVisible: restoreBtn ? restoreBtn.style.display : 'none'
+    };
+
+    const op = createOperation();
+    activeOperation = op;
+    isProcessing = true;
+    disableButtons();
+    showLoader();
+
+    let success = false;
+    let blobURL = null;
+
     try {
-        if (isProcessing) {
-            showError('当前有操作正在进行，请稍后重试');
+        const res = op.resources;
+
+        const cvs = document.createElement("canvas");
+        res.canvas = cvs;
+        cvs.width = width;
+        cvs.height = height;
+
+        const ctx = cvs.getContext("2d", { willReadFrequently: true });
+        if (!ctx) throw new Error('无法创建画布上下文');
+
+        ctx.drawImage(imgElement, 0, 0, width, height);
+
+        const imgdata = ctx.getImageData(0, 0, width, height);
+        res.imgData = imgdata;
+
+        const imgdata2 = ctx.createImageData(width, height);
+        const curve = gilbert2dIterative(width, height, () => op.cancelled || op.disposed || op.controller.signal.aborted);
+        res.curve = curve;
+
+        const totalPixels = width * height;
+        const strength = isEncrypt ? encryptStrength : decryptStrength;
+        const offset = Math.round(strength * (Math.sqrt(5) - 1) / 2 * totalPixels);
+
+        const srcData = imgdata.data;
+        const dstData = imgdata2.data;
+
+        await processImageInChunks(
+            totalPixels,
+            function (i) {
+                const a = curve[i];
+                const b = curve[(i + offset) % totalPixels];
+                const pa = a * 4;
+                const pb = b * 4;
+
+                if (isEncrypt) {
+                    dstData[pb] = srcData[pa];
+                    dstData[pb + 1] = srcData[pa + 1];
+                    dstData[pb + 2] = srcData[pa + 2];
+                    dstData[pb + 3] = srcData[pa + 3];
+                } else {
+                    dstData[pa] = srcData[pb];
+                    dstData[pa + 1] = srcData[pb + 1];
+                    dstData[pa + 2] = srcData[pb + 2];
+                    dstData[pa + 3] = srcData[pb + 3];
+                }
+            },
+            50000,
+            function () { return op.cancelled || op.disposed || op.controller.signal.aborted; }
+        );
+
+        if (op.cancelled || op.disposed) {
+            throw new Error('操作已被取消');
+        }
+
+        ctx.putImageData(imgdata2, 0, 0);
+
+        const blob = await withTimeout(
+            canvasToBlob(cvs, format, quality),
+            60000,
+            '生成图片数据超时'
+        );
+
+        if (op.cancelled || op.disposed) {
+            throw new Error('操作已被取消');
+        }
+
+        releaseResourceBag(res);
+
+        blobURL = URL.createObjectURL(blob);
+        op.producedBlobURL = blobURL;
+
+        const loaded = await safeSetImageSrc(blobURL, 30000, op);
+
+        if (op.cancelled || op.disposed) {
+            throw new Error('操作已被取消');
+        }
+
+        if (!loaded) {
+            throw new Error('图片加载失败');
+        }
+
+        success = true;
+
+        hasImage = true;
+        currentImageKind = isEncrypt ? 'encrypted' : 'decrypted';
+        currentBlob = blob;
+        currentBlobType = blob.type || (format === 'png' ? 'image/png' : 'image/jpeg');
+
+        showRestoreButton();
+        updateImageUiState();
+
+        if (hideButtons) {
+            if (isEncrypt) {
+                if (encBtn) encBtn.style.display = "none";
+                if (encMultipleBtn) encMultipleBtn.style.display = "none";
+            } else {
+                if (decBtn) decBtn.style.display = "none";
+                if (decMultipleBtn) decMultipleBtn.style.display = "none";
+            }
+        }
+
+        return true;
+
+    } catch (error) {
+        const wasCancelled = op.cancelled || op.disposed || (error && error.message === '操作已被取消');
+
+        if (!wasCancelled) {
+            showError((isEncrypt ? '混淆' : '解混淆') + '处理时出错: ' + (error && error.message ? error.message : error));
+        }
+
+        if (op.forced || op.disposed) {
+            return false;
+        }
+        if (activeOperation && activeOperation !== op) {
+            return false;
+        }
+
+        if (!success) {
+            try {
+                await rollbackTransform(op, prevState, blobURL);
+            } catch (rollbackError) {
+                console.error('回滚失败:', rollbackError);
+                if (op.forced || op.disposed || (activeOperation && activeOperation !== op)) {
+                    return false;
+                }
+                if (img) {
+                    img.style.display = 'none';
+                    img.removeAttribute('src');
+                }
+                clearImageData();
+                releaseAllBlobURLs();
+                updateImageUiState();
+                if (restoreBtn) restoreBtn.style.display = originalFile ? 'flex' : 'none';
+            }
+        }
+
+        return false;
+
+    } finally {
+        op.finished = true;
+        releaseResourceBag(op.resources);
+
+        if (op.disposed || op.forced) {
             return;
         }
-        
-        isProcessing = true;
-        disableButtons();
-        showLoader();
-        
-        abortController = new AbortController();
-        const signal = abortController.signal;
-        
-        try {
-            // 在处理前释放大对象
-            releaseLargeObjects();
-            
-            const cvs = document.createElement("canvas");
-            largeObjects.canvas = cvs;
-            const width = cvs.width = imgElement.width;
-            const height = cvs.height = imgElement.height;
-            const ctx = cvs.getContext("2d", { willReadFrequently: true });
-            ctx.drawImage(imgElement, 0, 0);
-            
-            let imgdata = ctx.getImageData(0, 0, width, height);
-            largeObjects.imgData = imgdata;
-            
-            const imgdata2 = new ImageData(width, height);
-            const curve = gilbert2dIterative(width, height);
-            largeObjects.curve = curve;
-            
-            const totalPixels = width * height;
-            // 使用混淆强度系数计算偏移量
-            const offset = Math.round(encryptStrength * (Math.sqrt(5) - 1) / 2 * totalPixels);
-            
-            await processImageInChunks(
-                totalPixels,
-                (i) => {
-                    const old_pos = curve[i];
-                    const new_pos = curve[(i + offset) % totalPixels];
-                    const old_p = 4 * (old_pos[0] + old_pos[1] * width);
-                    const new_p = 4 * (new_pos[0] + new_pos[1] * width);
-                    
-                    imgdata2.data[new_p] = imgdata.data[old_p];
-                    imgdata2.data[new_p + 1] = imgdata.data[old_p + 1];
-                    imgdata2.data[new_p + 2] = imgdata.data[old_p + 2];
-                    imgdata2.data[new_p + 3] = imgdata.data[old_p + 3];
-                },
-                10000,
-                () => signal.aborted
-            );
-            
-            if (signal.aborted) {
-                throw new Error('操作已被取消');
-            }
-            
-            ctx.putImageData(imgdata2, 0, 0);
-            
-            const format = formatSelect ? formatSelect.value : 'png';
-            
-            return new Promise((resolve, reject) => {
-                const onBlobCreated = (blob) => {
-                    try {
-                        if (signal.aborted) {
-                            reject(new Error('操作已被取消'));
-                            return;
-                        }
-                        
-                        if (!blob) {
-                            reject(new Error('创建blob失败'));
-                            return;
-                        }
-                        
-                        const blobURL = URL.createObjectURL(blob);
-                        
-                        // 设置图片源，等待图片加载完成
-                        setImageSrc(blobURL);
-                        
-                        // 注意：加载动画将在图片加载完成后由setImageSrc函数隐藏
-                        
-                        hasEncrypted = true;
-                        showRestoreButton();
-                        updateDownloadButtonVisibility();
-                        updateViewButtonVisibility();
-                        
-                        if (hideButtons) {
-                            if (encBtn) encBtn.style.display = "none";
-                            if (encMultipleBtn) encMultipleBtn.style.display = "none";
-                        }
-                        
-                        // 处理完成后立即释放大对象
-                        setTimeout(() => {
-                            releaseLargeObjects();
-                        }, 500);
-                        
-                        resolve(blobURL);
-                    } catch (error) {
-                        reject(error);
-                    }
-                };
-                
-                if (format === 'png') {
-                    cvs.toBlob(onBlobCreated, "image/png");
-                } else {
-                    const quality = qualityRange ? parseInt(qualityRange.value) / 100 : 1.0;
-                    cvs.toBlob(onBlobCreated, "image/jpeg", quality);
-                }
-            });
-            
-        } catch (error) {
-            // 处理过程中出错，隐藏加载动画
+
+        if (activeOperation === op) {
+            activeOperation = null;
+            isProcessing = false;
+            enableButtons();
             hideLoader();
-            // 确保释放大对象
-            releaseLargeObjects();
-            throw error;
         }
-        
-    } catch (error) {
-        if (error.message !== '操作已被取消') {
-            showError('加密处理时出错: ' + error.message);
-        }
-        throw error;
-    } finally {
-        // 注意：这里不再隐藏加载动画，因为加载动画将在图片加载完成后由setImageSrc函数隐藏
-        isProcessing = false;
-        abortController = null;
-        enableButtons();
     }
 }
 
-async function decryptCommon(imgElement, hideButtons = true) {
-    try {
-        if (isProcessing) {
-            showError('当前有操作正在进行，请稍后重试');
-            return;
-        }
-        
-        isProcessing = true;
-        disableButtons();
-        showLoader();
-        
-        abortController = new AbortController();
-        const signal = abortController.signal;
-        
-        try {
-            // 在处理前释放大对象
-            releaseLargeObjects();
-            
-            const cvs = document.createElement("canvas");
-            largeObjects.canvas = cvs;
-            const width = cvs.width = imgElement.width;
-            const height = cvs.height = imgElement.height;
-            const ctx = cvs.getContext("2d", { willReadFrequently: true });
-            ctx.drawImage(imgElement, 0, 0);
-            
-            let imgdata = ctx.getImageData(0, 0, width, height);
-            largeObjects.imgData = imgdata;
-            const imgdata2 = new ImageData(width, height);
-            
-            const curve = gilbert2dIterative(width, height);
-            largeObjects.curve = curve;
-            
-            const totalPixels = width * height;
-            // 使用解混淆强度系数计算偏移量
-            const offset = Math.round(decryptStrength * (Math.sqrt(5) - 1) / 2 * totalPixels);
-            
-            await processImageInChunks(
-                totalPixels,
-                (i) => {
-                    const old_pos = curve[i];
-                    const new_pos = curve[(i + offset) % totalPixels];
-                    const old_p = 4 * (old_pos[0] + old_pos[1] * width);
-                    const new_p = 4 * (new_pos[0] + new_pos[1] * width);
-                    
-                    imgdata2.data[old_p] = imgdata.data[new_p];
-                    imgdata2.data[old_p + 1] = imgdata.data[new_p + 1];
-                    imgdata2.data[old_p + 2] = imgdata.data[new_p + 2];
-                    imgdata2.data[old_p + 3] = imgdata.data[new_p + 3];
-                },
-                10000,
-                () => signal.aborted
-            );
-            
-            if (signal.aborted) {
-                throw new Error('操作已被取消');
-            }
-            
-            ctx.putImageData(imgdata2, 0, 0);
-            
-            const format = formatSelect ? formatSelect.value : 'png';
-            
-            return new Promise((resolve, reject) => {
-                const onBlobCreated = (blob) => {
-                    try {
-                        if (signal.aborted) {
-                            reject(new Error('操作已被取消'));
-                            return;
-                        }
-                        
-                        if (!blob) {
-                            reject(new Error('创建blob失败'));
-                            return;
-                        }
-                        
-                        const blobURL = URL.createObjectURL(blob);
-                        
-                        // 设置图片源，等待图片加载完成
-                        setImageSrc(blobURL);
-                        
-                        // 注意：加载动画将在图片加载完成后由setImageSrc函数隐藏
-                        
-                        hasDecrypted = true;
-                        showRestoreButton();
-                        updateDownloadButtonVisibility();
-                        updateViewButtonVisibility();
-                        
-                        if (hideButtons) {
-                            if (decBtn) decBtn.style.display = "none";
-                            if (decMultipleBtn) decMultipleBtn.style.display = "none";
-                        }
-                        
-                        // 处理完成后立即释放大对象
-                        setTimeout(() => {
-                            releaseLargeObjects();
-                        }, 500);
-                        
-                        resolve(blobURL);
-                    } catch (error) {
-                        reject(error);
-                    }
-                };
-                
-                if (format === 'png') {
-                    cvs.toBlob(onBlobCreated, "image/png");
-                } else {
-                    const quality = qualityRange ? parseInt(qualityRange.value) / 100 : 1.0;
-                    cvs.toBlob(onBlobCreated, "image/jpeg", quality);
-                }
-            });
-            
-        } catch (error) {
-            // 处理过程中出错，隐藏加载动画
-            hideLoader();
-            // 确保释放大对象
-            releaseLargeObjects();
-            throw error;
-        }
-        
-    } catch (error) {
-        if (error.message !== '操作已被取消') {
-            showError('解密处理时出错: ' + error.message);
-        }
-        throw error;
-    } finally {
-        // 注意：这里不再隐藏加载动画，因为加载动画将在图片加载完成后由setImageSrc函数隐藏
-        isProcessing = false;
-        abortController = null;
-        enableButtons();
+/* =========================================================
+   10. 下载 / 查看 / 清除 / 还原
+   ========================================================= */
+function extFromMime(type, fileName) {
+    if (type) {
+        const t = String(type).toLowerCase();
+        if (t.indexOf('jpeg') !== -1 || t.indexOf('jpg') !== -1) return 'jpg';
+        if (t.indexOf('png') !== -1) return 'png';
+        if (t.indexOf('webp') !== -1) return 'webp';
+        if (t.indexOf('gif') !== -1) return 'gif';
+        if (t.indexOf('bmp') !== -1) return 'bmp';
+        if (t.indexOf('svg') !== -1) return 'svg';
+        if (t.indexOf('avif') !== -1) return 'avif';
+        if (t.indexOf('x-icon') !== -1) return 'ico';
     }
+    const inferred = inferMimeFromFileName(fileName);
+    if (inferred) return extFromMime(inferred, '');
+    return 'bin';
 }
 
-function encrypt(imgElement, hideButtons = true) {
-    encryptCommon(imgElement, hideButtons).catch(() => {});
-}
+function getDownloadFileName() {
+    try {
+        const prefix = currentImageKind === 'encrypted' ? 'encrypted_'
+            : currentImageKind === 'decrypted' ? 'decrypted_'
+                : 'image_';
+        const extension = extFromMime(currentBlobType, currentFileName);
+        const timestamp = new Date().getTime();
 
-function decrypt(imgElement, hideButtons = true) {
-    decryptCommon(imgElement, hideButtons).catch(() => {});
-}
-
-function cancelCurrentOperation() {
-    if (abortController) {
-        abortController.abort();
-        hideLoader();
-        isProcessing = false;
-        enableButtons();
-        // 取消时释放大对象
-        releaseLargeObjects();
+        if (currentFileName) {
+            const nameWithoutExt = currentFileName.replace(/\.[^/.]+$/, "");
+            return prefix + nameWithoutExt + '_' + timestamp + '.' + extension;
+        }
+        return prefix + timestamp + '.' + extension;
+    } catch (error) {
+        showError('生成下载文件名时出错: ' + error.message);
+        return 'image_' + new Date().getTime() + '.png';
     }
 }
 
 function downloadImage() {
     try {
-        if (!img || !img.src || img.src === '') return;
-        
+        if (isProcessing) {
+            showError('当前有操作正在进行，请稍后再下载');
+            return;
+        }
+        if (!img || !img.getAttribute('src')) {
+            showError('当前没有可下载的图片');
+            return;
+        }
+
+        const fileName = getDownloadFileName();
         const link = document.createElement('a');
-        link.download = getDownloadFileName();
-        link.href = img.src;
-        link.click();
+        link.download = fileName;
+
+        if (currentBlob) {
+            const url = URL.createObjectURL(currentBlob);
+            link.href = url;
+            link.click();
+            setTimeout(function () {
+                try { URL.revokeObjectURL(url); } catch (e) { /* 忽略 */ }
+            }, 60000);
+        } else {
+            link.href = img.src;
+            link.click();
+        }
     } catch (error) {
         showError('下载图片时出错: ' + error.message);
     }
@@ -2688,30 +3077,31 @@ function downloadImage() {
 
 function viewImage() {
     try {
-        if (!img || !img.src || img.src === '') return;
-        
-        window.open(img.src, '_blank');
+        if (isProcessing) {
+            showError('当前有操作正在进行，请稍后再查看');
+            return;
+        }
+        if (!img || !img.getAttribute('src')) {
+            showError('当前没有可查看的图片');
+            return;
+        }
+
+        let viewURL = null;
+        if (currentBlob) {
+            viewURL = URL.createObjectURL(currentBlob);
+        } else {
+            viewURL = img.src;
+        }
+
+        window.open(viewURL, '_blank');
+
+        if (viewURL && viewURL.startsWith('blob:') && viewURL !== img.src) {
+            setTimeout(function () {
+                try { URL.revokeObjectURL(viewURL); } catch (e) { /* 忽略 */ }
+            }, 10 * 60 * 1000);
+        }
     } catch (error) {
         showError('查看图片时出错: ' + error.message);
-    }
-}
-
-function getDownloadFileName() {
-    try {
-        const format = formatSelect ? formatSelect.value : 'png';
-        const prefix = hasEncrypted ? 'encrypted_' : hasDecrypted ? 'decrypted_' : 'image_';
-        const timestamp = new Date().getTime();
-        const extension = format === 'png' ? 'png' : 'jpg';
-        
-        if (currentFileName) {
-            const nameWithoutExt = currentFileName.replace(/\.[^/.]+$/, "");
-            return `${prefix}${nameWithoutExt}_${timestamp}.${extension}`;
-        }
-        
-        return `${prefix}${timestamp}.${extension}`;
-    } catch (error) {
-        showError('生成下载文件名时出错: ' + error.message);
-        return 'image_' + new Date().getTime() + '.png';
     }
 }
 
@@ -2720,63 +3110,68 @@ function clearImage() {
         if (isProcessing) {
             cancelCurrentOperation();
         }
-        
+
+        if (activeOperation) {
+            disposeOperation(activeOperation, { interruptRollback: true });
+            activeOperation.finished = true;
+            activeOperation = null;
+        }
+
+        if (pendingLoadResolve) {
+            const f = pendingLoadResolve;
+            pendingLoadResolve = null;
+            f(false);
+        }
+
+        isProcessing = false;
+        hideLoader();
+
+        clearImageData();
+        originalFile = null;
+
         if (img) {
+            img.onload = null;
+            img.onerror = null;
             img.style.display = "none";
-            img.src = "";
+            img.removeAttribute("src");
         }
-        
-        // 彻底释放所有资源
+
         releaseAllBlobURLs();
-        releaseLargeObjects();
-        
-        const ipt = document.getElementById("ipt");
-        if (ipt) {
-            ipt.value = "";
-        }
-        
-        hasImage = false;
-        hasEncrypted = false;
-        hasDecrypted = false;
-        currentFileName = "";
-        
-        resetButtonStates();
-        if (clearBtn) clearBtn.style.display = "none";
-        if (downloadBtn) downloadBtn.style.display = "none";
-        if (viewBtn) viewBtn.style.display = "none";
-        
-        // 强制垃圾回收提示
-        if (window.gc) {
-            try {
-                window.gc();
-            } catch (e) {}
-        }
+
+        if (ipt) ipt.value = "";
+
+        resetButtonStates(false);
     } catch (error) {
         showError('清除图片时出错: ' + error.message);
     }
 }
 
+/* =========================================================
+   11. 波浪点击效果
+   ========================================================= */
 function addWaveEffect(event, waveColor) {
     try {
         const button = event.currentTarget;
-        if (!button || button.classList.contains('disabled')) return;
-        
+        if (!button) return;
+        if (button.disabled || button.classList.contains('disabled')) return;
+
         const wave = document.createElement('div');
         wave.className = 'wave';
-        
+
         const rect = button.getBoundingClientRect();
         const x = event.clientX - rect.left;
         const y = event.clientY - rect.top;
-        
+
         wave.style.left = x + 'px';
         wave.style.top = y + 'px';
-        
+
         const enhancedColor = waveColor.replace('0.7', '0.9').replace('0.6', '0.9');
         wave.style.backgroundColor = enhancedColor;
-        
+        wave.style.boxShadow = '0 0 10px ' + enhancedColor;
+
         button.appendChild(wave);
-        
-        setTimeout(() => {
+
+        setTimeout(function () {
             if (wave && wave.parentNode === button) {
                 wave.remove();
             }
@@ -2786,8 +3181,47 @@ function addWaveEffect(event, waveColor) {
     }
 }
 
-const buttons = [
-    { element: document.querySelector('.file-button'), color: 'rgba(106, 17, 203, 0.9)' },
+/* =========================================================
+   12. 强度按钮
+   ========================================================= */
+let encryptStrength = 1.0;
+let decryptStrength = 1.0;
+
+function initStrengthButtons() {
+    try {
+        const encryptButtons = document.querySelectorAll('.encrypt-strength-button');
+        encryptButtons.forEach(button => {
+            button.addEventListener('click', function (e) {
+                if (this.disabled) return;
+                addWaveEffect(e, 'rgba(30, 144, 255, 0.9)');
+                const value = parseFloat(this.getAttribute('data-value'));
+                if (!isNaN(value)) encryptStrength = value;
+                encryptButtons.forEach(btn => btn.classList.remove('selected'));
+                this.classList.add('selected');
+            });
+        });
+
+        const decryptButtons = document.querySelectorAll('.decrypt-strength-button');
+        decryptButtons.forEach(button => {
+            button.addEventListener('click', function (e) {
+                if (this.disabled) return;
+                addWaveEffect(e, 'rgba(220, 20, 60, 0.9)');
+                const value = parseFloat(this.getAttribute('data-value'));
+                if (!isNaN(value)) decryptStrength = value;
+                decryptButtons.forEach(btn => btn.classList.remove('selected'));
+                this.classList.add('selected');
+            });
+        });
+    } catch (error) {
+        console.error('初始化强度按钮时出错:', error);
+    }
+}
+
+/* =========================================================
+   13. 事件绑定
+   ========================================================= */
+const waveButtons = [
+    { element: fileButton, color: 'rgba(106, 17, 203, 0.9)' },
     { element: encBtn, color: 'rgba(30, 144, 255, 0.9)' },
     { element: decBtn, color: 'rgba(220, 20, 60, 0.9)' },
     { element: encMultipleBtn, color: 'rgba(30, 144, 255, 0.9)' },
@@ -2798,185 +3232,150 @@ const buttons = [
     { element: viewBtn, color: 'rgba(138, 43, 226, 0.9)' },
     { element: clearErrorsBtn, color: 'rgba(255, 140, 0, 0.9)' },
     { element: copyErrorsBtn, color: 'rgba(30, 144, 255, 0.9)' },
-    { element: openErrorWindowBtn, color: 'rgba(106, 17, 203, 0.9)' }
+    { element: openErrorWindowBtn, color: 'rgba(106, 17, 203, 0.9)' },
+    { element: loaderCancelBtn, color: 'rgba(255, 255, 255, 0.55)' }
 ];
 
-buttons.forEach(button => {
-    if (button.element) {
-        button.element.addEventListener('click', (e) => {
-            addWaveEffect(e, button.color);
-        });
+waveButtons.forEach(item => {
+    if (item.element) {
+        item.element.addEventListener('click', (e) => addWaveEffect(e, item.color));
     }
 });
 
-// 为强度按钮添加波浪效果
-document.querySelectorAll('.encrypt-strength-button').forEach(button => {
-    button.addEventListener('click', (e) => {
-        addWaveEffect(e, 'rgba(30, 144, 255, 0.9)');
-    });
-});
-
-document.querySelectorAll('.decrypt-strength-button').forEach(button => {
-    button.addEventListener('click', (e) => {
-        addWaveEffect(e, 'rgba(220, 20, 60, 0.9)');
-    });
-});
-
-const ipt = document.getElementById("ipt");
-if (ipt) {
-    ipt.onchange = () => {
-        try {
-            if (!ipt.files || ipt.files.length === 0) return;
-            
-            if (isProcessing) {
-                showError('当前有操作正在进行，无法选择新图片');
-                return;
-            }
-            
-            resetButtonStates();
-            
-            if (img) {
-                img.style.display = "none";
-            }
-            
-            const file = ipt.files[0];
-            if (!file.type.startsWith('image/')) {
-                showError('请选择图片文件');
-                ipt.value = "";
-                return;
-            }
-            
-            // 先释放之前的资源
-            releaseAllBlobURLs();
-            releaseLargeObjects();
-            
-            const fileURL = URL.createObjectURL(file);
-            setImageSrc(fileURL);
-            
-            hasImage = true;
-            currentFileName = file.name;
-            
-            if (clearBtn) clearBtn.style.display = "flex";
-            if (downloadBtn) downloadBtn.style.display = "none";
-            if (viewBtn) viewBtn.style.display = "none";
-            
-        } catch (error) {
-            showError('选择图片时出错: ' + error.message);
+if (loaderCancelBtn) {
+    loaderCancelBtn.addEventListener('click', function (e) {
+        e.stopPropagation();
+        if (isProcessing && !isCancelling) {
+            cancelCurrentOperation();
         }
-    };
+    });
+}
+
+function handleTransformClick(mode, hideButtons) {
+    if (isProcessing) return;
+    if (!img || !img.getAttribute('src')) {
+        showError('请先选择图片');
+        return;
+    }
+    const size = getImageSize(img);
+    if (!size.w || !size.h) {
+        showError('图片尚未加载完成，请稍候再试');
+        return;
+    }
+    transformImage(img, mode, hideButtons);
 }
 
 if (encBtn) {
-    encBtn.onclick = () => {
-        try {
-            if (isProcessing) return;
-            if (img && img.src && img.src !== '') {
-                if (img) img.style.display = "none";
-                encrypt(img, true);
-            }
-        } catch (error) {
-            showError('点击混淆按钮时出错: ' + error.message);
-        }
-    };
+    encBtn.onclick = () => handleTransformClick('encrypt', true);
 }
 
 if (decBtn) {
-    decBtn.onclick = () => {
-        try {
-            if (isProcessing) return;
-            if (img && img.src && img.src !== '') {
-                if (img) img.style.display = "none";
-                decrypt(img, true);
-            }
-        } catch (error) {
-            showError('点击解混淆按钮时出错: ' + error.message);
-        }
-    };
+    decBtn.onclick = () => handleTransformClick('decrypt', true);
 }
 
 if (encMultipleBtn) {
-    encMultipleBtn.onclick = () => {
-        try {
-            if (isProcessing) return;
-            if (img && img.src && img.src !== '') {
-                if (img) img.style.display = "none";
-                encrypt(img, false);
-            }
-        } catch (error) {
-            showError('点击多次混淆按钮时出错: ' + error.message);
-        }
-    };
+    encMultipleBtn.onclick = () => handleTransformClick('encrypt', false);
 }
 
 if (decMultipleBtn) {
-    decMultipleBtn.onclick = () => {
-        try {
-            if (isProcessing) return;
-            if (img && img.src && img.src !== '') {
-                if (img) img.style.display = "none";
-                decrypt(img, false);
-            }
-        } catch (error) {
-            showError('点击多次解混淆按钮时出错: ' + error.message);
-        }
-    };
+    decMultipleBtn.onclick = () => handleTransformClick('decrypt', false);
 }
 
 if (restoreBtn) {
-    restoreBtn.onclick = () => {
+    restoreBtn.onclick = async () => {
         try {
             if (isProcessing) {
                 showError('当前有操作正在进行，无法还原图片');
                 return;
             }
-            
-            const ipt = document.getElementById("ipt");
-            if (ipt && ipt.files && ipt.files.length > 0) {
-                resetButtonStates();
-                if (img) img.style.display = "none";
-                
-                // 释放之前的blob URLs
-                releaseAllBlobURLs();
-                
-                const fileURL = URL.createObjectURL(ipt.files[0]);
-                setImageSrc(fileURL);
-                hasImage = true;
-                
-                if (downloadBtn) downloadBtn.style.display = "none";
-                if (viewBtn) viewBtn.style.display = "none";
+            if (!originalFile) {
+                showError('没有可还原的原图');
+                return;
             }
+
+            resetButtonStates(false);
+
+            const fileURL = URL.createObjectURL(originalFile);
+            const ok = await safeSetImageSrc(fileURL, 30000, null);
+            if (!ok) {
+                showError('还原原图失败');
+                clearImageData();
+                updateImageUiState();
+                return;
+            }
+
+            hasImage = true;
+            currentImageKind = 'original';
+            currentBlob = originalFile;
+            currentBlobType = originalFile.type || inferMimeFromFileName(originalFile.name) || 'application/octet-stream';
+            currentFileName = originalFile.name;
+
+            if (restoreBtn) restoreBtn.style.display = 'none';
+            updateImageUiState();
         } catch (error) {
             showError('还原原图时出错: ' + error.message);
         }
     };
 }
 
-if (downloadBtn) {
-    downloadBtn.onclick = () => {
-        downloadImage();
-    };
-}
+if (downloadBtn) downloadBtn.onclick = downloadImage;
+if (viewBtn) viewBtn.onclick = viewImage;
+if (clearBtn) clearBtn.onclick = clearImage;
 
-if (viewBtn) {
-    viewBtn.onclick = () => {
-        viewImage();
-    };
-}
+if (ipt) {
+    ipt.onchange = async () => {
+        try {
+            if (!ipt.files || ipt.files.length === 0) return;
 
-if (clearBtn) {
-    clearBtn.onclick = () => {
-        clearImage();
+            if (isProcessing) {
+                showError('当前有操作正在进行，无法选择新图片');
+                ipt.value = "";
+                return;
+            }
+
+            const file = ipt.files[0];
+
+            let effectiveType = file.type || '';
+            if (!effectiveType || effectiveType === 'application/octet-stream') {
+                effectiveType = inferMimeFromFileName(file.name);
+            }
+            if (!effectiveType || !effectiveType.startsWith('image/')) {
+                showError('请选择图片文件');
+                ipt.value = "";
+                return;
+            }
+
+            originalFile = file;
+            ipt.value = "";
+
+            resetButtonStates(false);
+
+            const fileURL = URL.createObjectURL(file);
+            const ok = await safeSetImageSrc(fileURL, 30000, null);
+            if (!ok) {
+                showError('图片加载失败');
+                clearImageData();
+                updateImageUiState();
+                return;
+            }
+
+            hasImage = true;
+            currentImageKind = 'original';
+            currentBlob = file;
+            currentBlobType = file.type || inferMimeFromFileName(file.name) || 'application/octet-stream';
+            currentFileName = file.name;
+
+            updateImageUiState();
+        } catch (error) {
+            showError('选择图片时出错: ' + error.message);
+        }
     };
 }
 
 if (formatSelect) {
-    formatSelect.addEventListener('change', function() {
+    formatSelect.addEventListener('change', function () {
         try {
-            if (this.value === 'jpg' && qualityOption) {
-                qualityOption.style.display = 'block';
-            } else if (qualityOption) {
-                qualityOption.style.display = 'none';
-            }
+            updateQualityAvailability();
         } catch (error) {
             showError('更改输出格式时出错: ' + error.message);
         }
@@ -2984,56 +3383,66 @@ if (formatSelect) {
 }
 
 if (qualityRange) {
-    qualityRange.addEventListener('input', function() {
+    qualityRange.addEventListener('input', function () {
         try {
-            if (qualityValue) {
-                qualityValue.textContent = this.value;
-            }
+            if (qualityValue) qualityValue.textContent = this.value;
         } catch (error) {
             showError('更新质量滑块值时出错: ' + error.message);
         }
     });
-    
-    if (qualityValue) {
-        qualityValue.textContent = qualityRange.value;
+    if (qualityValue) qualityValue.textContent = qualityRange.value;
+}
+
+/* =========================================================
+   14. 内存清理
+   ========================================================= */
+function scheduleMemoryCleanup() {
+    if (isProcessing || activeOperation) return;
+
+    if (activeBlobURLs.size > 5) {
+        const urls = Array.from(activeBlobURLs).filter(url => url !== currentBlobURL);
+        urls.forEach(releaseBlobURL);
     }
 }
 
-window.addEventListener('beforeunload', function(event) {
+document.addEventListener('visibilitychange', function () {
+    if (document.hidden) {
+        scheduleMemoryCleanup();
+    }
+});
+
+window.addEventListener('beforeunload', function (event) {
+    if (isProcessing) {
+        event.preventDefault();
+        event.returnValue = '图片处理正在进行中，确定要离开吗？';
+        return event.returnValue;
+    }
+});
+
+window.addEventListener('pagehide', function (event) {
     try {
-        cancelCurrentOperation();
+        if (isProcessing) cancelCurrentOperation();
         releaseAllBlobURLs();
-        releaseLargeObjects();
-        
-        if (isProcessing) {
-            event.preventDefault();
-            event.returnValue = '图片处理正在进行中，确定要离开吗？';
-        }
+        document.documentElement.classList.remove('modal-open');
+        document.body.classList.remove('modal-open');
+        if (errorOverlay) errorOverlay.style.display = 'none';
     } catch (error) {
         console.error('页面卸载时清理资源出错:', error);
     }
 });
 
-// 添加页面隐藏时的内存清理
-document.addEventListener('visibilitychange', function() {
-    if (document.hidden) {
-        // 页面隐藏时执行内存清理
-        scheduleMemoryCleanup();
-    }
+window.addEventListener('pageshow', function () {
+    document.documentElement.classList.remove('modal-open');
+    document.body.classList.remove('modal-open');
 });
 
-if (formatSelect && qualityOption) {
-    if (formatSelect.value === 'jpg') {
-        qualityOption.style.display = 'block';
-    } else {
-        qualityOption.style.display = 'none';
-    }
-}
-
-// 初始化强度按钮
+/* =========================================================
+   15. 初始化
+   ========================================================= */
+updateQualityAvailability();
 initStrengthButtons();
-
-resetButtonStates();
+resetButtonStates(false);
+updateFileButtonState();
 </script>
 </body>
 </html>
